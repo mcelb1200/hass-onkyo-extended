@@ -22,6 +22,7 @@ from homeassistant.components.media_player import (
     MediaPlayerEntity,
     MediaPlayerEntityFeature,
     MediaPlayerState,
+    BrowseMedia,
 )
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, callback
@@ -147,14 +148,14 @@ def _detect_zones_safe(receiver) -> list[str]:
 class OnkyoMediaPlayer(MediaPlayerEntity):
     """
     Representation of an Onkyo media player.
-    
+
     Enhanced with:
     - Connection manager integration (Issue #123143 fix)
     - Graceful empty list handling (Issue #125768 fix)
     - Robust error recovery
     - Proper state management
     """
-    
+
     _attr_has_entity_name = True
     _attr_device_class = MediaPlayerDeviceClass.RECEIVER
     _attr_supported_features = (
@@ -176,28 +177,25 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         entry: ConfigEntry,
     ) -> None:
         """Initialize the media player."""
-        self._receiver = receiver
         self._attr_name = name
         self._zone = zone
-        self._entry = entry
-        
-        # Initialize connection manager (Issue #123143 fix)
-        self._conn_manager = OnkyoConnectionManager(hass, self._receiver)
-        
+
         # State variables
-        self._attr_state = MediaPlayerState.OFF
-        self._attr_available = False
-        self._attr_volume_level: float | None = None
-        self._attr_is_volume_muted: bool = False
-        self._attr_source: str | None = None
-        
-        # Lists that may be empty (Issue #125768 fix)
-        self._attr_source_list: list[str] = []
-        self._listening_modes: list[str] = []
-        
-        # Extra attributes
+        self._attributes = {
+            "state": MediaPlayerState.OFF,
+            "available": False,
+            "volume_level": None,
+            "is_volume_muted": False,
+            "source": None,
+            "source_list": [],
+            "listening_modes": [],
+        }
         self._attr_extra_state_attributes: dict[str, Any] = {}
-        
+        self.hass = hass
+        self._receiver = receiver
+        self._entry = entry
+        self._conn_manager = None
+
         # Unique ID based on receiver and zone
         host = entry.data.get("host", "unknown")
         self._attr_unique_id = f"{host}_{zone}"
@@ -214,6 +212,8 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         """Run when entity is added to hass."""
         await super().async_added_to_hass()
         
+        self._conn_manager = OnkyoConnectionManager(self.hass, self._receiver)
+
         # Register callback for receiver updates if using local_push
         if hasattr(self._receiver, "register_callback"):
             self._receiver.register_callback(self._handle_receiver_update)
@@ -251,24 +251,24 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         
         # Update state based on command
         if command == "power":
-            self._attr_state = (
-                MediaPlayerState.ON if value == "on" 
+            self._attributes["state"] = (
+                MediaPlayerState.ON if value == "on"
                 else MediaPlayerState.OFF
             )
-            self._attr_available = True
-            
+            self._attributes["available"] = True
+
         elif command == "volume":
-            self._attr_volume_level = self._receiver_volume_to_ha(value)
-            
+            self._attributes["volume_level"] = self._receiver_volume_to_ha(value)
+
         elif command == "muting":
-            self._attr_is_volume_muted = value == "on"
-            
+            self._attributes["is_volume_muted"] = value == "on"
+
         elif command == "input-selector" or command == "selector":
             if isinstance(value, tuple):
-                self._attr_source = value[1] if len(value) > 1 else value[0]
+                self._attributes["source"] = value[1] if len(value) > 1 else value[0]
             else:
-                self._attr_source = str(value)
-        
+                self._attributes["source"] = str(value)
+
         # Schedule UI update
         self.async_write_ha_state()
     
@@ -282,35 +282,35 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
             await self._async_update_all()
         except Exception as err:
             _LOGGER.debug("Update failed for %s: %s", self._attr_name, err)
-            self._attr_available = False
+            self._attributes["available"] = False
     
     async def _async_update_all(self) -> None:
         """Fetch all data from receiver."""
         # Get power state
         power_state = await self._async_get_power_state()
-        
+
         if power_state == "on":
-            self._attr_state = MediaPlayerState.ON
-            self._attr_available = True
-            
+            self._attributes["state"] = MediaPlayerState.ON
+            self._attributes["available"] = True
+
             # Fetch other state when powered on
             await self._async_update_volume()
             await self._async_update_source()
             await self._async_update_mute()
-            
+
             # Fetch lists if empty (Issue #125768 fix)
-            if not self._attr_source_list:
+            if not self._attributes["source_list"]:
                 await self._async_fetch_source_list()
-            
-            if not self._listening_modes:
+
+            if not self._attributes["listening_modes"]:
                 await self._async_fetch_listening_modes()
-            
+
         elif power_state == "standby":
-            self._attr_state = MediaPlayerState.OFF
-            self._attr_available = True
+            self._attributes["state"] = MediaPlayerState.OFF
+            self._attributes["available"] = True
         else:
             # Unknown state - might be disconnected
-            self._attr_available = False
+            self._attributes["available"] = False
     
     async def _async_get_power_state(self) -> str:
         """Get power state from receiver."""
@@ -323,12 +323,12 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
                 result = await self._conn_manager.async_send_command(
                     "command", f"{self._zone}.power=query"
                 )
-            
+
             # Parse result
             if isinstance(result, tuple) and len(result) >= 2:
                 return result[1]
             return str(result)
-            
+
         except Exception as err:
             _LOGGER.debug("Failed to get power state: %s", err)
             return "unknown"
@@ -343,11 +343,11 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
             result = await self._conn_manager.async_send_command(
                 "command", command
             )
-            
+
             if result:
                 volume = int(result) if isinstance(result, (int, str)) else 50
-                self._attr_volume_level = self._receiver_volume_to_ha(volume)
-                
+                self._attributes["volume_level"] = self._receiver_volume_to_ha(volume)
+
         except Exception as err:
             _LOGGER.debug("Failed to update volume: %s", err)
     
@@ -361,13 +361,13 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
             result = await self._conn_manager.async_send_command(
                 "command", command
             )
-            
+
             if result:
                 if isinstance(result, tuple):
-                    self._attr_source = result[1] if len(result) > 1 else result[0]
+                    self._attributes["source"] = result[1] if len(result) > 1 else result[0]
                 else:
-                    self._attr_source = str(result)
-                    
+                    self._attributes["source"] = str(result)
+
         except Exception as err:
             _LOGGER.debug("Failed to update source: %s", err)
     
@@ -381,10 +381,10 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
             result = await self._conn_manager.async_send_command(
                 "command", command
             )
-            
+
             if result:
-                self._attr_is_volume_muted = str(result) == "on"
-                
+                self._attributes["is_volume_muted"] = str(result) == "on"
+
         except Exception as err:
             _LOGGER.debug("Failed to update mute state: %s", err)
     
@@ -397,12 +397,12 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         try:
             # Get input sources from receiver
             sources = await self._conn_manager.async_send_command("raw", "SLIQSTN")
-            
+
             if sources and isinstance(sources, dict):
-                self._attr_source_list = list(sources.keys())
+                self._attributes["source_list"] = list(sources.keys())
                 _LOGGER.debug(
                     "Loaded %d sources for %s",
-                    len(self._attr_source_list),
+                    len(self._attributes["source_list"]),
                     self._attr_name
                 )
             else:
@@ -410,8 +410,8 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
                     "No sources returned for %s. This may be normal.",
                     self._attr_name
                 )
-                self._attr_source_list = []
-                
+                self._attributes["source_list"] = []
+
         except Exception as err:
             _LOGGER.debug(
                 "Could not fetch source list for %s: %s",
@@ -419,7 +419,7 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
                 err
             )
             # Keep empty list instead of failing
-            self._attr_source_list = []
+            self._attributes["source_list"] = []
     
     async def _async_fetch_listening_modes(self) -> None:
         """
@@ -430,12 +430,12 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         try:
             # Get listening modes from receiver
             modes = await self._conn_manager.async_send_command("raw", "LMQSTN")
-            
+
             if modes and isinstance(modes, dict):
-                self._listening_modes = list(modes.keys())
+                self._attributes["listening_modes"] = list(modes.keys())
                 _LOGGER.debug(
                     "Loaded %d listening modes for %s",
-                    len(self._listening_modes),
+                    len(self._attributes["listening_modes"]),
                     self._attr_name
                 )
             else:
@@ -443,8 +443,8 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
                     "No listening modes returned for %s. This may be normal.",
                     self._attr_name
                 )
-                self._listening_modes = []
-                
+                self._attributes["listening_modes"] = []
+
         except Exception as err:
             _LOGGER.debug(
                 "Could not fetch listening modes for %s: %s",
@@ -452,7 +452,7 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
                 err
             )
             # Keep empty list instead of failing
-            self._listening_modes = []
+            self._attributes["listening_modes"] = []
     
     # Media Player Entity Methods
     
@@ -464,23 +464,23 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
                 else f"{self._zone}.power=on"
             )
             await self._conn_manager.async_send_command("command", command)
-            
+
             # Wait for receiver to power on
             await asyncio.sleep(2)
-            
+
             # Fetch device info after power on
-            if not self._attr_source_list:
+            if not self._attributes["source_list"]:
                 await self._async_fetch_source_list()
-            if not self._listening_modes:
+            if not self._attributes["listening_modes"]:
                 await self._async_fetch_listening_modes()
-            
-            self._attr_state = MediaPlayerState.ON
-            self._attr_available = True
+
+            self._attributes["state"] = MediaPlayerState.ON
+            self._attributes["available"] = True
             self.async_write_ha_state()
-            
+
         except Exception as err:
             _LOGGER.error("Failed to turn on %s: %s", self._attr_name, err)
-            self._attr_available = False
+            self._attributes["available"] = False
             raise
     
     async def async_turn_off(self) -> None:
@@ -491,10 +491,10 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
                 else f"{self._zone}.power=standby"
             )
             await self._conn_manager.async_send_command("command", command)
-            
-            self._attr_state = MediaPlayerState.OFF
+
+            self._attributes["state"] = MediaPlayerState.OFF
             self.async_write_ha_state()
-            
+
         except Exception as err:
             _LOGGER.error("Failed to turn off %s: %s", self._attr_name, err)
             raise
@@ -513,10 +513,10 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
                 else f"{self._zone}.volume={receiver_volume}"
             )
             await self._conn_manager.async_send_command("command", command)
-            
-            self._attr_volume_level = volume
+
+            self._attributes["volume_level"] = volume
             self.async_write_ha_state()
-            
+
         except Exception as err:
             _LOGGER.error("Failed to set volume: %s", err)
             raise
@@ -529,12 +529,12 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
                 else f"{self._zone}.volume=level-up"
             )
             await self._conn_manager.async_send_command("command", command)
-            
+
             # Update state after a moment
             await asyncio.sleep(0.2)
             await self._async_update_volume()
             self.async_write_ha_state()
-            
+
         except Exception as err:
             _LOGGER.error("Failed to increase volume: %s", err)
             raise
@@ -547,12 +547,12 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
                 else f"{self._zone}.volume=level-down"
             )
             await self._conn_manager.async_send_command("command", command)
-            
+
             # Update state after a moment
             await asyncio.sleep(0.2)
             await self._async_update_volume()
             self.async_write_ha_state()
-            
+
         except Exception as err:
             _LOGGER.error("Failed to decrease volume: %s", err)
             raise
@@ -566,10 +566,10 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
                 else f"{self._zone}.muting={mute_state}"
             )
             await self._conn_manager.async_send_command("command", command)
-            
-            self._attr_is_volume_muted = mute
+
+            self._attributes["is_volume_muted"] = mute
             self.async_write_ha_state()
-            
+
         except Exception as err:
             _LOGGER.error("Failed to %s: %s", "mute" if mute else "unmute", err)
             raise
@@ -582,10 +582,10 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
                 else f"{self._zone}.selector={source}"
             )
             await self._conn_manager.async_send_command("command", command)
-            
-            self._attr_source = source
+
+            self._attributes["source"] = source
             self.async_write_ha_state()
-            
+
         except Exception as err:
             _LOGGER.error("Failed to select source %s: %s", source, err)
             raise
@@ -605,15 +605,15 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
                 # Select radio tuner as source first
                 await self.async_select_source("radio")
                 await asyncio.sleep(0.5)
-                
+
                 # Select preset
                 command = f"preset={media_id}" if self._zone == "main" else f"{self._zone}.preset={media_id}"
                 await self._conn_manager.async_send_command("command", command)
-                
+
                 _LOGGER.debug("Playing radio preset %s", media_id)
             else:
                 _LOGGER.warning("Unsupported media type: %s", media_type)
-                
+
         except Exception as err:
             _LOGGER.error("Failed to play media: %s", err)
             raise
@@ -634,13 +634,13 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         try:
             command = f"hdmi-output-selector={hdmi_output}"
             await self._conn_manager.async_send_command("command", command)
-            
+
             _LOGGER.debug("Selected HDMI output: %s", hdmi_output)
-            
+
             # Update extra attributes
             self._attr_extra_state_attributes[ATTR_HDMI_OUTPUT] = hdmi_output
             self.async_write_ha_state()
-            
+
         except Exception as err:
             _LOGGER.error("Failed to select HDMI output %s: %s", hdmi_output, err)
             raise
@@ -656,17 +656,17 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         - Maximum volume limit
         """
         from .const import CONF_MAX_VOLUME, CONF_VOLUME_RESOLUTION
-        
+
         max_volume = self._entry.options.get(
             CONF_MAX_VOLUME,
             self._entry.data.get(CONF_MAX_VOLUME, 100)
         )
-        
+
         resolution = self._entry.options.get(
             CONF_VOLUME_RESOLUTION,
             self._entry.data.get(CONF_VOLUME_RESOLUTION, 80)
         )
-        
+
         # Scale: HA volume -> max volume % -> receiver steps
         scaled_volume = ha_volume * (max_volume / 100) * resolution
         return int(scaled_volume)
@@ -680,17 +680,17 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         - Maximum volume limit
         """
         from .const import CONF_MAX_VOLUME, CONF_VOLUME_RESOLUTION
-        
+
         max_volume = self._entry.options.get(
             CONF_MAX_VOLUME,
             self._entry.data.get(CONF_MAX_VOLUME, 100)
         )
-        
+
         resolution = self._entry.options.get(
             CONF_VOLUME_RESOLUTION,
             self._entry.data.get(CONF_VOLUME_RESOLUTION, 80)
         )
-        
+
         # Scale: receiver steps -> max volume % -> HA volume
         ha_volume = (receiver_volume / resolution) / (max_volume / 100)
         return min(1.0, max(0.0, ha_volume))
@@ -698,34 +698,106 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
     # Properties
     
     @property
+    def state(self) -> MediaPlayerState:
+        """Return the state of the device."""
+        return self._attributes["state"]
+
+    @property
+    def volume_level(self) -> float | None:
+        """Return the volume level of the device."""
+        return self._attributes["volume_level"]
+
+    @property
+    def is_volume_muted(self) -> bool:
+        """Return boolean if volume is currently muted."""
+        return self._attributes["is_volume_muted"]
+
+    @property
+    def source(self) -> str | None:
+        """Return the current input source."""
+        return self._attributes["source"]
+
+    @property
     def source_list(self) -> list[str]:
         """
         Return list of available input sources.
-        
+
         Issue #125768 fix: Always return list, never None.
         Empty list is valid and won't break setup.
         """
-        return self._attr_source_list if self._attr_source_list else []
+        return self._attributes["source_list"] if self._attributes["source_list"] else []
     
     @property
     def available(self) -> bool:
         """
         Return if entity is available.
-        
+
         Considers both connection manager state and entity availability.
         """
-        return self._attr_available and self._conn_manager.connected
+        return self._attributes["available"] and self._conn_manager.connected
     
     @property
     def extra_state_attributes(self) -> dict[str, Any]:
         """Return entity specific state attributes."""
         attrs = self._attr_extra_state_attributes.copy()
-        
+
         # Add listening modes if available
-        if self._listening_modes:
-            attrs["listening_modes"] = self._listening_modes
-        
+        if self._attributes["listening_modes"]:
+            attrs["listening_modes"] = self._attributes["listening_modes"]
+
         return attrs
+
+    def media_play(self) -> None:
+        """Send play command."""
+        raise NotImplementedError()
+
+    def media_pause(self) -> None:
+        """Send pause command."""
+        raise NotImplementedError()
+
+    def media_stop(self) -> None:
+        """Send stop command."""
+        raise NotImplementedError()
+
+    def media_next_track(self) -> None:
+        """Send next track command."""
+        raise NotImplementedError()
+
+    def media_previous_track(self) -> None:
+        """Send previous track command."""
+        raise NotImplementedError()
+
+    def media_seek(self, position: float) -> None:
+        """Send seek command."""
+        raise NotImplementedError()
+
+    def set_shuffle(self, shuffle: bool) -> None:
+        """Enable/disable shuffle mode."""
+        raise NotImplementedError()
+
+    def set_repeat(self, repeat: str) -> None:
+        """Set repeat mode."""
+        raise NotImplementedError()
+
+    def clear_playlist(self) -> None:
+        """Clear players playlist."""
+        raise NotImplementedError()
+
+    def select_sound_mode(self, sound_mode: str) -> None:
+        """Select sound mode."""
+        raise NotImplementedError()
+
+    async def async_browse_media(self, media_content_type: str | None = None, media_content_id: str | None = None) -> BrowseMedia:
+        """Implement the websocket media browsing helper."""
+        raise NotImplementedError()
+
+    def join_players(self, group_members: list[str]) -> None:
+        """Join `group_members` to this player."""
+        raise NotImplementedError()
+
+    def unjoin_player(self, player_entity_id: str) -> None:
+        """Remove `player_entity_id` from the player's group."""
+        raise NotImplementedError()
     
     # Cleanup
     
@@ -737,10 +809,10 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
                 self._receiver.unregister_callback(self._handle_receiver_update)
             except Exception as err:
                 _LOGGER.debug("Error unregistering callback: %s", err)
-        
+
         # Close connection manager
         await self._conn_manager.async_close()
-        
+
         _LOGGER.debug("Cleaned up entity: %s", self._attr_name)
 
 
@@ -760,7 +832,7 @@ def validate_source_list(sources: list[str] | None) -> list[str]:
     """
     if not sources:
         return []
-    
+
     if not isinstance(sources, list):
         _LOGGER.warning(
             "Source list is not a list type: %s, attempting conversion",
@@ -770,16 +842,16 @@ def validate_source_list(sources: list[str] | None) -> list[str]:
             return list(sources)
         except (TypeError, ValueError):
             return []
-    
+
     # Filter out invalid entries
     valid_sources = [s for s in sources if s and isinstance(s, str)]
-    
+
     if len(valid_sources) != len(sources):
         _LOGGER.debug(
             "Filtered out %d invalid sources",
             len(sources) - len(valid_sources)
         )
-    
+
     return valid_sources
 
 
@@ -797,7 +869,7 @@ def validate_listening_modes(modes: list[str] | None) -> list[str]:
     """
     if not modes:
         return []
-    
+
     if not isinstance(modes, list):
         _LOGGER.warning(
             "Listening mode list is not a list type: %s, attempting conversion",
@@ -807,16 +879,16 @@ def validate_listening_modes(modes: list[str] | None) -> list[str]:
             return list(modes)
         except (TypeError, ValueError):
             return []
-    
+
     # Filter out invalid entries
     valid_modes = [m for m in modes if m and isinstance(m, str)]
-    
+
     if len(valid_modes) != len(modes):
         _LOGGER.debug(
             "Filtered out %d invalid listening modes",
             len(modes) - len(valid_modes)
         )
-    
+
     return valid_modes
 
 
@@ -873,7 +945,7 @@ class MockOnkyoReceiver:
             return True
         
         return None
-    
+
     def raw(self, cmd: str) -> Any:
         """Process raw command."""
         if cmd == "SLIQSTN":
@@ -881,7 +953,7 @@ class MockOnkyoReceiver:
         elif cmd == "LMQSTN":
             return self._listening_modes
         return None
-    
+
     def disconnect(self) -> None:
         """Disconnect (mock)."""
         pass
