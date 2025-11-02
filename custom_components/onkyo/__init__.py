@@ -35,7 +35,11 @@ from .const import (
     DEFAULT_RECEIVER_MAX_VOLUME,
     DEFAULT_VOLUME_RESOLUTION,
     DOMAIN,
+    CONF_CONFIG_ENTRY_ONLY,
 )
+import homeassistant.helpers.config_validation as cv
+
+CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
 
 _LOGGER = logging.getLogger(__name__)
 
