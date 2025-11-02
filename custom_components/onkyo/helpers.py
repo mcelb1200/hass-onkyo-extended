@@ -41,9 +41,9 @@ def build_selected_dict(
 ) -> dict[str, str]:
     """Return selected dictionary."""
     if sources:
-        return {k: v for k, v in build_sources_list().items() if (k in sources)}
+        return {k: v for k, v in build_sources_list().items() if k in sources}
     if sounds:
-        return {k: v for k, v in build_sounds_mode_list().items() if (k in sounds)}
+        return {k: v for k, v in build_sounds_mode_list().items() if k in sounds}
     return {}
 
 

@@ -310,11 +310,6 @@ class OnkyoOptionsFlowHandler(config_entries.OptionsFlow):
             100
         )
         
-        current_sources = self.config_entry.options.get(
-            CONF_SOURCES,
-            build_sources_list()
-        )
-        
         options_schema = vol.Schema({
             vol.Required(
                 CONF_RECEIVER_MAX_VOLUME,
