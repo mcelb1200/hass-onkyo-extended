@@ -10,7 +10,6 @@ CONF_RECEIVER_MAX_VOLUME: Final = "receiver_max_volume"
 CONF_VOLUME_RESOLUTION: Final = "volume_resolution"
 CONF_MAX_VOLUME: Final = "max_volume"
 CONF_SOURCES: Final = "sources"
-CONF_CONFIG_ENTRY_ONLY: Final = "config_entry_only"
 
 # Defaults
 DEFAULT_NAME: Final = "Onkyo Receiver"

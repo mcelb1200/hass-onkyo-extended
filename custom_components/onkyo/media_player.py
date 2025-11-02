@@ -726,58 +726,6 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
             attrs["listening_modes"] = self._listening_modes
 
         return attrs
-
-    def media_play(self) -> None:
-        """Send play command."""
-        raise NotImplementedError()
-
-    def media_pause(self) -> None:
-        """Send pause command."""
-        raise NotImplementedError()
-
-    def media_stop(self) -> None:
-        """Send stop command."""
-        raise NotImplementedError()
-
-    def media_next_track(self) -> None:
-        """Send next track command."""
-        raise NotImplementedError()
-
-    def media_previous_track(self) -> None:
-        """Send previous track command."""
-        raise NotImplementedError()
-
-    def media_seek(self, position: float) -> None:
-        """Send seek command."""
-        raise NotImplementedError()
-
-    def set_shuffle(self, shuffle: bool) -> None:
-        """Enable/disable shuffle mode."""
-        raise NotImplementedError()
-
-    def set_repeat(self, repeat: str) -> None:
-        """Set repeat mode."""
-        raise NotImplementedError()
-
-    def clear_playlist(self) -> None:
-        """Clear players playlist."""
-        raise NotImplementedError()
-
-    def select_sound_mode(self, sound_mode: str) -> None:
-        """Select sound mode."""
-        raise NotImplementedError()
-
-    async def async_browse_media(self, media_content_type: str | None = None, media_content_id: str | None = None):
-        """Implement the websocket media browsing helper."""
-        raise NotImplementedError()
-
-    def join_players(self, group_members: list[str]) -> None:
-        """Join `group_members` to this player."""
-        raise NotImplementedError()
-
-    def unjoin_player(self) -> None:
-        """Remove `player_entity_id` from the player's group."""
-        raise NotImplementedError()
     
     # Cleanup
     

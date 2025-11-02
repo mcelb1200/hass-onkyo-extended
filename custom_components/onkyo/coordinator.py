@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
 from datetime import timedelta
 import logging
 
@@ -33,32 +32,24 @@ _LOGGER = logging.getLogger(__name__)
 SCAN_INTERVAL = timedelta(seconds=10)
 
 
-@dataclass
-class OnkyoData:
-    """Class for holding onkyo data."""
-
-    volume_raw: tuple | None = None
-    mute_raw: tuple | None = None
-    current_source_raw: tuple | None = None
-    preset_raw: tuple | None = None
-    hdmi_out_raw: tuple | None = None
-
-
+# pylint: disable=too-many-instance-attributes
 class OnkyoUpdateCoordinator(DataUpdateCoordinator):
     """DataUpdateCoordinator base class for onkyo."""
 
+    # pylint: disable=too-many-arguments
     def __init__(
         self,
         hass: HomeAssistant,
         config_entry: ConfigEntry,
+        hdmi_out_supported=True,
+        audio_info_supported=True,
+        video_info_supported=True,
     ) -> None:
         """Initialize onkyo DataUpdateCoordinator."""
         self.config_entry = config_entry
-        self.supported_features = {
-            "hdmi_out": True,
-            "audio_info": True,
-            "video_info": True,
-        }
+        self.hdmi_out_supported = hdmi_out_supported
+        self.audio_info_supported = audio_info_supported
+        self.video_info_supported = video_info_supported
         self.sources = config_entry.options[CONF_SOURCES]
         self.receiver_max_volume = config_entry.options[CONF_RECEIVER_MAX_VOLUME]
         self.max_volume = config_entry.options[CONF_MAX_VOLUME]
@@ -80,6 +71,7 @@ class OnkyoUpdateCoordinator(DataUpdateCoordinator):
             raise UpdateFailed from error
         return data
 
+    # pylint: disable=too-many-locals, too-many-branches
     async def async_fetch_data(self) -> dict:
         """Fetch all data from api."""
         data: dict[str, Any] = {}
@@ -94,12 +86,10 @@ class OnkyoUpdateCoordinator(DataUpdateCoordinator):
             data.update({"pwstate": STATE_OFF, "attributes": attributes})
             return data
 
-        onkyo_data = OnkyoData(
-            volume_raw=self.receiver.command("volume query"),
-            mute_raw=self.receiver.command("audio-muting query"),
-            current_source_raw=self.receiver.command("input-selector query"),
-            preset_raw=self.receiver.command("preset query"),
-        )
+        volume_raw = self.receiver.command("volume query")
+        mute_raw = self.receiver.command("audio-muting query")
+        current_source_raw = self.receiver.command("input-selector query")
+        preset_raw = self.receiver.command("preset query")
         listening_mode_raw = self.receiver.command("listening-mode query")
         # If the following command is sent to a device with only one HDMI out,
         # the display shows 'Not Available'.
@@ -108,59 +98,53 @@ class OnkyoUpdateCoordinator(DataUpdateCoordinator):
             sound_mode = self._parse_onkyo_payload(listening_mode_raw)[-1]
             data.update({"sound_mode": sound_mode})
 
-        if self.supported_features["hdmi_out"]:
-            onkyo_data.hdmi_out_raw = self.receiver.command("hdmi-output-selector query")
+        if self.hdmi_out_supported:
+            hdmi_out_raw = self.receiver.command("hdmi-output-selector query")
         else:
-            onkyo_data.hdmi_out_raw = []
+            hdmi_out_raw = []
 
-        self._update_main_zone_attributes(attributes, onkyo_data)
-        data.update({"attributes": attributes})
-        return data
-
-    def _update_main_zone_attributes(
-        self,
-        attributes: dict,
-        onkyo_data: OnkyoData,
-    ) -> None:
-        """Update the main zone attributes."""
-        if self.supported_features["audio_info"]:
+        if self.audio_info_supported:
             audio_information_raw = self.receiver.command("audio-information query")
             info_audio = self._parse_audio_information(audio_information_raw)
             attributes.update(info_audio)
-        if self.supported_features["video_info"]:
+        if self.video_info_supported:
             video_information_raw = self.receiver.command("video-information query")
             info_video = self._parse_video_information(video_information_raw)
             attributes.update(info_video)
-        if not (
-            onkyo_data.volume_raw
-            and onkyo_data.mute_raw
-            and onkyo_data.current_source_raw
-        ):
-            return
+        if not (volume_raw and mute_raw and current_source_raw):
+            return data
 
-        sources = self._parse_onkyo_payload(onkyo_data.current_source_raw)
+        sources = self._parse_onkyo_payload(current_source_raw)
         for source in sources:
             if source in self.sources:
                 current_source = self.sources[source]
                 break
             current_source = "_".join(sources)
 
-        attributes["current_source"] = current_source
+        data.update({"current_source": current_source})
 
-        if onkyo_data.preset_raw and current_source.lower() == "radio":
-            attributes[ATTR_PRESET] = onkyo_data.preset_raw[1]
+        if preset_raw and current_source.lower() == "radio":
+            attributes[ATTR_PRESET] = preset_raw[1]
         elif ATTR_PRESET in attributes:
             del attributes[ATTR_PRESET]
 
-        attributes["muted"] = bool(onkyo_data.mute_raw[1] == "on")
-        attributes["volume"] = onkyo_data.volume_raw[1] / (
-            self.receiver_max_volume * self.max_volume / 100
-        )
+        muted = bool(mute_raw[1] == "on")
+        data.update({"muted": muted})
 
-        if onkyo_data.hdmi_out_raw:
-            attributes[ATTR_HDMI_OUTPUT] = ",".join(onkyo_data.hdmi_out_raw[1])
-            if onkyo_data.hdmi_out_raw[1] == "N/A":
-                self.supported_features["hdmi_out"] = False
+        # AMP_VOL/MAX_RECEIVER_VOL*(MAX_VOL/100)
+        volume = volume_raw[1] / (self.receiver_max_volume * self.max_volume / 100)
+        data.update({"volume": volume})
+
+        if not hdmi_out_raw:
+            return data
+
+        attributes[ATTR_HDMI_OUTPUT] = ",".join(hdmi_out_raw[1])
+        if hdmi_out_raw[1] == "N/A":
+            data.update({"hdmi_out_supported": False})
+
+        data.update({"attributes": attributes})
+
+        return data
 
     async def async_fetch_data_zone(self, zone) -> dict:
         """Fetch data zone."""
