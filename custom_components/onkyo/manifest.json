@@ -1,11 +1,12 @@
 {
   "domain": "onkyo",
   "name": "Onkyo",
-  "codeowners": [],
+  "codeowners": ["@sillyfrog"],
   "config_flow": true,
   "dependencies": [],
-  "documentation": "https://www.home-assistant.io/integrations/onkyo",
+  "documentation": "https://github.com/sillyfrog/hass-onkyo",
   "iot_class": "local_polling",
+  "issue_tracker": "https://github.com/sillyfrog/hass-onkyo/issues",
   "loggers": ["eiscp"],
   "requirements": ["onkyo-eiscp==1.2.7"],
   "ssdp": [
@@ -14,5 +15,5 @@
       "deviceType": "urn:schemas-upnp-org:device:MediaRenderer:2"
     }
   ],
-  "version": "2.0.0"
+  "version": "2.1.0"
 }
