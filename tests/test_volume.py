@@ -1,76 +1,87 @@
-"""Tests for the Onkyo media_player volume conversion."""
+
 import pytest
-from unittest.mock import MagicMock, AsyncMock
-
-from homeassistant.config_entries import ConfigEntry
-
+from unittest.mock import MagicMock, PropertyMock
 from custom_components.onkyo.media_player import OnkyoMediaPlayer
 
+# Minimal mock for ConfigEntry
+class MockConfigEntry:
+    def __init__(self, data, options=None):
+        self._data = data
+        self._options = options if options is not None else {}
 
-class MockConfigEntry(ConfigEntry):
-    """Mock config entry."""
+    @property
+    def data(self):
+        return self._data
 
-    def __init__(self, *, data, options, entry_id="test-entry-id", **kwargs):
-        """Initialize the mock config entry."""
-        # Add all required fields for a ConfigEntry
-        super().__init__(
-            entry_id=entry_id,
-            data=data,
-            options=options,
-            domain=kwargs.get("domain", "onkyo"),
-            title=kwargs.get("title", "Onkyo"),
-            source=kwargs.get("source", "user"),
-            unique_id=kwargs.get("unique_id", "12345"),
-            version=kwargs.get("version", 1),
-            minor_version=kwargs.get("minor_version", 1),
-            discovery_keys=kwargs.get("discovery_keys", {}),
-        )
+    @property
+    def options(self):
+        return self._options
 
+# Test cases for volume conversion
+@pytest.mark.parametrize("receiver_volume, max_volume, resolution, expected_ha_volume", [
+    # Scenario 1: No max volume limit (max_volume is 100)
+    (0, 100, 80, 0.0),      # Min volume
+    (40, 100, 80, 0.5),     # Mid volume
+    (80, 100, 80, 1.0),     # Max volume
 
-@pytest.mark.asyncio
-async def test_update_volume_does_not_crash_on_invalid_string():
-    """Test that async_update_volume handles non-integer string from receiver."""
-    # Setup
-    receiver_mock = MagicMock()
-    hass_mock = MagicMock()
+    # Scenario 2: With max volume limit (e.g., 80), max receiver volume is 64
+    (0, 80, 80, 0.0),       # Min volume
+    (32, 80, 80, 0.5),      # Mid volume (half of the usable range)
+    (51, 80, 80, 0.796875), # Corresponds to HA volume 0.8
+    (64, 80, 80, 1.0),      # Max volume (full slider)
 
-    # A basic mock config entry
-    mock_config_entry = MockConfigEntry(
+    # Scenario 3: Different resolution (e.g., 100)
+    (50, 100, 100, 0.5),    # Mid volume
+    (100, 100, 100, 1.0),   # Max volume
+    (50, 80, 100, 0.625),   # 50 is 62.5% of 80
+])
+def test_receiver_volume_to_ha(receiver_volume, max_volume, resolution, expected_ha_volume):
+    """Test conversion from receiver volume to HA volume scale."""
+
+    # Mock necessary dependencies
+    mock_receiver = MagicMock()
+    mock_hass = MagicMock()
+
+    # Create mock config entry with volume settings
+    mock_entry = MockConfigEntry(
         data={"host": "1.2.3.4", "name": "Test Receiver"},
-        options={},
-        domain="onkyo",
-        title="Onkyo",
+        options={
+            "max_volume": max_volume,
+            "volume_resolution": resolution
+        }
     )
 
+    # Instantiate the media player
     player = OnkyoMediaPlayer(
-        receiver=receiver_mock,
-        name="Test Player",
+        receiver=mock_receiver,
+        name="Test Receiver",
         zone="main",
-        hass=hass_mock,
-        entry=mock_config_entry,
+        hass=mock_hass,
+        entry=mock_entry
     )
 
-    # Mock the connection manager to return an invalid volume string
-    player._conn_manager = AsyncMock()
+    # Perform the conversion
+    ha_volume = player._receiver_volume_to_ha(receiver_volume)
 
-    # Mock the sequence of commands during an update
-    async def command_side_effect(*args, **kwargs):
-        command = args[1]
-        if "power" in command:
-            return ("system-power", "on")
-        if "volume" in command:
-            # This is the problematic value
-            return "N/A"
-        if "selector" in command:
-            return "pc"
-        if "muting" in command:
-            return "off"
-        return None
+    # Assert the result is as expected, allowing for small float inaccuracies
+    assert ha_volume == pytest.approx(expected_ha_volume, abs=1e-3)
 
-    player._conn_manager.async_send_command.side_effect = command_side_effect
+def test_receiver_volume_to_ha_zero_max_volume():
+    """Test volume conversion with max_volume set to 0 to prevent division by zero."""
+    mock_receiver = MagicMock()
+    mock_hass = MagicMock()
+    mock_entry = MockConfigEntry(
+        data={"host": "1.2.3.4", "name": "Test Receiver"},
+        options={"max_volume": 0, "volume_resolution": 80}
+    )
+    player = OnkyoMediaPlayer(
+        receiver=mock_receiver,
+        name="Test Receiver",
+        zone="main",
+        hass=mock_hass,
+        entry=mock_entry
+    )
 
-    # This call should not raise an exception.
-    await player.async_update()
-
-    # Assert that the volume level is unchanged (it's None by default)
-    assert player.volume_level is None
+    # This should not raise an error
+    ha_volume = player._receiver_volume_to_ha(0)
+    assert ha_volume == 0.0

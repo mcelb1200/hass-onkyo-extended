@@ -72,3 +72,50 @@ async def test_update_volume_parses_tuple():
     # Assert that the volume level is correctly parsed from the tuple
     # With resolution 100 and max_vol 100, receiver vol 40 should be HA vol 0.4
     assert player.volume_level == 0.4
+
+
+@pytest.mark.asyncio
+async def test_update_volume_does_not_crash_on_invalid_string():
+    """Test that async_update_volume does not crash on a non-numeric string."""
+    # Setup
+    receiver_mock = MagicMock()
+    hass_mock = MagicMock()
+
+    # A basic mock config entry
+    mock_config_entry = MockConfigEntry(
+        data={"host": "1.2.3.4", "name": "Test Receiver", "max_volume": 100},
+        options={"volume_resolution": 100},
+    )
+
+    player = OnkyoMediaPlayer(
+        receiver=receiver_mock,
+        name="Test Player",
+        zone="main",
+        hass=hass_mock,
+        entry=mock_config_entry,
+    )
+
+    # Mock the connection manager
+    player._conn_manager = AsyncMock()
+
+    # Mock the sequence of commands during an update
+    async def command_side_effect(*args, **kwargs):
+        command = args[1]
+        if "power" in command:
+            return ("system-power", "on")
+        if "volume" in command:
+            # The receiver can return a non-numeric string
+            return ("master-volume", "N/A")
+        if "selector" in command:
+            return "pc"
+        if "muting" in command:
+            return "off"
+        return None
+
+    player._conn_manager.async_send_command.side_effect = command_side_effect
+
+    # Run the update - this should not raise an exception
+    await player.async_update()
+
+    # Assert that the volume level remains None as the value was invalid
+    assert player.volume_level is None

@@ -698,8 +698,13 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
             self._entry.data.get(CONF_VOLUME_RESOLUTION, 80)
         )
 
-        # Scale: receiver steps -> max volume % -> HA volume
-        ha_volume = (receiver_volume / resolution) / (max_volume / 100)
+        # Scale: receiver steps -> HA volume
+        # The HA volume should be a percentage of the *usable* volume range
+        max_receiver_volume = resolution * (max_volume / 100)
+        if max_receiver_volume == 0:
+            return 0.0
+
+        ha_volume = receiver_volume / max_receiver_volume
         return min(1.0, max(0.0, ha_volume))
     
     # Properties
