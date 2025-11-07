@@ -345,8 +345,11 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
             )
 
             if result:
-                volume = int(result) if isinstance(result, (int, str)) else 50
-                self._attr_volume_level = self._receiver_volume_to_ha(volume)
+                try:
+                    volume = int(result)
+                    self._attr_volume_level = self._receiver_volume_to_ha(volume)
+                except (ValueError, TypeError):
+                    _LOGGER.debug("Received non-numeric volume value: %s", result)
 
         except OSError as err:
             _LOGGER.debug("Failed to update volume: %s", err)
