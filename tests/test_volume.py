@@ -1,6 +1,6 @@
 
 import pytest
-from unittest.mock import MagicMock, PropertyMock
+from unittest.mock import MagicMock
 from custom_components.onkyo.media_player import OnkyoMediaPlayer
 
 # Minimal mock for ConfigEntry
