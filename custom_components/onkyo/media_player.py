@@ -346,7 +346,11 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
 
             if result:
                 try:
-                    volume = int(result)
+                    volume_raw = result
+                    if isinstance(result, tuple) and len(result) >= 2:
+                        volume_raw = result[1]
+
+                    volume = int(volume_raw)
                     self._attr_volume_level = self._receiver_volume_to_ha(volume)
                 except (ValueError, TypeError):
                     _LOGGER.debug("Received non-numeric volume value: %s", result)
