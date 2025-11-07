@@ -119,3 +119,39 @@ async def test_update_volume_does_not_crash_on_invalid_string():
 
     # Assert that the volume level remains None as the value was invalid
     assert player.volume_level is None
+
+
+@pytest.mark.asyncio
+async def test_update_source_parses_tuple():
+    """Test that async_update_source correctly parses a tuple response."""
+    # Setup
+    receiver_mock = MagicMock()
+    hass_mock = MagicMock()
+    mock_config_entry = MockConfigEntry(
+        data={"host": "1.2.3.4", "name": "Test Receiver"},
+        options={},
+    )
+    player = OnkyoMediaPlayer(
+        receiver=receiver_mock,
+        name="Test Player",
+        zone="main",
+        hass=hass_mock,
+        entry=mock_config_entry,
+    )
+    player._conn_manager = AsyncMock()
+    async def command_side_effect(*args, **kwargs):
+        command = args[1]
+        if "power" in command:
+            return ("system-power", "on")
+        if "volume" in command:
+            return ("master-volume", 40)
+        if "selector" in command:
+            # When the source is changed, the receiver returns a tuple
+            return ('input-selector', ('cbl-sat', 'CBL/SAT'))
+        if "muting" in command:
+            return "off"
+        return None
+
+    player._conn_manager.async_send_command.side_effect = command_side_effect
+    await player.async_update()
+    assert player.source == 'cbl-sat'
