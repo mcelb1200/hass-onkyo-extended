@@ -265,7 +265,7 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
 
         elif command == "input-selector" or command == "selector":
             if isinstance(value, tuple):
-                self._attr_source = value[1] if len(value) > 1 else value[0]
+                self._attr_source = value[0]
             else:
                 self._attr_source = str(value)
 
@@ -370,8 +370,10 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
             )
 
             if result:
-                if isinstance(result, tuple):
-                    self._attr_source = result[1] if len(result) > 1 else result[0]
+                if isinstance(result, tuple) and len(result) > 1 and isinstance(result[1], tuple):
+                    self._attr_source = result[1][0]
+                elif isinstance(result, tuple):
+                    self._attr_source = result[0]
                 else:
                     self._attr_source = str(result)
 
