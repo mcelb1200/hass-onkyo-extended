@@ -4,10 +4,6 @@ from unittest.mock import MagicMock, AsyncMock
 
 from homeassistant.config_entries import ConfigEntry
 
-from custom_components.onkyo.const import (
-    CONF_MAX_VOLUME,
-    CONF_VOLUME_RESOLUTION,
-)
 from custom_components.onkyo.media_player import OnkyoMediaPlayer
 
 
