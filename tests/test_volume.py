@@ -85,3 +85,40 @@ def test_receiver_volume_to_ha_zero_max_volume():
     # This should not raise an error
     ha_volume = player._receiver_volume_to_ha(0)
     assert ha_volume == 0.0
+
+
+@pytest.mark.parametrize("ha_volume, max_volume, resolution, expected_receiver_volume", [
+    (0.5, 100, 80, 40),      # Mid volume
+    (0.499, 100, 80, 40),    # Value that should be rounded up
+    (0.493, 100, 80, 39),    # Value that should be rounded down
+])
+def test_ha_volume_to_receiver(ha_volume, max_volume, resolution, expected_receiver_volume):
+    """Test conversion from HA volume to receiver volume scale."""
+
+    # Mock necessary dependencies
+    mock_receiver = MagicMock()
+    mock_hass = MagicMock()
+
+    # Create mock config entry with volume settings
+    mock_entry = MockConfigEntry(
+        data={"host": "1.2.3.4", "name": "Test Receiver"},
+        options={
+            "max_volume": max_volume,
+            "volume_resolution": resolution
+        }
+    )
+
+    # Instantiate the media player
+    player = OnkyoMediaPlayer(
+        receiver=mock_receiver,
+        name="Test Receiver",
+        zone="main",
+        hass=mock_hass,
+        entry=mock_entry
+    )
+
+    # Perform the conversion
+    receiver_volume = player._ha_volume_to_receiver(ha_volume)
+
+    # Assert the result is as expected
+    assert receiver_volume == expected_receiver_volume

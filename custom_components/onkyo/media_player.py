@@ -371,9 +371,8 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
 
             if result:
                 if isinstance(result, tuple) and len(result) > 1 and isinstance(result[1], tuple):
-                    if result[1]:
-                        self._attr_source = result[1][0]
-                elif isinstance(result, tuple) and result:
+                    self._attr_source = result[1][0]
+                elif isinstance(result, tuple):
                     self._attr_source = result[0]
                 else:
                     self._attr_source = str(result)
@@ -476,13 +475,7 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
             await self._conn_manager.async_send_command("command", command)
 
             # Wait for receiver to power on
-            for _ in range(10):
-                power_state = await self._async_get_power_state()
-                if power_state == "on":
-                    break
-                await asyncio.sleep(0.5)
-            else:
-                _LOGGER.warning("Receiver did not power on in time.")
+            await asyncio.sleep(2)
 
             # Fetch device info after power on
             if not self._attr_source_list:
@@ -685,7 +678,7 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
 
         # Scale: HA volume -> max volume % -> receiver steps
         scaled_volume = ha_volume * (max_volume / 100) * resolution
-        return int(scaled_volume)
+        return round(scaled_volume)
     
     def _receiver_volume_to_ha(self, receiver_volume: int) -> float:
         """
