@@ -678,7 +678,7 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
 
         # Scale: HA volume -> max volume % -> receiver steps
         scaled_volume = ha_volume * (max_volume / 100) * resolution
-        return int(scaled_volume)
+        return round(scaled_volume)
     
     def _receiver_volume_to_ha(self, receiver_volume: int) -> float:
         """
