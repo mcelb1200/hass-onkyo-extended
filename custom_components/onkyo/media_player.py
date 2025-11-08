@@ -476,7 +476,13 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
             await self._conn_manager.async_send_command("command", command)
 
             # Wait for receiver to power on
-            await asyncio.sleep(2)
+            for _ in range(10):
+                power_state = await self._async_get_power_state()
+                if power_state == "on":
+                    break
+                await asyncio.sleep(0.5)
+            else:
+                _LOGGER.warning("Receiver did not power on in time.")
 
             # Fetch device info after power on
             if not self._attr_source_list:

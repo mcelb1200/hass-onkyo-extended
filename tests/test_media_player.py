@@ -1,4 +1,5 @@
 """Tests for the Onkyo media_player."""
+import asyncio
 import pytest
 from unittest.mock import MagicMock, AsyncMock
 
@@ -46,6 +47,7 @@ async def test_update_volume_parses_tuple():
         hass=hass_mock,
         entry=mock_config_entry,
     )
+    player.async_write_ha_state = MagicMock()
 
     # Mock the connection manager
     player._conn_manager = AsyncMock()
@@ -94,6 +96,7 @@ async def test_update_volume_does_not_crash_on_invalid_string():
         hass=hass_mock,
         entry=mock_config_entry,
     )
+    player.async_write_ha_state = MagicMock()
 
     # Mock the connection manager
     player._conn_manager = AsyncMock()
@@ -138,6 +141,7 @@ async def test_update_source_parses_tuple():
         hass=hass_mock,
         entry=mock_config_entry,
     )
+    player.async_write_ha_state = MagicMock()
     player._conn_manager = AsyncMock()
     async def command_side_effect(*args, **kwargs):
         command = args[1]
@@ -174,6 +178,7 @@ async def test_update_source_handles_empty_tuple():
         hass=hass_mock,
         entry=mock_config_entry,
     )
+    player.async_write_ha_state = MagicMock()
     player._conn_manager = AsyncMock()
 
     # Mock the command to return an empty tuple for the source
@@ -197,3 +202,51 @@ async def test_update_source_handles_empty_tuple():
 
     # The source should remain at its initial state (None) because the response was invalid
     assert player.source is None
+
+
+@pytest.mark.asyncio
+async def test_turn_on_waits_for_power():
+    """Test that async_turn_on waits for the receiver to power on."""
+    # Setup
+    receiver_mock = MagicMock()
+    hass_mock = MagicMock()
+    mock_config_entry = MockConfigEntry(
+        data={"host": "1.2.3.4", "name": "Test Receiver"},
+        options={},
+    )
+    player = OnkyoMediaPlayer(
+        receiver=receiver_mock,
+        name="Test Player",
+        zone="main",
+        hass=hass_mock,
+        entry=mock_config_entry,
+    )
+    player.async_write_ha_state = MagicMock()
+    player._conn_manager = AsyncMock()
+
+    # Simulate a receiver that takes a long time to power on
+    power_on_time = 3
+    start_time = 0
+    async def command_side_effect(*args, **kwargs):
+        nonlocal start_time
+        command = args[1]
+        if "power=on" in command:
+            start_time = asyncio.get_event_loop().time()
+            return True
+        if "power" in command:
+            if asyncio.get_event_loop().time() - start_time < power_on_time:
+                return "standby"
+            else:
+                return "on"
+        if "SLIQSTN" in args:
+            if asyncio.get_event_loop().time() - start_time < power_on_time:
+                return {}
+            else:
+                return {"tv": "TV"}
+        return None
+
+    player._conn_manager.async_send_command.side_effect = command_side_effect
+
+    await player.async_turn_on()
+
+    assert player.source_list == ["tv"]
