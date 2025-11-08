@@ -1,49 +1,87 @@
-"""Tests for volume conversion in the Onkyo media_player."""
+
 import pytest
 from unittest.mock import MagicMock
-
 from custom_components.onkyo.media_player import OnkyoMediaPlayer
-from homeassistant.config_entries import ConfigEntry
 
+# Minimal mock for ConfigEntry
+class MockConfigEntry:
+    def __init__(self, data, options=None):
+        self._data = data
+        self._options = options if options is not None else {}
 
-class MockConfigEntry(ConfigEntry):
-    """Mock config entry."""
+    @property
+    def data(self):
+        return self._data
 
-    def __init__(self, *, data, options, entry_id="test-entry-id", **kwargs):
-        """Initialize the mock config entry."""
-        super().__init__(
-            entry_id=entry_id,
-            data=data,
-            options=options,
-            domain=kwargs.get("domain", "onkyo"),
-            title=kwargs.get("title", "Onkyo"),
-            source=kwargs.get("source", "user"),
-            unique_id=kwargs.get("unique_id", "12345"),
-            version=kwargs.get("version", 1),
-            minor_version=kwargs.get("minor_version", 1),
-            discovery_keys=kwargs.get("discovery_keys", {}),
-        )
+    @property
+    def options(self):
+        return self._options
 
-def test_volume_conversion_handles_zero_max_volume():
-    """Test that _receiver_volume_to_ha handles a max_volume of 0."""
-    # Setup
-    receiver_mock = MagicMock()
-    hass_mock = MagicMock()
+# Test cases for volume conversion
+@pytest.mark.parametrize("receiver_volume, max_volume, resolution, expected_ha_volume", [
+    # Scenario 1: No max volume limit (max_volume is 100)
+    (0, 100, 80, 0.0),      # Min volume
+    (40, 100, 80, 0.5),     # Mid volume
+    (80, 100, 80, 1.0),     # Max volume
 
-    # Config entry with max_volume set to 0
-    mock_config_entry = MockConfigEntry(
-        data={"host": "1.2.3.4", "name": "Test Receiver", "max_volume": 0},
-        options={"volume_resolution": 100},
+    # Scenario 2: With max volume limit (e.g., 80), max receiver volume is 64
+    (0, 80, 80, 0.0),       # Min volume
+    (32, 80, 80, 0.5),      # Mid volume (half of the usable range)
+    (51, 80, 80, 0.796875), # Corresponds to HA volume 0.8
+    (64, 80, 80, 1.0),      # Max volume (full slider)
+
+    # Scenario 3: Different resolution (e.g., 100)
+    (50, 100, 100, 0.5),    # Mid volume
+    (100, 100, 100, 1.0),   # Max volume
+    (50, 80, 100, 0.625),   # 50 is 62.5% of 80
+])
+def test_receiver_volume_to_ha(receiver_volume, max_volume, resolution, expected_ha_volume):
+    """Test conversion from receiver volume to HA volume scale."""
+
+    # Mock necessary dependencies
+    mock_receiver = MagicMock()
+    mock_hass = MagicMock()
+
+    # Create mock config entry with volume settings
+    mock_entry = MockConfigEntry(
+        data={"host": "1.2.3.4", "name": "Test Receiver"},
+        options={
+            "max_volume": max_volume,
+            "volume_resolution": resolution
+        }
     )
 
+    # Instantiate the media player
     player = OnkyoMediaPlayer(
-        receiver=receiver_mock,
-        name="Test Player",
+        receiver=mock_receiver,
+        name="Test Receiver",
         zone="main",
-        hass=hass_mock,
-        entry=mock_config_entry,
+        hass=mock_hass,
+        entry=mock_entry
     )
 
-    # Call the function directly and assert it doesn't raise an exception
-    ha_volume = player._receiver_volume_to_ha(50)
+    # Perform the conversion
+    ha_volume = player._receiver_volume_to_ha(receiver_volume)
+
+    # Assert the result is as expected, allowing for small float inaccuracies
+    assert ha_volume == pytest.approx(expected_ha_volume, abs=1e-3)
+
+def test_receiver_volume_to_ha_zero_max_volume():
+    """Test volume conversion with max_volume set to 0 to prevent division by zero."""
+    mock_receiver = MagicMock()
+    mock_hass = MagicMock()
+    mock_entry = MockConfigEntry(
+        data={"host": "1.2.3.4", "name": "Test Receiver"},
+        options={"max_volume": 0, "volume_resolution": 80}
+    )
+    player = OnkyoMediaPlayer(
+        receiver=mock_receiver,
+        name="Test Receiver",
+        zone="main",
+        hass=mock_hass,
+        entry=mock_entry
+    )
+
+    # This should not raise an error
+    ha_volume = player._receiver_volume_to_ha(0)
     assert ha_volume == 0.0
