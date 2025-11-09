@@ -258,7 +258,10 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
             self._attr_available = True
 
         elif command == "volume":
-            self._attr_volume_level = self._receiver_volume_to_ha(value)
+            try:
+                self._attr_volume_level = self._receiver_volume_to_ha(value)
+            except (ValueError, TypeError):
+                _LOGGER.debug("Received non-numeric volume value: %s", value)
 
         elif command == "muting":
             self._attr_is_volume_muted = value == "on"

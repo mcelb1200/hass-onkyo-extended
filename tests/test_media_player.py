@@ -1,13 +1,9 @@
-"""Tests for the Onkyo media_player volume conversion."""
+"""Tests for the Onkyo media_player."""
 import pytest
 from unittest.mock import MagicMock, AsyncMock
 
 from homeassistant.config_entries import ConfigEntry
 
-from custom_components.onkyo.const import (
-    CONF_MAX_VOLUME,
-    CONF_VOLUME_RESOLUTION,
-)
 from custom_components.onkyo.media_player import OnkyoMediaPlayer
 
 
@@ -32,8 +28,8 @@ class MockConfigEntry(ConfigEntry):
 
 
 @pytest.mark.asyncio
-async def test_update_volume_does_not_crash_on_invalid_string():
-    """Test that async_update_volume handles non-integer string from receiver."""
+async def test_handle_receiver_update_does_not_crash_on_invalid_volume():
+    """Test that _handle_receiver_update handles non-numeric volume values."""
     # Setup
     receiver_mock = MagicMock()
     hass_mock = MagicMock()
@@ -54,27 +50,12 @@ async def test_update_volume_does_not_crash_on_invalid_string():
         entry=mock_config_entry,
     )
 
-    # Mock the connection manager to return an invalid volume string
-    player._conn_manager = AsyncMock()
-
-    # Mock the sequence of commands during an update
-    async def command_side_effect(*args, **kwargs):
-        command = args[1]
-        if "power" in command:
-            return ("system-power", "on")
-        if "volume" in command:
-            # This is the problematic value
-            return "N/A"
-        if "selector" in command:
-            return "pc"
-        if "muting" in command:
-            return "off"
-        return None
-
-    player._conn_manager.async_send_command.side_effect = command_side_effect
+    # Mock async_write_ha_state to prevent it from being called
+    player.async_write_ha_state = MagicMock()
 
     # This call should not raise an exception.
-    await player.async_update()
+    # Before the fix, it will raise an exception and fail the test.
+    player._handle_receiver_update("main", "volume", "N/A")
 
     # Assert that the volume level is unchanged (it's None by default)
     assert player.volume_level is None
