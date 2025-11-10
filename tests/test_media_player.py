@@ -155,3 +155,41 @@ async def test_update_source_parses_tuple():
     player._conn_manager.async_send_command.side_effect = command_side_effect
     await player.async_update()
     assert player.source == 'cbl-sat'
+
+
+@pytest.mark.asyncio
+async def test_turn_on_waits_for_power_on_state():
+    """Test that async_turn_on waits for the receiver to power on before fetching sources."""
+    # Setup
+    receiver_mock = MagicMock()
+    hass_mock = MagicMock()
+    mock_config_entry = MockConfigEntry(
+        data={"host": "1.2.3.4", "name": "Test Receiver"},
+        options={},
+    )
+    player = OnkyoMediaPlayer(
+        receiver=receiver_mock,
+        name="Test Player",
+        zone="main",
+        hass=hass_mock,
+        entry=mock_config_entry,
+    )
+    # Mock methods that are not part of this test
+    player.async_write_ha_state = MagicMock()
+
+    # Mock the connection manager and power state check
+    player._conn_manager = AsyncMock()
+    player._async_get_power_state = AsyncMock(side_effect=["standby", "standby", "on"])
+    player._async_fetch_source_list = AsyncMock()
+
+    # Call the method to test
+    await player.async_turn_on()
+
+    # Assertions
+    # Power state should have been polled 3 times
+    assert player._async_get_power_state.call_count == 3
+    # Fetch source list should have been called once after power on
+    player._async_fetch_source_list.assert_awaited_once()
+    # The player state should be ON
+    from homeassistant.components.media_player import MediaPlayerState
+    assert player.state == MediaPlayerState.ON
