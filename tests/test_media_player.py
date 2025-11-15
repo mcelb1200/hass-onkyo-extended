@@ -185,3 +185,44 @@ async def test_power_state_parses_single_element_tuple():
 
     # Assert that the power state is correctly parsed
     assert power_state == "on"
+
+
+@pytest.mark.asyncio
+async def test_turn_on_waits_for_power_on():
+    """Test that async_turn_on waits for the receiver to power on."""
+    # Setup
+    receiver_mock = MagicMock()
+    hass_mock = MagicMock()
+    mock_config_entry = MockConfigEntry(
+        data={"host": "1.2.3.4", "name": "Test Receiver"},
+        options={},
+    )
+    player = OnkyoMediaPlayer(
+        receiver=receiver_mock,
+        name="Test Player",
+        zone="main",
+        hass=hass_mock,
+        entry=mock_config_entry,
+    )
+    player._conn_manager = AsyncMock()
+    player.async_write_ha_state = MagicMock()
+
+    # Simulate the receiver taking time to power on
+    power_states = ["standby", "standby", "on"]
+
+    async def command_side_effect(*args, **kwargs):
+        command = args[1]
+        if "power=on" in command:
+            return True
+        if "power=query" in command:
+            return power_states.pop(0)
+        return None
+
+    player._conn_manager.async_send_command.side_effect = command_side_effect
+
+    # Run the turn_on method
+    await player.async_turn_on()
+
+    # Assert that the method waited until the power state was "on"
+    # 1 call to turn on, 3 calls to poll, 2 calls to fetch lists
+    assert player._conn_manager.async_send_command.call_count == 6
