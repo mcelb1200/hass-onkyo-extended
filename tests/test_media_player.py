@@ -155,3 +155,33 @@ async def test_update_source_parses_tuple():
     player._conn_manager.async_send_command.side_effect = command_side_effect
     await player.async_update()
     assert player.source == 'cbl-sat'
+
+
+@pytest.mark.asyncio
+async def test_power_state_parses_single_element_tuple():
+    """Test that _async_get_power_state correctly parses a single-element tuple."""
+    # Setup
+    receiver_mock = MagicMock()
+    hass_mock = MagicMock()
+    mock_config_entry = MockConfigEntry(
+        data={"host": "1.2.3.4", "name": "Test Receiver"},
+        options={},
+    )
+    player = OnkyoMediaPlayer(
+        receiver=receiver_mock,
+        name="Test Player",
+        zone="main",
+        hass=hass_mock,
+        entry=mock_config_entry,
+    )
+    player._conn_manager = AsyncMock()
+    player.async_write_ha_state = MagicMock()
+
+    # Mock the command to return a single-element tuple for power state
+    player._conn_manager.async_send_command.return_value = ("on",)
+
+    # Run the method
+    power_state = await player._async_get_power_state()
+
+    # Assert that the power state is correctly parsed
+    assert power_state == "on"

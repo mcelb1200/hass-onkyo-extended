@@ -325,8 +325,8 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
                 )
 
             # Parse result
-            if isinstance(result, tuple) and len(result) >= 2:
-                return result[1]
+            if isinstance(result, tuple) and result:
+                return result[-1]
             return str(result)
 
         except OSError as err:
