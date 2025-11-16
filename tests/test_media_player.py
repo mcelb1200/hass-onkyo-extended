@@ -226,3 +226,46 @@ async def test_turn_on_waits_for_power_on():
     # Assert that the method waited until the power state was "on"
     # 1 call to turn on, 3 calls to poll, 2 calls to fetch lists
     assert player._conn_manager.async_send_command.call_count == 6
+
+
+@pytest.mark.asyncio
+async def test_update_source_handles_empty_tuple():
+    """Test that async_update_source handles an empty tuple without crashing."""
+    # Setup
+    receiver_mock = MagicMock()
+    hass_mock = MagicMock()
+    mock_config_entry = MockConfigEntry(
+        data={"host": "1.2.3.4", "name": "Test Receiver"},
+        options={},
+    )
+    player = OnkyoMediaPlayer(
+        receiver=receiver_mock,
+        name="Test Player",
+        zone="main",
+        hass=hass_mock,
+        entry=mock_config_entry,
+    )
+    player._conn_manager = AsyncMock()
+    player.async_write_ha_state = MagicMock()
+
+    # Mock the command to return a nested empty tuple for the source
+    async def command_side_effect(*args, **kwargs):
+        command = args[1]
+        if "power" in command:
+            return ("system-power", "on")
+        if "volume" in command:
+            return ("master-volume", 40)
+        if "selector" in command:
+            # When the source is not set, the receiver can return an empty tuple
+            return ('input-selector', ())
+        if "muting" in command:
+            return "off"
+        return None
+
+    player._conn_manager.async_send_command.side_effect = command_side_effect
+
+    # Run the update - this should not raise an IndexError
+    await player.async_update()
+
+    # Assert that the source remains None as the value was empty
+    assert player.source is None
