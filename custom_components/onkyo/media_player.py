@@ -325,8 +325,8 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
                 )
 
             # Parse result
-            if isinstance(result, tuple) and len(result) >= 2:
-                return result[1]
+            if isinstance(result, tuple) and result:
+                return result[-1]
             return str(result)
 
         except OSError as err:
@@ -371,7 +371,8 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
 
             if result:
                 if isinstance(result, tuple) and len(result) > 1 and isinstance(result[1], tuple):
-                    self._attr_source = result[1][0]
+                    if result[1]:
+                        self._attr_source = result[1][0]
                 elif isinstance(result, tuple):
                     self._attr_source = result[0]
                 else:
