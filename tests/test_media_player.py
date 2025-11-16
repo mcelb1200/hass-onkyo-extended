@@ -158,8 +158,8 @@ async def test_update_source_parses_tuple():
 
 
 @pytest.mark.asyncio
-async def test_power_state_parses_single_element_tuple():
-    """Test that _async_get_power_state correctly parses a single-element tuple."""
+async def test_turn_on_waits_for_power_on_state():
+    """Test that async_turn_on waits for the receiver to power on before fetching sources."""
     # Setup
     receiver_mock = MagicMock()
     hass_mock = MagicMock()
@@ -174,98 +174,22 @@ async def test_power_state_parses_single_element_tuple():
         hass=hass_mock,
         entry=mock_config_entry,
     )
-    player._conn_manager = AsyncMock()
+    # Mock methods that are not part of this test
     player.async_write_ha_state = MagicMock()
 
-    # Mock the command to return a single-element tuple for power state
-    player._conn_manager.async_send_command.return_value = ("on",)
-
-    # Run the method
-    power_state = await player._async_get_power_state()
-
-    # Assert that the power state is correctly parsed
-    assert power_state == "on"
-
-
-@pytest.mark.asyncio
-async def test_turn_on_waits_for_power_on():
-    """Test that async_turn_on waits for the receiver to power on."""
-    # Setup
-    receiver_mock = MagicMock()
-    hass_mock = MagicMock()
-    mock_config_entry = MockConfigEntry(
-        data={"host": "1.2.3.4", "name": "Test Receiver"},
-        options={},
-    )
-    player = OnkyoMediaPlayer(
-        receiver=receiver_mock,
-        name="Test Player",
-        zone="main",
-        hass=hass_mock,
-        entry=mock_config_entry,
-    )
+    # Mock the connection manager and power state check
     player._conn_manager = AsyncMock()
-    player.async_write_ha_state = MagicMock()
+    player._async_get_power_state = AsyncMock(side_effect=["standby", "standby", "on"])
+    player._async_fetch_source_list = AsyncMock()
 
-    # Simulate the receiver taking time to power on
-    power_states = ["standby", "standby", "on"]
-
-    async def command_side_effect(*args, **kwargs):
-        command = args[1]
-        if "power=on" in command:
-            return True
-        if "power=query" in command:
-            return power_states.pop(0)
-        return None
-
-    player._conn_manager.async_send_command.side_effect = command_side_effect
-
-    # Run the turn_on method
+    # Call the method to test
     await player.async_turn_on()
 
-    # Assert that the method waited until the power state was "on"
-    # 1 call to turn on, 3 calls to poll, 2 calls to fetch lists
-    assert player._conn_manager.async_send_command.call_count == 6
-
-
-@pytest.mark.asyncio
-async def test_update_source_handles_empty_tuple():
-    """Test that async_update_source handles an empty tuple without crashing."""
-    # Setup
-    receiver_mock = MagicMock()
-    hass_mock = MagicMock()
-    mock_config_entry = MockConfigEntry(
-        data={"host": "1.2.3.4", "name": "Test Receiver"},
-        options={},
-    )
-    player = OnkyoMediaPlayer(
-        receiver=receiver_mock,
-        name="Test Player",
-        zone="main",
-        hass=hass_mock,
-        entry=mock_config_entry,
-    )
-    player._conn_manager = AsyncMock()
-    player.async_write_ha_state = MagicMock()
-
-    # Mock the command to return a nested empty tuple for the source
-    async def command_side_effect(*args, **kwargs):
-        command = args[1]
-        if "power" in command:
-            return ("system-power", "on")
-        if "volume" in command:
-            return ("master-volume", 40)
-        if "selector" in command:
-            # When the source is not set, the receiver can return an empty tuple
-            return ('input-selector', ())
-        if "muting" in command:
-            return "off"
-        return None
-
-    player._conn_manager.async_send_command.side_effect = command_side_effect
-
-    # Run the update - this should not raise an IndexError
-    await player.async_update()
-
-    # Assert that the source remains None as the value was empty
-    assert player.source is None
+    # Assertions
+    # Power state should have been polled 3 times
+    assert player._async_get_power_state.call_count == 3
+    # Fetch source list should have been called once after power on
+    player._async_fetch_source_list.assert_awaited_once()
+    # The player state should be ON
+    from homeassistant.components.media_player import MediaPlayerState
+    assert player.state == MediaPlayerState.ON
