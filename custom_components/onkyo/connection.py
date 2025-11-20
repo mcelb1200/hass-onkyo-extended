@@ -77,6 +77,11 @@ class OnkyoConnectionManager:
             except Exception as err:
                 _LOGGER.debug("Error sending command %s: %s", command, err)
                 self._is_connected = False
+                # Force disconnect to reset the eISCP state
+                try:
+                    await self.hass.async_add_executor_job(self._receiver.disconnect)
+                except Exception:
+                    pass
                 # Don't raise, return None to allow graceful degradation
                 return None
 
