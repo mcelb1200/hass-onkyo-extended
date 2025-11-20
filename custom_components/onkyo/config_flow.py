@@ -57,7 +57,15 @@ class OnkyoConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     async def async_step_user(
         self, user_input: dict[str, Any] | None = None
     ) -> FlowResult:
-        """Handle the initial step - manual configuration."""
+        """
+        Handle the initial step - manual configuration.
+
+        Args:
+            user_input: The user input dictionary.
+
+        Returns:
+            FlowResult: The result of the flow step.
+        """
         errors: dict[str, str] = {}
         
         if user_input is not None:
@@ -127,7 +135,15 @@ class OnkyoConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     async def async_step_ssdp(
         self, discovery_info: dict[str, Any]
     ) -> FlowResult:
-        """Handle SSDP discovery."""
+        """
+        Handle SSDP discovery.
+
+        Args:
+            discovery_info: The discovery info dictionary.
+
+        Returns:
+            FlowResult: The result of the flow step.
+        """
         host = discovery_info.get("host") or discovery_info.get("ssdp_location", "").split("://")[1].split(":")[0]
         name = discovery_info.get("friendlyName", "").replace("._eISCP._tcp.local.", "")
         
@@ -161,7 +177,15 @@ class OnkyoConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     async def async_step_discovery_confirm(
         self, user_input: dict[str, Any] | None = None
     ) -> FlowResult:
-        """Confirm discovery."""
+        """
+        Confirm discovery.
+
+        Args:
+            user_input: The user input dictionary.
+
+        Returns:
+            FlowResult: The result of the flow step.
+        """
         if user_input is not None:
             # Get sources list
             sources = build_sources_list()
@@ -192,8 +216,12 @@ class OnkyoConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         """
         Try to connect to the receiver.
         
+        Args:
+            host: The hostname or IP address of the receiver.
+
         Returns:
-            dict with 'success', 'error', and 'allow_setup' keys
+            dict[str, Any]: A dictionary containing 'success' (bool),
+            'error' (str, optional), and 'allow_setup' (bool, optional).
         """
         try:
             # Try to create receiver instance
@@ -267,21 +295,44 @@ class OnkyoConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     def async_get_options_flow(
         config_entry: config_entries.ConfigEntry,
     ) -> config_entries.OptionsFlow:
-        """Get the options flow for this handler."""
+        """
+        Get the options flow for this handler.
+
+        Args:
+            config_entry: The configuration entry.
+
+        Returns:
+            config_entries.OptionsFlow: The options flow handler.
+        """
         return OnkyoOptionsFlowHandler(config_entry)
 
 
 class OnkyoOptionsFlowHandler(config_entries.OptionsFlow):
-    """Handle Onkyo options."""
+    """
+    Handle Onkyo options.
+    """
     
     def __init__(self, config_entry: config_entries.ConfigEntry) -> None:
-        """Initialize options flow."""
+        """
+        Initialize options flow.
+
+        Args:
+            config_entry: The configuration entry.
+        """
         self.config_entry = config_entry
     
     async def async_step_init(
         self, user_input: dict[str, Any] | None = None
     ) -> FlowResult:
-        """Manage the options."""
+        """
+        Manage the options.
+
+        Args:
+            user_input: The user input dictionary.
+
+        Returns:
+            FlowResult: The result of the flow step.
+        """
         errors: dict[str, str] = {}
         
         if user_input is not None:

@@ -47,6 +47,11 @@ async def async_setup_entry(
     
     Enhanced with robust error handling to prevent setup failures
     when receiver is temporarily unavailable (Issue #125768 fix).
+
+    Args:
+        hass: The Home Assistant instance.
+        entry: The configuration entry.
+        async_add_entities: Callback to add entities.
     """
     receiver_data = hass.data[DOMAIN][entry.entry_id]
     receiver = receiver_data["receiver"]
@@ -112,7 +117,11 @@ def _detect_zones_safe(receiver) -> list[str]:
     """
     Safely detect available zones.
     
-    Returns list of zone names, or ["main"] if detection fails.
+    Args:
+        receiver: The receiver instance.
+
+    Returns:
+        list[str]: list of zone names, or ["main"] if detection fails.
     """
     try:
         # Query receiver for available zones
@@ -175,7 +184,16 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         hass: HomeAssistant,
         entry: ConfigEntry,
     ) -> None:
-        """Initialize the media player."""
+        """
+        Initialize the media player.
+
+        Args:
+            receiver: The receiver instance.
+            name: The name of the entity.
+            zone: The zone identifier.
+            hass: The Home Assistant instance.
+            entry: The configuration entry.
+        """
         self._receiver = receiver
         self._attr_name = name
         self._zone = zone
@@ -313,7 +331,12 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
             self._attr_available = False
     
     async def _async_get_power_state(self) -> str:
-        """Get power state from receiver."""
+        """
+        Get power state from receiver.
+
+        Returns:
+            str: The power state ('on', 'standby', or 'unknown').
+        """
         try:
             if self._zone == "main":
                 result = await self._conn_manager.async_send_command(
@@ -529,6 +552,9 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         Set volume level (0.0 to 1.0).
         
         Converts HA volume to receiver-specific scale.
+
+        Args:
+            volume: Volume level to set.
         """
         try:
             receiver_volume = self._ha_volume_to_receiver(volume)
@@ -583,7 +609,12 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
             raise
     
     async def async_mute_volume(self, mute: bool) -> None:
-        """Mute or unmute the media player."""
+        """
+        Mute or unmute the media player.
+
+        Args:
+            mute: True to mute, False to unmute.
+        """
         try:
             mute_state = "on" if mute else "off"
             command = (
@@ -600,7 +631,12 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
             raise
     
     async def async_select_source(self, source: str) -> None:
-        """Select input source."""
+        """
+        Select input source.
+
+        Args:
+            source: The source to select.
+        """
         try:
             command = (
                 f"input-selector={source}" if self._zone == "main"
@@ -622,8 +658,9 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         Play media (radio presets).
         
         Args:
-            media_type: Type of media (e.g., "radio")
-            media_id: Preset number (1-40)
+            media_type: Type of media (e.g., "radio").
+            media_id: Preset number (1-40).
+            kwargs: Additional arguments.
         """
         try:
             if media_type.lower() == "radio":
@@ -650,7 +687,7 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         Select HDMI output (custom service).
         
         Args:
-            hdmi_output: Output selector (no, analog, yes, out, out-sub, sub, hdbaset, both, up)
+            hdmi_output: Output selector (no, analog, yes, out, out-sub, sub, hdbaset, both, up).
         """
         if self._zone != "main":
             _LOGGER.warning("HDMI output selection only available for main zone")
@@ -679,6 +716,12 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         Takes into account:
         - Volume resolution (50, 80, 100, or 200 steps)
         - Maximum volume limit
+
+        Args:
+            ha_volume: The Home Assistant volume level (float).
+
+        Returns:
+            int: The receiver volume step.
         """
         from .const import CONF_MAX_VOLUME, CONF_VOLUME_RESOLUTION
 
@@ -703,6 +746,12 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         Takes into account:
         - Volume resolution
         - Maximum volume limit
+
+        Args:
+            receiver_volume: The receiver volume step (int).
+
+        Returns:
+            float: The Home Assistant volume level.
         """
         from .const import CONF_MAX_VOLUME, CONF_VOLUME_RESOLUTION
 
@@ -734,6 +783,9 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
 
         Issue #125768 fix: Always return list, never None.
         Empty list is valid and won't break setup.
+
+        Returns:
+            list[str]: The list of available sources.
         """
         return self._attr_source_list if self._attr_source_list else []
     
@@ -743,12 +795,20 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         Return if entity is available.
 
         Considers both connection manager state and entity availability.
+
+        Returns:
+            bool: True if available, False otherwise.
         """
         return self._attr_available and self._conn_manager.connected
     
     @property
     def extra_state_attributes(self) -> dict[str, Any]:
-        """Return entity specific state attributes."""
+        """
+        Return entity specific state attributes.
+
+        Returns:
+            dict[str, Any]: A dictionary of extra state attributes.
+        """
         attrs = self._attr_extra_state_attributes.copy()
 
         # Add listening modes if available
@@ -786,7 +846,7 @@ def validate_source_list(sources: list[str] | None) -> list[str]:
         sources: Source list to validate
         
     Returns:
-        Valid source list (may be empty)
+        list[str]: Valid source list (may be empty)
     """
     if not sources:
         return []
@@ -823,7 +883,7 @@ def validate_listening_modes(modes: list[str] | None) -> list[str]:
         modes: Listening mode list to validate
         
     Returns:
-        Valid listening mode list (may be empty)
+        list[str]: Valid listening mode list (may be empty)
     """
     if not modes:
         return []
@@ -856,7 +916,12 @@ class MockOnkyoReceiver:
     """Mock receiver for testing without hardware."""
     
     def __init__(self, host: str = "192.168.1.100"):
-        """Initialize mock receiver."""
+        """
+        Initialize mock receiver.
+
+        Args:
+            host: Hostname or IP address.
+        """
         self.host = host
         self.port = 60128
         self._power = "standby"
@@ -874,7 +939,15 @@ class MockOnkyoReceiver:
         self._listening_modes = ["stereo", "direct", "all-ch-stereo"]
     
     def command(self, cmd: str) -> Any:
-        """Process a command."""
+        """
+        Process a command.
+
+        Args:
+            cmd: The command string.
+
+        Returns:
+            Any: The result of the command.
+        """
         if "power=query" in cmd:
             return self._power
         elif "power=on" in cmd:
@@ -905,7 +978,15 @@ class MockOnkyoReceiver:
         return None
 
     def raw(self, cmd: str) -> Any:
-        """Process raw command."""
+        """
+        Process raw command.
+
+        Args:
+            cmd: The raw command string.
+
+        Returns:
+            Any: The result of the raw command.
+        """
         if cmd == "SLIQSTN":
             return self._sources
         elif cmd == "LMQSTN":

@@ -34,7 +34,11 @@ SCAN_INTERVAL = timedelta(seconds=10)
 
 # pylint: disable=too-many-instance-attributes
 class OnkyoUpdateCoordinator(DataUpdateCoordinator):
-    """DataUpdateCoordinator base class for onkyo."""
+    """
+    DataUpdateCoordinator base class for onkyo.
+
+    Manages fetching data from the receiver and updating the entities.
+    """
 
     # pylint: disable=too-many-arguments
     def __init__(
@@ -45,7 +49,16 @@ class OnkyoUpdateCoordinator(DataUpdateCoordinator):
         audio_info_supported=True,
         video_info_supported=True,
     ) -> None:
-        """Initialize onkyo DataUpdateCoordinator."""
+        """
+        Initialize onkyo DataUpdateCoordinator.
+
+        Args:
+            hass: The Home Assistant instance.
+            config_entry: The configuration entry.
+            hdmi_out_supported: Whether the receiver supports HDMI output.
+            audio_info_supported: Whether the receiver supports audio info.
+            video_info_supported: Whether the receiver supports video info.
+        """
         self.config_entry = config_entry
         self.hdmi_out_supported = hdmi_out_supported
         self.audio_info_supported = audio_info_supported
@@ -57,6 +70,15 @@ class OnkyoUpdateCoordinator(DataUpdateCoordinator):
         super().__init__(hass, _LOGGER, name=DOMAIN, update_interval=SCAN_INTERVAL)
 
     async def _async_update_data(self) -> dict:
+        """
+        Fetch data from the receiver.
+
+        Returns:
+            dict: A dictionary containing the updated data for main zone and other zones.
+
+        Raises:
+            UpdateFailed: If data fetching fails.
+        """
         data = {}
         try:
             main = await self.async_fetch_data()
@@ -73,7 +95,12 @@ class OnkyoUpdateCoordinator(DataUpdateCoordinator):
 
     # pylint: disable=too-many-locals, too-many-branches
     async def async_fetch_data(self) -> dict:
-        """Fetch all data from api."""
+        """
+        Fetch all data from api for the main zone.
+
+        Returns:
+            dict: A dictionary containing status, volume, source, and attributes.
+        """
         data: dict[str, Any] = {}
         attributes: dict[str, Any] = {}
 
@@ -147,7 +174,15 @@ class OnkyoUpdateCoordinator(DataUpdateCoordinator):
         return data
 
     async def async_fetch_data_zone(self, zone) -> dict:
-        """Fetch data zone."""
+        """
+        Fetch data for a specific zone.
+
+        Args:
+            zone: The zone identifier (e.g., "zone2").
+
+        Returns:
+            dict: A dictionary containing status, volume, source, and attributes for the zone.
+        """
         data: dict[str, Any] = {}
         attributes: dict[str, Any] = {}
 
@@ -207,7 +242,15 @@ class OnkyoUpdateCoordinator(DataUpdateCoordinator):
         return data
 
     def _parse_onkyo_payload(self, payload):
-        """Parse a payload returned from the eiscp library."""
+        """
+        Parse a payload returned from the eiscp library.
+
+        Args:
+            payload: The payload to parse.
+
+        Returns:
+            Any: The parsed payload (list, string, or bool).
+        """
         if isinstance(payload, bool):
             # command not supported by the device
             return False
@@ -222,6 +265,15 @@ class OnkyoUpdateCoordinator(DataUpdateCoordinator):
         return payload[1]
 
     def _parse_audio_information(self, audio_information_raw):
+        """
+        Parse audio information from raw response.
+
+        Args:
+            audio_information_raw: The raw audio information response.
+
+        Returns:
+            dict: Parsed audio information.
+        """
         if values := self._parse_onkyo_payload(audio_information_raw):
             info = {
                 "format": self._tuple_get(values, 1),
@@ -235,6 +287,15 @@ class OnkyoUpdateCoordinator(DataUpdateCoordinator):
         return {}
 
     def _parse_video_information(self, video_information_raw):
+        """
+        Parse video information from raw response.
+
+        Args:
+            video_information_raw: The raw video information response.
+
+        Returns:
+            dict: Parsed video information.
+        """
         if values := self._parse_onkyo_payload(video_information_raw):
             info = {
                 "input_resolution": self._tuple_get(values, 1),
@@ -249,11 +310,29 @@ class OnkyoUpdateCoordinator(DataUpdateCoordinator):
         return {}
 
     def _tuple_get(self, tup, index, default=None) -> tuple:
-        """Return a tuple item at index or a default value if it doesn't exist."""
+        """
+        Return a tuple item at index or a default value if it doesn't exist.
+
+        Args:
+            tup: The tuple to access.
+            index: The index to access.
+            default: The default value if index is out of bounds.
+
+        Returns:
+            Any: The value at the index or the default value.
+        """
         return (tup[index : index + 1] or [default])[0]
 
     def _determine_zones(self, receiver) -> list[str]:
-        """Determine what zones are available for the receiver."""
+        """
+        Determine what zones are available for the receiver.
+
+        Args:
+            receiver: The receiver instance.
+
+        Returns:
+            list[str]: A list of available zones (e.g., ["zone2", "zone3"]).
+        """
         out = []
         try:
             _LOGGER.debug("Checking for zone 2 capability")
