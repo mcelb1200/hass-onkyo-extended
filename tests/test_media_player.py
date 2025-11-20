@@ -48,9 +48,6 @@ async def test_update_volume_parses_tuple():
         entry=mock_config_entry,
     )
 
-    # Mock the connection manager
-    player._conn_manager = conn_manager_mock
-
     # Mock the sequence of commands during an update
     async def command_side_effect(*args, **kwargs):
         command = args[1]
@@ -98,9 +95,6 @@ async def test_update_volume_does_not_crash_on_invalid_string():
         entry=mock_config_entry,
     )
 
-    # Mock the connection manager
-    player._conn_manager = conn_manager_mock
-
     # Mock the sequence of commands during an update
     async def command_side_effect(*args, **kwargs):
         command = args[1]
@@ -131,6 +125,7 @@ async def test_update_source_parses_tuple():
     receiver_mock = MagicMock()
     hass_mock = MagicMock()
     conn_manager_mock = AsyncMock()
+
     mock_config_entry = MockConfigEntry(
         data={"host": "1.2.3.4", "name": "Test Receiver"},
         options={},
@@ -143,7 +138,7 @@ async def test_update_source_parses_tuple():
         hass=hass_mock,
         entry=mock_config_entry,
     )
-    player._conn_manager = conn_manager_mock
+
     async def command_side_effect(*args, **kwargs):
         command = args[1]
         if "power" in command:
@@ -169,6 +164,7 @@ async def test_turn_on_waits_for_power_on_state():
     receiver_mock = MagicMock()
     hass_mock = MagicMock()
     conn_manager_mock = AsyncMock()
+
     mock_config_entry = MockConfigEntry(
         data={"host": "1.2.3.4", "name": "Test Receiver"},
         options={},
@@ -184,8 +180,6 @@ async def test_turn_on_waits_for_power_on_state():
     # Mock methods that are not part of this test
     player.async_write_ha_state = MagicMock()
 
-    # Mock the connection manager and power state check
-    player._conn_manager = conn_manager_mock
     player._async_get_power_state = AsyncMock(side_effect=["standby", "standby", "on"])
     player._async_fetch_source_list = AsyncMock()
     player._async_fetch_listening_modes = AsyncMock()

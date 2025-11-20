@@ -27,6 +27,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.helpers.typing import ConfigType
 
+from .connection import OnkyoConnectionManager
 from .const import (
     CONF_MAX_VOLUME,
     CONF_RECEIVER_MAX_VOLUME,
@@ -36,7 +37,6 @@ from .const import (
     DEFAULT_VOLUME_RESOLUTION,
     DOMAIN,
 )
-from .connection import OnkyoConnectionManager
 import homeassistant.helpers.config_validation as cv
 
 CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
@@ -249,7 +249,7 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
             receiver_data = hass.data[DOMAIN][entry.entry_id]
             connection_manager = receiver_data.get("connection_manager")
             receiver = receiver_data["receiver"]
-
+            
             if connection_manager:
                 await connection_manager.async_close()
             else:
@@ -259,7 +259,7 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
                     _LOGGER.debug("Disconnected from receiver")
                 except Exception as err:
                     _LOGGER.debug("Error disconnecting receiver: %s", err)
-
+            
             # Remove from hass.data
             hass.data[DOMAIN].pop(entry.entry_id)
         

@@ -65,7 +65,7 @@ async def async_setup_entry(
         # Note: We moved detection to connection manager or keep it local but robust
         # Using the connection manager to detect zones safely
         zones_detected = await _detect_zones_safe(connection_manager)
-
+        
         _LOGGER.debug("Detected zones: %s", zones_detected)
         
         # Create entity for each detected zone
@@ -119,7 +119,7 @@ async def async_setup_entry(
 async def _detect_zones_safe(connection_manager: OnkyoConnectionManager) -> list[str]:
     """
     Safely detect available zones using connection manager.
-
+    
     Args:
         connection_manager: The connection manager instance.
 
