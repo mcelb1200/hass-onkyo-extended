@@ -53,6 +53,13 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
     Set up the Onkyo component.
     
     YAML configuration is no longer supported - only config flow.
+
+    Args:
+        hass: The Home Assistant instance.
+        config: The configuration dictionary.
+
+    Returns:
+        bool: Always returns True as YAML config is not supported.
     """
     return True
 
@@ -63,6 +70,16 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     
     Enhanced with robust error handling to prevent setup failures
     when receiver is temporarily unavailable.
+
+    Args:
+        hass: The Home Assistant instance.
+        entry: The configuration entry.
+
+    Returns:
+        bool: True if setup is successful.
+
+    Raises:
+        ConfigEntryNotReady: If an unexpected error occurs during setup.
     """
     host = entry.data[CONF_HOST]
     
@@ -132,15 +149,15 @@ async def _async_setup_receiver(
     Set up the receiver connection with timeout.
     
     Args:
-        hass: Home Assistant instance
-        entry: Config entry
+        hass: Home Assistant instance.
+        entry: Config entry.
         
     Returns:
-        eISCP receiver instance
+        eISCP: The connected receiver instance.
         
     Raises:
-        asyncio.TimeoutError: If connection times out
-        OSError: If network error occurs
+        asyncio.TimeoutError: If connection times out.
+        OSError: If network error occurs.
     """
     host = entry.data[CONF_HOST]
     
@@ -183,13 +200,13 @@ def _test_connection(receiver: eISCP) -> bool:
     Test connection to receiver (sync function for executor).
     
     Args:
-        receiver: eISCP receiver instance
+        receiver: eISCP receiver instance.
         
     Returns:
-        True if connection successful
+        bool: True if connection successful.
         
     Raises:
-        Various exceptions if connection fails
+        Exception: Various exceptions if connection fails.
     """
     # Try a simple command to verify connection
     try:
@@ -206,6 +223,13 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     Unload a config entry.
     
     Properly cleans up connections and removes platforms.
+
+    Args:
+        hass: The Home Assistant instance.
+        entry: The configuration entry to unload.
+
+    Returns:
+        bool: True if unload was successful.
     """
     _LOGGER.debug("Unloading Onkyo integration for entry %s", entry.entry_id)
     
@@ -243,6 +267,10 @@ async def async_update_options(hass: HomeAssistant, entry: ConfigEntry) -> None:
     Handle options update.
     
     Called when user changes options via UI.
+
+    Args:
+        hass: The Home Assistant instance.
+        entry: The configuration entry.
     """
     _LOGGER.debug("Updating options for Onkyo integration")
     
@@ -255,6 +283,13 @@ async def async_migrate_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     Migrate old config entries to new format.
     
     Handles version upgrades gracefully.
+
+    Args:
+        hass: The Home Assistant instance.
+        entry: The configuration entry to migrate.
+
+    Returns:
+        bool: True if migration was successful.
     """
     _LOGGER.debug(
         "Migrating Onkyo config entry from version %s",
@@ -304,5 +339,9 @@ async def async_remove_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
     Handle removal of an entry.
     
     Clean up any persistent data.
+
+    Args:
+        hass: The Home Assistant instance.
+        entry: The configuration entry.
     """
     _LOGGER.debug("Removing Onkyo config entry %s", entry.entry_id)
