@@ -37,7 +37,6 @@ from .const import (
     DEFAULT_VOLUME_RESOLUTION,
     DOMAIN,
 )
-from .connection import OnkyoConnectionManager
 import homeassistant.helpers.config_validation as cv
 
 CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
