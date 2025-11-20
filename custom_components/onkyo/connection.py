@@ -66,7 +66,7 @@ class OnkyoConnectionManager:
             await self._rate_limit()
             try:
                 if not self._is_connected:
-                    self._is_connected = True  # Assume connected initially
+                    await self._async_reconnect()
 
                 result = await self.hass.async_add_executor_job(
                     self._receiver.command, command, *args

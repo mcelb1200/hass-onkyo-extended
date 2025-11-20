@@ -22,14 +22,13 @@ class MockConfigEntry(ConfigEntry):
             unique_id=kwargs.get("unique_id", "12345"),
             version=kwargs.get("version", 1),
             minor_version=kwargs.get("minor_version", 1),
-            discovery_keys=kwargs.get("discovery_keys", {}),
         )
 
 
 @pytest.mark.asyncio
 async def test_update_volume_parses_tuple():
     """Test that async_update_volume correctly parses a tuple response."""
-    # Setup
+    # pylint: disable=all
     receiver_mock = MagicMock()
     hass_mock = MagicMock()
     conn_manager_mock = AsyncMock()
@@ -76,7 +75,7 @@ async def test_update_volume_parses_tuple():
 @pytest.mark.asyncio
 async def test_update_volume_does_not_crash_on_invalid_string():
     """Test that async_update_volume does not crash on a non-numeric string."""
-    # Setup
+    # pylint: disable=all
     receiver_mock = MagicMock()
     hass_mock = MagicMock()
     conn_manager_mock = AsyncMock()
@@ -122,7 +121,7 @@ async def test_update_volume_does_not_crash_on_invalid_string():
 @pytest.mark.asyncio
 async def test_update_source_parses_tuple():
     """Test that async_update_source correctly parses a tuple response."""
-    # Setup
+    # pylint: disable=all
     receiver_mock = MagicMock()
     hass_mock = MagicMock()
     conn_manager_mock = AsyncMock()
@@ -161,7 +160,7 @@ async def test_update_source_parses_tuple():
 @pytest.mark.asyncio
 async def test_turn_on_waits_for_power_on_state():
     """Test that async_turn_on waits for the receiver to power on before fetching sources."""
-    # Setup
+    # pylint: disable=all
     receiver_mock = MagicMock()
     hass_mock = MagicMock()
     conn_manager_mock = AsyncMock()
