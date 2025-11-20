@@ -22,16 +22,16 @@ class MockConfigEntry(ConfigEntry):
             unique_id=kwargs.get("unique_id", "12345"),
             version=kwargs.get("version", 1),
             minor_version=kwargs.get("minor_version", 1),
-            discovery_keys=kwargs.get("discovery_keys", {}),
         )
 
 
 @pytest.mark.asyncio
 async def test_update_volume_parses_tuple():
     """Test that async_update_volume correctly parses a tuple response."""
-    # Setup
+    # pylint: disable=all
     receiver_mock = MagicMock()
     hass_mock = MagicMock()
+    conn_manager_mock = AsyncMock()
 
     # A basic mock config entry
     mock_config_entry = MockConfigEntry(
@@ -41,6 +41,7 @@ async def test_update_volume_parses_tuple():
 
     player = OnkyoMediaPlayer(
         receiver=receiver_mock,
+        connection_manager=conn_manager_mock,
         name="Test Player",
         zone="main",
         hass=hass_mock,
@@ -48,7 +49,7 @@ async def test_update_volume_parses_tuple():
     )
 
     # Mock the connection manager
-    player._conn_manager = AsyncMock()
+    player._conn_manager = conn_manager_mock
 
     # Mock the sequence of commands during an update
     async def command_side_effect(*args, **kwargs):
@@ -77,9 +78,10 @@ async def test_update_volume_parses_tuple():
 @pytest.mark.asyncio
 async def test_update_volume_does_not_crash_on_invalid_string():
     """Test that async_update_volume does not crash on a non-numeric string."""
-    # Setup
+    # pylint: disable=all
     receiver_mock = MagicMock()
     hass_mock = MagicMock()
+    conn_manager_mock = AsyncMock()
 
     # A basic mock config entry
     mock_config_entry = MockConfigEntry(
@@ -89,6 +91,7 @@ async def test_update_volume_does_not_crash_on_invalid_string():
 
     player = OnkyoMediaPlayer(
         receiver=receiver_mock,
+        connection_manager=conn_manager_mock,
         name="Test Player",
         zone="main",
         hass=hass_mock,
@@ -96,7 +99,7 @@ async def test_update_volume_does_not_crash_on_invalid_string():
     )
 
     # Mock the connection manager
-    player._conn_manager = AsyncMock()
+    player._conn_manager = conn_manager_mock
 
     # Mock the sequence of commands during an update
     async def command_side_effect(*args, **kwargs):
@@ -124,21 +127,23 @@ async def test_update_volume_does_not_crash_on_invalid_string():
 @pytest.mark.asyncio
 async def test_update_source_parses_tuple():
     """Test that async_update_source correctly parses a tuple response."""
-    # Setup
+    # pylint: disable=all
     receiver_mock = MagicMock()
     hass_mock = MagicMock()
+    conn_manager_mock = AsyncMock()
     mock_config_entry = MockConfigEntry(
         data={"host": "1.2.3.4", "name": "Test Receiver"},
         options={},
     )
     player = OnkyoMediaPlayer(
         receiver=receiver_mock,
+        connection_manager=conn_manager_mock,
         name="Test Player",
         zone="main",
         hass=hass_mock,
         entry=mock_config_entry,
     )
-    player._conn_manager = AsyncMock()
+    player._conn_manager = conn_manager_mock
     async def command_side_effect(*args, **kwargs):
         command = args[1]
         if "power" in command:
@@ -160,15 +165,17 @@ async def test_update_source_parses_tuple():
 @pytest.mark.asyncio
 async def test_turn_on_waits_for_power_on_state():
     """Test that async_turn_on waits for the receiver to power on before fetching sources."""
-    # Setup
+    # pylint: disable=all
     receiver_mock = MagicMock()
     hass_mock = MagicMock()
+    conn_manager_mock = AsyncMock()
     mock_config_entry = MockConfigEntry(
         data={"host": "1.2.3.4", "name": "Test Receiver"},
         options={},
     )
     player = OnkyoMediaPlayer(
         receiver=receiver_mock,
+        connection_manager=conn_manager_mock,
         name="Test Player",
         zone="main",
         hass=hass_mock,
@@ -178,9 +185,10 @@ async def test_turn_on_waits_for_power_on_state():
     player.async_write_ha_state = MagicMock()
 
     # Mock the connection manager and power state check
-    player._conn_manager = AsyncMock()
+    player._conn_manager = conn_manager_mock
     player._async_get_power_state = AsyncMock(side_effect=["standby", "standby", "on"])
     player._async_fetch_source_list = AsyncMock()
+    player._async_fetch_listening_modes = AsyncMock()
 
     # Call the method to test
     await player.async_turn_on()

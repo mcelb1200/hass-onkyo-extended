@@ -66,7 +66,7 @@ class OnkyoConnectionManager:
             await self._rate_limit()
             try:
                 if not self._is_connected:
-                    self._is_connected = True  # Assume connected initially
+                    await self._async_reconnect()
 
                 result = await self.hass.async_add_executor_job(
                     self._receiver.command, command, *args
@@ -105,7 +105,7 @@ class OnkyoConnectionManager:
             RECONNECT_DELAY_BASE * (2 ** (self._reconnect_attempt - 1)),
             RECONNECT_DELAY_MAX,
         )
-        _LOGGER.debug("Attempting reconnect in %s seconds (attempt %d)", 
+        _LOGGER.debug("Attempting reconnect in %s seconds (attempt %d)",
                      delay, self._reconnect_attempt)
         await asyncio.sleep(delay)
 

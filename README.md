@@ -91,9 +91,7 @@ logger:
   - `media_player.py`: Media player entity implementation.
   - `connection.py`: connection handling logic.
   - `const.py`: Constants and configuration keys.
-  - `coordinator.py`: Data update coordinator.
   - `helpers.py`: Utility functions.
-
 ### Contributing
 
 Contributions are welcome! Please submit Pull Requests with clear descriptions of changes.

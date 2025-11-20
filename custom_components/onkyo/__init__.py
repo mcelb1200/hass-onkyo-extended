@@ -36,6 +36,7 @@ from .const import (
     DEFAULT_VOLUME_RESOLUTION,
     DOMAIN,
 )
+from .connection import OnkyoConnectionManager
 import homeassistant.helpers.config_validation as cv
 
 CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
@@ -121,10 +122,14 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
             f"Unexpected error connecting to receiver: {err}"
         ) from err
     
+    # Initialize Connection Manager
+    connection_manager = OnkyoConnectionManager(hass, receiver)
+
     # Store the receiver instance and entry data
     hass.data.setdefault(DOMAIN, {})
     hass.data[DOMAIN][entry.entry_id] = {
         "receiver": receiver,
+        "connection_manager": connection_manager,
         "host": host,
         "name": entry.data.get(CONF_NAME, "Onkyo Receiver"),
         "entry": entry,
@@ -242,14 +247,19 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         # Clean up the receiver connection
         if entry.entry_id in hass.data[DOMAIN]:
             receiver_data = hass.data[DOMAIN][entry.entry_id]
+            connection_manager = receiver_data.get("connection_manager")
             receiver = receiver_data["receiver"]
-            
-            try:
-                await hass.async_add_executor_job(receiver.disconnect)
-                _LOGGER.debug("Disconnected from receiver")
-            except Exception as err:
-                _LOGGER.debug("Error disconnecting receiver: %s", err)
-            
+
+            if connection_manager:
+                await connection_manager.async_close()
+            else:
+                # Fallback cleanup if connection manager wasn't created
+                try:
+                    await hass.async_add_executor_job(receiver.disconnect)
+                    _LOGGER.debug("Disconnected from receiver")
+                except Exception as err:
+                    _LOGGER.debug("Error disconnecting receiver: %s", err)
+
             # Remove from hass.data
             hass.data[DOMAIN].pop(entry.entry_id)
         

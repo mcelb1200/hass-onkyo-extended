@@ -55,23 +55,24 @@ async def async_setup_entry(
     """
     receiver_data = hass.data[DOMAIN][entry.entry_id]
     receiver = receiver_data["receiver"]
+    connection_manager = receiver_data["connection_manager"]
     name = receiver_data["name"]
     
     entities = []
     
     try:
-        # Try to detect available zones
-        zones_detected = await hass.async_add_executor_job(
-            _detect_zones_safe,
-            receiver
-        )
-        
+        # Try to detect available zones via connection manager
+        # Note: We moved detection to connection manager or keep it local but robust
+        # Using the connection manager to detect zones safely
+        zones_detected = await _detect_zones_safe(connection_manager)
+
         _LOGGER.debug("Detected zones: %s", zones_detected)
         
         # Create entity for each detected zone
         for zone_name in zones_detected:
             entity = OnkyoMediaPlayer(
                 receiver=receiver,
+                connection_manager=connection_manager,
                 name=f"{name} {zone_name}",
                 zone=zone_name,
                 hass=hass,
@@ -87,6 +88,7 @@ async def async_setup_entry(
             )
             entity = OnkyoMediaPlayer(
                 receiver=receiver,
+                connection_manager=connection_manager,
                 name=name,
                 zone="main",
                 hass=hass,
@@ -94,7 +96,7 @@ async def async_setup_entry(
             )
             entities.append(entity)
 
-    except OSError as err:
+    except Exception as err:
         _LOGGER.warning(
             "Error detecting zones for %s: %s. Creating main zone only.",
             name,
@@ -103,6 +105,7 @@ async def async_setup_entry(
         # Create at least the main zone so integration doesn't completely fail
         entity = OnkyoMediaPlayer(
             receiver=receiver,
+            connection_manager=connection_manager,
             name=name,
             zone="main",
             hass=hass,
@@ -113,12 +116,12 @@ async def async_setup_entry(
     async_add_entities(entities)
 
 
-def _detect_zones_safe(receiver) -> list[str]:
+async def _detect_zones_safe(connection_manager: OnkyoConnectionManager) -> list[str]:
     """
-    Safely detect available zones.
-    
+    Safely detect available zones using connection manager.
+
     Args:
-        receiver: The receiver instance.
+        connection_manager: The connection manager instance.
 
     Returns:
         list[str]: list of zone names, or ["main"] if detection fails.
@@ -132,23 +135,23 @@ def _detect_zones_safe(receiver) -> list[str]:
         
         # Check for Zone 2
         try:
-            zone2_power = receiver.command("zone2.power=query")
+            zone2_power = await connection_manager.async_send_command("command", "zone2.power=query")
             if zone2_power:
                 zones.append("zone2")
-        except OSError:
+        except Exception:
             pass
         
         # Check for Zone 3
         try:
-            zone3_power = receiver.command("zone3.power=query")
+            zone3_power = await connection_manager.async_send_command("command", "zone3.power=query")
             if zone3_power:
                 zones.append("zone3")
-        except OSError:
+        except Exception:
             pass
         
         return zones
         
-    except OSError as err:
+    except Exception as err:
         _LOGGER.debug("Zone detection failed: %s", err)
         return ["main"]
 
@@ -179,6 +182,7 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
     def __init__(
         self,
         receiver,
+        connection_manager,
         name: str,
         zone: str,
         hass: HomeAssistant,
@@ -189,6 +193,7 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
 
         Args:
             receiver: The receiver instance.
+            connection_manager: The connection manager instance.
             name: The name of the entity.
             zone: The zone identifier.
             hass: The Home Assistant instance.
@@ -199,8 +204,8 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         self._zone = zone
         self._entry = entry
 
-        # Initialize connection manager (Issue #123143 fix)
-        self._conn_manager = OnkyoConnectionManager(hass, self._receiver)
+        # Use shared connection manager
+        self._conn_manager = connection_manager
 
         # State variables
         self._attr_state = MediaPlayerState.OFF
@@ -829,7 +834,9 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
                 _LOGGER.debug("Error unregistering callback: %s", err)
 
         # Close connection manager
-        await self._conn_manager.async_close()
+        # NOTE: Since the connection manager is now shared (owned by __init__),
+        # individual entities shouldn't close it. Cleanup happens in async_unload_entry.
+        pass
 
         _LOGGER.debug("Cleaned up entity: %s", self._attr_name)
 
