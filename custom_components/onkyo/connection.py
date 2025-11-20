@@ -105,8 +105,11 @@ class OnkyoConnectionManager:
             RECONNECT_DELAY_BASE * (2 ** (self._reconnect_attempt - 1)),
             RECONNECT_DELAY_MAX,
         )
-        _LOGGER.debug("Attempting reconnect in %s seconds (attempt %d)",
-                     delay, self._reconnect_attempt)
+        _LOGGER.debug(
+            "Attempting reconnect in %s seconds (attempt %d)",
+            delay,
+            self._reconnect_attempt,
+        )
         await asyncio.sleep(delay)
 
         try:
@@ -125,8 +128,7 @@ class OnkyoConnectionManager:
             _LOGGER.warning("Reconnect failed: %s", err)
             if self._reconnect_attempt >= 5:
                 _LOGGER.error(
-                    "Failed to reconnect after %d attempts.",
-                    self._reconnect_attempt
+                    "Failed to reconnect after %d attempts.", self._reconnect_attempt
                 )
                 self._is_connected = False
             raise
