@@ -130,3 +130,6 @@ custom_components/*/deps/
 .HA_VERSION
 
 # End of https://www.gitignore.io/api/python
+
+.gemini/
+gha-creds-*.json

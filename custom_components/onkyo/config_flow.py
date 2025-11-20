@@ -367,10 +367,6 @@ class OnkyoOptionsFlowHandler(config_entries.OptionsFlow):
                 default=current_max_volume
             ): vol.All(vol.Coerce(int), vol.Range(min=1, max=200)),
             vol.Required(
-                CONF_VOLUME_RESOLUTION,
-                default=current_resolution
-            ): vol.In(VOLUME_RESOLUTION_OPTIONS),
-            vol.Required(
                 CONF_MAX_VOLUME,
                 default=current_max_vol_pct
             ): vol.All(vol.Coerce(int), vol.Range(min=1, max=100)),
