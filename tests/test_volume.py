@@ -41,6 +41,7 @@ def test_receiver_volume_to_ha(receiver_volume, max_volume, resolution, expected
     # Mock necessary dependencies
     mock_receiver = MagicMock()
     mock_hass = MagicMock()
+    mock_conn_manager = MagicMock()
 
     # Create mock config entry with volume settings
     mock_entry = MockConfigEntry(
@@ -54,6 +55,7 @@ def test_receiver_volume_to_ha(receiver_volume, max_volume, resolution, expected
     # Instantiate the media player
     player = OnkyoMediaPlayer(
         receiver=mock_receiver,
+        connection_manager=mock_conn_manager,
         name="Test Receiver",
         zone="main",
         hass=mock_hass,
@@ -70,12 +72,14 @@ def test_receiver_volume_to_ha_zero_max_volume():
     """Test volume conversion with max_volume set to 0 to prevent division by zero."""
     mock_receiver = MagicMock()
     mock_hass = MagicMock()
+    mock_conn_manager = MagicMock()
     mock_entry = MockConfigEntry(
         data={"host": "1.2.3.4", "name": "Test Receiver"},
         options={"max_volume": 0, "volume_resolution": 80}
     )
     player = OnkyoMediaPlayer(
         receiver=mock_receiver,
+        connection_manager=mock_conn_manager,
         name="Test Receiver",
         zone="main",
         hass=mock_hass,
@@ -98,6 +102,7 @@ def test_ha_volume_to_receiver(ha_volume, max_volume, resolution, expected_recei
     # Mock necessary dependencies
     mock_receiver = MagicMock()
     mock_hass = MagicMock()
+    mock_conn_manager = MagicMock()
 
     # Create mock config entry with volume settings
     mock_entry = MockConfigEntry(
@@ -111,6 +116,7 @@ def test_ha_volume_to_receiver(ha_volume, max_volume, resolution, expected_recei
     # Instantiate the media player
     player = OnkyoMediaPlayer(
         receiver=mock_receiver,
+        connection_manager=mock_conn_manager,
         name="Test Receiver",
         zone="main",
         hass=mock_hass,

@@ -8,7 +8,15 @@ from eiscp.commands import COMMANDS
 
 
 def build_sources_list() -> dict:
-    """Retrieve default sources."""
+    """
+    Retrieve default sources from eISCP commands.
+
+    Parses the eISCP command definitions to build a list of available
+    source selection commands and their descriptions.
+
+    Returns:
+        dict: A dictionary mapping source identifiers to descriptions.
+    """
     sources_list = {}
     for value in COMMANDS["main"]["SLI"]["values"].values():
         name = value["name"]
@@ -22,7 +30,15 @@ def build_sources_list() -> dict:
 
 
 def build_sounds_mode_list() -> dict:
-    """Retrieve sound mode list."""
+    """
+    Retrieve sound mode list from eISCP commands.
+
+    Parses the eISCP command definitions to build a list of available
+    sound mode commands.
+
+    Returns:
+        dict: A dictionary mapping sound mode identifiers to readable names.
+    """
     sounds_list = []
     for value in COMMANDS["main"]["LMD"]["values"].values():
         name = value["name"]
@@ -39,7 +55,16 @@ def build_sounds_mode_list() -> dict:
 def build_selected_dict(
     sources: dict[str, Any] | None = None, sounds: dict[str, Any] | None = None
 ) -> dict[str, str]:
-    """Return selected dictionary."""
+    """
+    Return selected dictionary filtered by provided keys.
+
+    Args:
+        sources: Optional dictionary of sources to filter by.
+        sounds: Optional dictionary of sound modes to filter by.
+
+    Returns:
+        dict[str, str]: A filtered dictionary of sources or sound modes.
+    """
     if sources:
         return {k: v for k, v in build_sources_list().items() if k in sources}
     if sounds:
@@ -48,5 +73,13 @@ def build_selected_dict(
 
 
 def reverse_mapping(ssdict) -> dict[str, str]:
-    """Reverse dictionary."""
+    """
+    Reverse dictionary mapping (value -> key).
+
+    Args:
+        ssdict: The dictionary to reverse.
+
+    Returns:
+        dict[str, str]: A new dictionary with keys and values swapped.
+    """
     return {v: k for k, v in ssdict.items()}
