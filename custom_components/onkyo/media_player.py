@@ -44,36 +44,42 @@ async def async_setup_entry(
 ) -> None:
     """
     Set up Onkyo media player from config entry.
-    
+
     Enhanced with robust error handling to prevent setup failures
     when receiver is temporarily unavailable (Issue #125768 fix).
+
+    Args:
+        hass: The Home Assistant instance.
+        entry: The configuration entry.
+        async_add_entities: Callback to add entities.
     """
     receiver_data = hass.data[DOMAIN][entry.entry_id]
     receiver = receiver_data["receiver"]
+    connection_manager = receiver_data["connection_manager"]
     name = receiver_data["name"]
-    
+
     entities = []
-    
+
     try:
-        # Try to detect available zones
-        zones_detected = await hass.async_add_executor_job(
-            _detect_zones_safe,
-            receiver
-        )
-        
+        # Try to detect available zones via connection manager
+        # Note: We moved detection to connection manager or keep it local but robust
+        # Using the connection manager to detect zones safely
+        zones_detected = await _detect_zones_safe(connection_manager)
+
         _LOGGER.debug("Detected zones: %s", zones_detected)
-        
+
         # Create entity for each detected zone
         for zone_name in zones_detected:
             entity = OnkyoMediaPlayer(
                 receiver=receiver,
+                connection_manager=connection_manager,
                 name=f"{name} {zone_name}",
                 zone=zone_name,
                 hass=hass,
                 entry=entry,
             )
             entities.append(entity)
-        
+
         if not entities:
             # No zones detected - create main zone anyway
             _LOGGER.info(
@@ -82,6 +88,7 @@ async def async_setup_entry(
             )
             entity = OnkyoMediaPlayer(
                 receiver=receiver,
+                connection_manager=connection_manager,
                 name=name,
                 zone="main",
                 hass=hass,
@@ -89,7 +96,7 @@ async def async_setup_entry(
             )
             entities.append(entity)
 
-    except OSError as err:
+    except Exception as err:
         _LOGGER.warning(
             "Error detecting zones for %s: %s. Creating main zone only.",
             name,
@@ -98,48 +105,53 @@ async def async_setup_entry(
         # Create at least the main zone so integration doesn't completely fail
         entity = OnkyoMediaPlayer(
             receiver=receiver,
+            connection_manager=connection_manager,
             name=name,
             zone="main",
             hass=hass,
             entry=entry,
         )
         entities.append(entity)
-    
+
     async_add_entities(entities)
 
 
-def _detect_zones_safe(receiver) -> list[str]:
+async def _detect_zones_safe(connection_manager: OnkyoConnectionManager) -> list[str]:
     """
-    Safely detect available zones.
-    
-    Returns list of zone names, or ["main"] if detection fails.
+    Safely detect available zones using connection manager.
+
+    Args:
+        connection_manager: The connection manager instance.
+
+    Returns:
+        list[str]: list of zone names, or ["main"] if detection fails.
     """
     try:
         # Query receiver for available zones
         zones = []
-        
+
         # Main zone always exists
         zones.append("main")
-        
+
         # Check for Zone 2
         try:
-            zone2_power = receiver.command("zone2.power=query")
+            zone2_power = await connection_manager.async_send_command("command", "zone2.power=query")
             if zone2_power:
                 zones.append("zone2")
-        except OSError:
+        except Exception:
             pass
-        
+
         # Check for Zone 3
         try:
-            zone3_power = receiver.command("zone3.power=query")
+            zone3_power = await connection_manager.async_send_command("command", "zone3.power=query")
             if zone3_power:
                 zones.append("zone3")
-        except OSError:
+        except Exception:
             pass
-        
+
         return zones
-        
-    except OSError as err:
+
+    except Exception as err:
         _LOGGER.debug("Zone detection failed: %s", err)
         return ["main"]
 
@@ -166,23 +178,34 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         | MediaPlayerEntityFeature.SELECT_SOURCE
         | MediaPlayerEntityFeature.PLAY_MEDIA
     )
-    
+
     def __init__(
         self,
         receiver,
+        connection_manager,
         name: str,
         zone: str,
         hass: HomeAssistant,
         entry: ConfigEntry,
     ) -> None:
-        """Initialize the media player."""
+        """
+        Initialize the media player.
+
+        Args:
+            receiver: The receiver instance.
+            connection_manager: The connection manager instance.
+            name: The name of the entity.
+            zone: The zone identifier.
+            hass: The Home Assistant instance.
+            entry: The configuration entry.
+        """
         self._receiver = receiver
         self._attr_name = name
         self._zone = zone
         self._entry = entry
 
-        # Initialize connection manager (Issue #123143 fix)
-        self._conn_manager = OnkyoConnectionManager(hass, self._receiver)
+        # Use shared connection manager
+        self._conn_manager = connection_manager
 
         # State variables
         self._attr_state = MediaPlayerState.OFF
@@ -201,7 +224,7 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         # Unique ID based on receiver and zone
         host = entry.data.get("host", "unknown")
         self._attr_unique_id = f"{host}_{zone}"
-        
+
         # Device info for grouping zones
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, host)},
@@ -209,15 +232,15 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
             manufacturer="Onkyo",
             model="Network Receiver",
         )
-    
+
     async def async_added_to_hass(self) -> None:
         """Run when entity is added to hass."""
         await super().async_added_to_hass()
-        
+
         # Register callback for receiver updates if using local_push
         if hasattr(self._receiver, "register_callback"):
             self._receiver.register_callback(self._handle_receiver_update)
-        
+
         # Fetch initial data
         try:
             await self._async_update_all()
@@ -228,12 +251,12 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
                 self._attr_name,
                 err
             )
-    
+
     @callback
     def _handle_receiver_update(self, zone: str, command: str, value: Any) -> None:
         """
         Handle updates from receiver (for local_push mode).
-        
+
         Args:
             zone: Zone name (main, zone2, zone3)
             command: Command that changed
@@ -241,14 +264,14 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         """
         if zone != self._zone:
             return
-        
+
         _LOGGER.debug(
             "Received update for %s: %s = %s",
             self._attr_name,
             command,
             value
         )
-        
+
         # Update state based on command
         if command == "power":
             self._attr_state = (
@@ -271,11 +294,11 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
 
         # Schedule UI update
         self.async_write_ha_state()
-    
+
     async def async_update(self) -> None:
         """
         Update the entity state.
-        
+
         Called periodically by Home Assistant or manually triggered.
         """
         try:
@@ -283,7 +306,7 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         except OSError as err:
             _LOGGER.debug("Update failed for %s: %s", self._attr_name, err)
             self._attr_available = False
-    
+
     async def _async_update_all(self) -> None:
         """Fetch all data from receiver."""
         # Get power state
@@ -311,9 +334,14 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         else:
             # Unknown state - might be disconnected
             self._attr_available = False
-    
+
     async def _async_get_power_state(self) -> str:
-        """Get power state from receiver."""
+        """
+        Get power state from receiver.
+
+        Returns:
+            str: The power state ('on', 'standby', or 'unknown').
+        """
         try:
             if self._zone == "main":
                 result = await self._conn_manager.async_send_command(
@@ -332,7 +360,7 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         except OSError as err:
             _LOGGER.debug("Failed to get power state: %s", err)
             return "unknown"
-    
+
     async def _async_update_volume(self) -> None:
         """Update volume level."""
         try:
@@ -357,7 +385,7 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
 
         except OSError as err:
             _LOGGER.debug("Failed to update volume: %s", err)
-    
+
     async def _async_update_source(self) -> None:
         """Update current source."""
         try:
@@ -380,7 +408,7 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
 
         except OSError as err:
             _LOGGER.debug("Failed to update source: %s", err)
-    
+
     async def _async_update_mute(self) -> None:
         """Update mute state."""
         try:
@@ -397,11 +425,11 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
 
         except OSError as err:
             _LOGGER.debug("Failed to update mute state: %s", err)
-    
+
     async def _async_fetch_source_list(self) -> None:
         """
         Fetch list of available sources.
-        
+
         Issue #125768 fix: Gracefully handle empty or unavailable lists.
         """
         try:
@@ -430,11 +458,11 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
             )
             # Keep empty list instead of failing
             self._attr_source_list = []
-    
+
     async def _async_fetch_listening_modes(self) -> None:
         """
         Fetch list of available listening modes.
-        
+
         Issue #125768 fix: Gracefully handle empty or unavailable lists.
         """
         try:
@@ -463,9 +491,9 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
             )
             # Keep empty list instead of failing
             self._listening_modes = []
-    
+
     # Media Player Entity Methods
-    
+
     async def async_turn_on(self) -> None:
         """Turn the media player on."""
         try:
@@ -507,7 +535,7 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
             _LOGGER.error("Failed to turn on %s: %s", self._attr_name, err)
             self._attr_available = False
             raise
-    
+
     async def async_turn_off(self) -> None:
         """Turn the media player off."""
         try:
@@ -523,16 +551,19 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         except OSError as err:
             _LOGGER.error("Failed to turn off %s: %s", self._attr_name, err)
             raise
-    
+
     async def async_set_volume_level(self, volume: float) -> None:
         """
         Set volume level (0.0 to 1.0).
-        
+
         Converts HA volume to receiver-specific scale.
+
+        Args:
+            volume: Volume level to set.
         """
         try:
             receiver_volume = self._ha_volume_to_receiver(volume)
-            
+
             command = (
                 f"master-volume={receiver_volume}" if self._zone == "main"
                 else f"{self._zone}.volume={receiver_volume}"
@@ -545,7 +576,7 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         except OSError as err:
             _LOGGER.error("Failed to set volume: %s", err)
             raise
-    
+
     async def async_volume_up(self) -> None:
         """Volume up the media player."""
         try:
@@ -563,7 +594,7 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         except OSError as err:
             _LOGGER.error("Failed to increase volume: %s", err)
             raise
-    
+
     async def async_volume_down(self) -> None:
         """Volume down the media player."""
         try:
@@ -581,9 +612,14 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         except OSError as err:
             _LOGGER.error("Failed to decrease volume: %s", err)
             raise
-    
+
     async def async_mute_volume(self, mute: bool) -> None:
-        """Mute or unmute the media player."""
+        """
+        Mute or unmute the media player.
+
+        Args:
+            mute: True to mute, False to unmute.
+        """
         try:
             mute_state = "on" if mute else "off"
             command = (
@@ -598,9 +634,14 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         except OSError as err:
             _LOGGER.error("Failed to %s: %s", "mute" if mute else "unmute", err)
             raise
-    
+
     async def async_select_source(self, source: str) -> None:
-        """Select input source."""
+        """
+        Select input source.
+
+        Args:
+            source: The source to select.
+        """
         try:
             command = (
                 f"input-selector={source}" if self._zone == "main"
@@ -614,16 +655,17 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         except OSError as err:
             _LOGGER.error("Failed to select source %s: %s", source, err)
             raise
-    
+
     async def async_play_media(
         self, media_type: str, media_id: str, **kwargs: Any
     ) -> None:
         """
         Play media (radio presets).
-        
+
         Args:
-            media_type: Type of media (e.g., "radio")
-            media_id: Preset number (1-40)
+            media_type: Type of media (e.g., "radio").
+            media_id: Preset number (1-40).
+            kwargs: Additional arguments.
         """
         try:
             if media_type.lower() == "radio":
@@ -642,20 +684,20 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         except OSError as err:
             _LOGGER.error("Failed to play media: %s", err)
             raise
-    
+
     # Custom Services
-    
+
     async def async_select_hdmi_output(self, hdmi_output: str) -> None:
         """
         Select HDMI output (custom service).
-        
+
         Args:
-            hdmi_output: Output selector (no, analog, yes, out, out-sub, sub, hdbaset, both, up)
+            hdmi_output: Output selector (no, analog, yes, out, out-sub, sub, hdbaset, both, up).
         """
         if self._zone != "main":
             _LOGGER.warning("HDMI output selection only available for main zone")
             return
-        
+
         try:
             command = f"hdmi-output-selector={hdmi_output}"
             await self._conn_manager.async_send_command("command", command)
@@ -669,16 +711,22 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         except OSError as err:
             _LOGGER.error("Failed to select HDMI output %s: %s", hdmi_output, err)
             raise
-    
+
     # Helper Methods
-    
+
     def _ha_volume_to_receiver(self, ha_volume: float) -> int:
         """
         Convert HA volume (0.0-1.0) to receiver scale.
-        
+
         Takes into account:
         - Volume resolution (50, 80, 100, or 200 steps)
         - Maximum volume limit
+
+        Args:
+            ha_volume: The Home Assistant volume level (float).
+
+        Returns:
+            int: The receiver volume step.
         """
         from .const import CONF_MAX_VOLUME, CONF_VOLUME_RESOLUTION
 
@@ -695,14 +743,20 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         # Scale: HA volume -> max volume % -> receiver steps
         scaled_volume = ha_volume * (max_volume / 100) * resolution
         return round(scaled_volume)
-    
+
     def _receiver_volume_to_ha(self, receiver_volume: int) -> float:
         """
         Convert receiver volume to HA scale (0.0-1.0).
-        
+
         Takes into account:
         - Volume resolution
         - Maximum volume limit
+
+        Args:
+            receiver_volume: The receiver volume step (int).
+
+        Returns:
+            float: The Home Assistant volume level.
         """
         from .const import CONF_MAX_VOLUME, CONF_VOLUME_RESOLUTION
 
@@ -724,9 +778,9 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
 
         ha_volume = receiver_volume / max_receiver_volume
         return min(1.0, max(0.0, ha_volume))
-    
+
     # Properties
-    
+
     @property
     def source_list(self) -> list[str]:
         """
@@ -734,21 +788,32 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
 
         Issue #125768 fix: Always return list, never None.
         Empty list is valid and won't break setup.
+
+        Returns:
+            list[str]: The list of available sources.
         """
         return self._attr_source_list if self._attr_source_list else []
-    
+
     @property
     def available(self) -> bool:
         """
         Return if entity is available.
 
         Considers both connection manager state and entity availability.
+
+        Returns:
+            bool: True if available, False otherwise.
         """
         return self._attr_available and self._conn_manager.connected
-    
+
     @property
     def extra_state_attributes(self) -> dict[str, Any]:
-        """Return entity specific state attributes."""
+        """
+        Return entity specific state attributes.
+
+        Returns:
+            dict[str, Any]: A dictionary of extra state attributes.
+        """
         attrs = self._attr_extra_state_attributes.copy()
 
         # Add listening modes if available
@@ -756,9 +821,9 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
             attrs["listening_modes"] = self._listening_modes
 
         return attrs
-    
+
     # Cleanup
-    
+
     async def async_will_remove_from_hass(self) -> None:
         """Run when entity will be removed from hass."""
         # Unregister callback if registered
@@ -769,7 +834,9 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
                 _LOGGER.debug("Error unregistering callback: %s", err)
 
         # Close connection manager
-        await self._conn_manager.async_close()
+        # NOTE: Since the connection manager is now shared (owned by __init__),
+        # individual entities shouldn't close it. Cleanup happens in async_unload_entry.
+        pass
 
         _LOGGER.debug("Cleaned up entity: %s", self._attr_name)
 
@@ -779,14 +846,14 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
 def validate_source_list(sources: list[str] | None) -> list[str]:
     """
     Validate and sanitize source list.
-    
+
     Issue #125768 fix: Ensure source list is never None or invalid.
-    
+
     Args:
         sources: Source list to validate
-        
+
     Returns:
-        Valid source list (may be empty)
+        list[str]: Valid source list (may be empty)
     """
     if not sources:
         return []
@@ -816,14 +883,14 @@ def validate_source_list(sources: list[str] | None) -> list[str]:
 def validate_listening_modes(modes: list[str] | None) -> list[str]:
     """
     Validate and sanitize listening mode list.
-    
+
     Issue #125768 fix: Ensure listening mode list is never None or invalid.
-    
+
     Args:
         modes: Listening mode list to validate
-        
+
     Returns:
-        Valid listening mode list (may be empty)
+        list[str]: Valid listening mode list (may be empty)
     """
     if not modes:
         return []
@@ -854,9 +921,14 @@ def validate_listening_modes(modes: list[str] | None) -> list[str]:
 
 class MockOnkyoReceiver:
     """Mock receiver for testing without hardware."""
-    
+
     def __init__(self, host: str = "192.168.1.100"):
-        """Initialize mock receiver."""
+        """
+        Initialize mock receiver.
+
+        Args:
+            host: Hostname or IP address.
+        """
         self.host = host
         self.port = 60128
         self._power = "standby"
@@ -872,9 +944,17 @@ class MockOnkyoReceiver:
             "tv-cd": "TV/CD",
         }
         self._listening_modes = ["stereo", "direct", "all-ch-stereo"]
-    
+
     def command(self, cmd: str) -> Any:
-        """Process a command."""
+        """
+        Process a command.
+
+        Args:
+            cmd: The command string.
+
+        Returns:
+            Any: The result of the command.
+        """
         if "power=query" in cmd:
             return self._power
         elif "power=on" in cmd:
@@ -901,11 +981,19 @@ class MockOnkyoReceiver:
         elif "selector=" in cmd or "input-selector=" in cmd:
             self._source = cmd.split("=")[1]
             return True
-        
+
         return None
 
     def raw(self, cmd: str) -> Any:
-        """Process raw command."""
+        """
+        Process raw command.
+
+        Args:
+            cmd: The raw command string.
+
+        Returns:
+            Any: The result of the raw command.
+        """
         if cmd == "SLIQSTN":
             return self._sources
         elif cmd == "LMQSTN":
