@@ -1,9 +1,9 @@
 """Tests for the Onkyo connection manager."""
 
 import pytest
-import asyncio
-from unittest.mock import MagicMock, AsyncMock, patch
+from unittest.mock import MagicMock, patch
 from custom_components.onkyo.connection import OnkyoConnectionManager
+
 
 @pytest.fixture
 def mock_receiver():
@@ -12,9 +12,11 @@ def mock_receiver():
     receiver.disconnect = MagicMock()
     return receiver
 
+
 @pytest.fixture
 def connection_manager(hass, mock_receiver):
     return OnkyoConnectionManager(hass, mock_receiver)
+
 
 @pytest.mark.asyncio
 async def test_send_command_success(hass, connection_manager, mock_receiver):
@@ -29,6 +31,7 @@ async def test_send_command_success(hass, connection_manager, mock_receiver):
     assert result == "success"
     assert mock_receiver.command.called
 
+
 @pytest.mark.asyncio
 async def test_send_command_reconnect_success(hass, connection_manager, mock_receiver):
     """Test reconnection logic when not connected."""
@@ -42,6 +45,7 @@ async def test_send_command_reconnect_success(hass, connection_manager, mock_rec
     # Should have called command twice: once for reconnect check, once for actual command
     assert mock_receiver.command.call_count >= 2
 
+
 @pytest.mark.asyncio
 async def test_send_command_failure(hass, connection_manager, mock_receiver):
     """Test sending a command failure handling."""
@@ -53,6 +57,7 @@ async def test_send_command_failure(hass, connection_manager, mock_receiver):
     assert result is None
     assert not connection_manager.connected
 
+
 @pytest.mark.asyncio
 async def test_rate_limit(hass, connection_manager):
     """Test rate limiting."""
@@ -62,6 +67,7 @@ async def test_rate_limit(hass, connection_manager):
     with patch("asyncio.sleep") as mock_sleep:
         await connection_manager.async_send_command("test")
         mock_sleep.assert_awaited()
+
 
 @pytest.mark.asyncio
 async def test_reconnect_failure(hass, connection_manager, mock_receiver):
@@ -75,6 +81,7 @@ async def test_reconnect_failure(hass, connection_manager, mock_receiver):
 
     assert result is None
     assert not connection_manager.connected
+
 
 @pytest.mark.asyncio
 async def test_close(hass, connection_manager, mock_receiver):
