@@ -95,7 +95,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
             "Timeout connecting to Onkyo receiver at %s. "
             "The receiver may be powered off or in standby. "
             "Integration will retry when the receiver becomes available.",
-            host
+            host,
         )
         # Don't raise ConfigEntryNotReady - allow setup to continue
         # The media player will handle reconnection
@@ -106,17 +106,13 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
             "Network error connecting to Onkyo receiver at %s: %s. "
             "Integration will retry when network is available.",
             host,
-            err
+            err,
         )
         # Allow setup to continue - will reconnect later
         receiver = eISCP(host)
 
     except Exception as err:
-        _LOGGER.error(
-            "Unexpected error setting up Onkyo receiver at %s: %s",
-            host,
-            err
-        )
+        _LOGGER.error("Unexpected error setting up Onkyo receiver at %s: %s", host, err)
         # Only raise for truly unexpected errors
         raise ConfigEntryNotReady(
             f"Unexpected error connecting to receiver: {err}"
@@ -146,10 +142,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     return True
 
 
-async def _async_setup_receiver(
-    hass: HomeAssistant,
-    entry: ConfigEntry
-) -> eISCP:
+async def _async_setup_receiver(hass: HomeAssistant, entry: ConfigEntry) -> eISCP:
     """
     Set up the receiver connection with timeout.
 
@@ -175,7 +168,7 @@ async def _async_setup_receiver(
     try:
         await asyncio.wait_for(
             hass.async_add_executor_job(_test_connection, receiver),
-            timeout=CONNECTION_TIMEOUT
+            timeout=CONNECTION_TIMEOUT,
         )
 
         _LOGGER.info("Successfully connected to Onkyo receiver at %s", host)
@@ -239,9 +232,7 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     _LOGGER.debug("Unloading Onkyo integration for entry %s", entry.entry_id)
 
     # Unload platforms
-    unload_ok = await hass.config_entries.async_unload_platforms(
-        entry, PLATFORMS
-    )
+    unload_ok = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
 
     if unload_ok:
         # Clean up the receiver connection
@@ -301,10 +292,7 @@ async def async_migrate_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     Returns:
         bool: True if migration was successful.
     """
-    _LOGGER.debug(
-        "Migrating Onkyo config entry from version %s",
-        entry.version
-    )
+    _LOGGER.debug("Migrating Onkyo config entry from version %s", entry.version)
 
     # Version 1 to 2: Add volume settings and sources
     if entry.version == 1:
@@ -333,10 +321,7 @@ async def async_migrate_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
         # Update the entry
         hass.config_entries.async_update_entry(
-            entry,
-            data=new_data,
-            options=new_options,
-            version=2
+            entry, data=new_data, options=new_options, version=2
         )
 
         _LOGGER.info("Successfully migrated Onkyo config entry to version 2")

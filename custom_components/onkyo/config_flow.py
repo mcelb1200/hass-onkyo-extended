@@ -102,7 +102,7 @@ class OnkyoConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     _LOGGER.warning(
                         "Could not verify connection to %s, but allowing setup. Error: %s",
                         host,
-                        result.get("error")
+                        result.get("error"),
                     )
 
                 # Create entry with options
@@ -116,14 +116,15 @@ class OnkyoConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 errors["base"] = result.get("error", "unknown")
 
         # Show the form
-        data_schema = vol.Schema({
-            vol.Required(CONF_HOST): str,
-            vol.Optional(CONF_NAME, default=DEFAULT_NAME): str,
-            vol.Optional(
-                CONF_RECEIVER_MAX_VOLUME,
-                default=DEFAULT_RECEIVER_MAX_VOLUME
-            ): vol.All(vol.Coerce(int), vol.Range(min=1, max=200)),
-        })
+        data_schema = vol.Schema(
+            {
+                vol.Required(CONF_HOST): str,
+                vol.Optional(CONF_NAME, default=DEFAULT_NAME): str,
+                vol.Optional(
+                    CONF_RECEIVER_MAX_VOLUME, default=DEFAULT_RECEIVER_MAX_VOLUME
+                ): vol.All(vol.Coerce(int), vol.Range(min=1, max=200)),
+            }
+        )
 
         return self.async_show_form(
             step_id="user",
@@ -131,9 +132,7 @@ class OnkyoConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             errors=errors,
         )
 
-    async def async_step_ssdp(
-        self, discovery_info: dict[str, Any]
-    ) -> FlowResult:
+    async def async_step_ssdp(self, discovery_info: dict[str, Any]) -> FlowResult:
         """
         Handle SSDP discovery.
 
@@ -143,7 +142,10 @@ class OnkyoConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         Returns:
             FlowResult: The result of the flow step.
         """
-        host = discovery_info.get("host") or discovery_info.get("ssdp_location", "").split("://")[1].split(":")[0]
+        host = (
+            discovery_info.get("host")
+            or discovery_info.get("ssdp_location", "").split("://")[1].split(":")[0]
+        )
         name = discovery_info.get("friendlyName", "").replace("._eISCP._tcp.local.", "")
 
         if not host:
@@ -166,10 +168,7 @@ class OnkyoConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         result = await self._async_try_connect(host)
 
         if not result["success"]:
-            _LOGGER.info(
-                "Discovered Onkyo receiver at %s but cannot connect yet",
-                host
-            )
+            _LOGGER.info("Discovered Onkyo receiver at %s but cannot connect yet", host)
 
         return await self.async_step_discovery_confirm()
 
@@ -238,14 +237,11 @@ class OnkyoConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
             except TimeoutError:
                 # Timeout - receiver might be off or in standby
-                _LOGGER.info(
-                    "Connection to %s timed out - receiver may be off",
-                    host
-                )
+                _LOGGER.info("Connection to %s timed out - receiver may be off", host)
                 return {
                     "success": False,
                     "error": "timeout",
-                    "allow_setup": True  # Allow setup, will connect when on
+                    "allow_setup": True,  # Allow setup, will connect when on
                 }
 
             except ConnectionRefusedError:
@@ -254,17 +250,13 @@ class OnkyoConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 return {
                     "success": False,
                     "error": "connection_refused",
-                    "allow_setup": True
+                    "allow_setup": True,
                 }
 
             except OSError as err:
                 # Network error - might be temporary
                 _LOGGER.warning("Network error connecting to %s: %s", host, err)
-                return {
-                    "success": False,
-                    "error": "network_error",
-                    "allow_setup": True
-                }
+                return {"success": False, "error": "network_error", "allow_setup": True}
 
             finally:
                 # Clean up connection
@@ -275,19 +267,11 @@ class OnkyoConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
         except ImportError:
             _LOGGER.error("onkyo-eiscp library not found")
-            return {
-                "success": False,
-                "error": "library_missing",
-                "allow_setup": False
-            }
+            return {"success": False, "error": "library_missing", "allow_setup": False}
 
         except Exception as err:
             _LOGGER.error("Unexpected error connecting to %s: %s", host, err)
-            return {
-                "success": False,
-                "error": "unknown",
-                "allow_setup": False
-            }
+            return {"success": False, "error": "unknown", "allow_setup": False}
 
     @staticmethod
     @callback
@@ -346,30 +330,25 @@ class OnkyoOptionsFlowHandler(config_entries.OptionsFlow):
 
         # Get current settings
         current_max_volume = self.config_entry.options.get(
-            CONF_RECEIVER_MAX_VOLUME,
-            DEFAULT_RECEIVER_MAX_VOLUME
+            CONF_RECEIVER_MAX_VOLUME, DEFAULT_RECEIVER_MAX_VOLUME
         )
 
         current_resolution = self.config_entry.options.get(
-            CONF_VOLUME_RESOLUTION,
-            DEFAULT_VOLUME_RESOLUTION
+            CONF_VOLUME_RESOLUTION, DEFAULT_VOLUME_RESOLUTION
         )
 
-        current_max_vol_pct = self.config_entry.options.get(
-            CONF_MAX_VOLUME,
-            100
-        )
+        current_max_vol_pct = self.config_entry.options.get(CONF_MAX_VOLUME, 100)
 
-        options_schema = vol.Schema({
-            vol.Required(
-                CONF_RECEIVER_MAX_VOLUME,
-                default=current_max_volume
-            ): vol.All(vol.Coerce(int), vol.Range(min=1, max=200)),
-            vol.Required(
-                CONF_MAX_VOLUME,
-                default=current_max_vol_pct
-            ): vol.All(vol.Coerce(int), vol.Range(min=1, max=100)),
-        })
+        options_schema = vol.Schema(
+            {
+                vol.Required(
+                    CONF_RECEIVER_MAX_VOLUME, default=current_max_volume
+                ): vol.All(vol.Coerce(int), vol.Range(min=1, max=200)),
+                vol.Required(CONF_MAX_VOLUME, default=current_max_vol_pct): vol.All(
+                    vol.Coerce(int), vol.Range(min=1, max=100)
+                ),
+            }
+        )
 
         return self.async_show_form(
             step_id="init",

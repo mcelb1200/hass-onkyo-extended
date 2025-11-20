@@ -1,4 +1,5 @@
 """Tests for the Onkyo media_player."""
+
 import pytest
 from unittest.mock import MagicMock, AsyncMock
 
@@ -147,14 +148,14 @@ async def test_update_source_parses_tuple():
             return ("master-volume", 40)
         if "selector" in command:
             # When the source is changed, the receiver returns a tuple
-            return ('input-selector', ('cbl-sat', 'CBL/SAT'))
+            return ("input-selector", ("cbl-sat", "CBL/SAT"))
         if "muting" in command:
             return "off"
         return None
 
     player._conn_manager.async_send_command.side_effect = command_side_effect
     await player.async_update()
-    assert player.source == 'cbl-sat'
+    assert player.source == "cbl-sat"
 
 
 @pytest.mark.asyncio
@@ -194,4 +195,5 @@ async def test_turn_on_waits_for_power_on_state():
     player._async_fetch_source_list.assert_awaited_once()
     # The player state should be ON
     from homeassistant.components.media_player import MediaPlayerState
+
     assert player.state == MediaPlayerState.ON

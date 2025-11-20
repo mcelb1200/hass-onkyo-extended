@@ -87,7 +87,7 @@ HDMI_OUTPUT_OPTIONS: Final = [
     "sub",
     "hdbaset",
     "both",
-    "up"
+    "up",
 ]
 """List of valid HDMI output options."""
 

@@ -82,10 +82,7 @@ async def async_setup_entry(
 
         if not entities:
             # No zones detected - create main zone anyway
-            _LOGGER.info(
-                "No zones detected for %s, creating main zone entity",
-                name
-            )
+            _LOGGER.info("No zones detected for %s, creating main zone entity", name)
             entity = OnkyoMediaPlayer(
                 receiver=receiver,
                 connection_manager=connection_manager,
@@ -98,9 +95,7 @@ async def async_setup_entry(
 
     except Exception as err:
         _LOGGER.warning(
-            "Error detecting zones for %s: %s. Creating main zone only.",
-            name,
-            err
+            "Error detecting zones for %s: %s. Creating main zone only.", name, err
         )
         # Create at least the main zone so integration doesn't completely fail
         entity = OnkyoMediaPlayer(
@@ -135,7 +130,9 @@ async def _detect_zones_safe(connection_manager: OnkyoConnectionManager) -> list
 
         # Check for Zone 2
         try:
-            zone2_power = await connection_manager.async_send_command("command", "zone2.power=query")
+            zone2_power = await connection_manager.async_send_command(
+                "command", "zone2.power=query"
+            )
             if zone2_power:
                 zones.append("zone2")
         except Exception:
@@ -143,7 +140,9 @@ async def _detect_zones_safe(connection_manager: OnkyoConnectionManager) -> list
 
         # Check for Zone 3
         try:
-            zone3_power = await connection_manager.async_send_command("command", "zone3.power=query")
+            zone3_power = await connection_manager.async_send_command(
+                "command", "zone3.power=query"
+            )
             if zone3_power:
                 zones.append("zone3")
         except Exception:
@@ -249,7 +248,7 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
                 "Failed to fetch initial data for %s: %s. "
                 "Will retry during next update.",
                 self._attr_name,
-                err
+                err,
             )
 
     @callback
@@ -266,17 +265,13 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
             return
 
         _LOGGER.debug(
-            "Received update for %s: %s = %s",
-            self._attr_name,
-            command,
-            value
+            "Received update for %s: %s = %s", self._attr_name, command, value
         )
 
         # Update state based on command
         if command == "power":
             self._attr_state = (
-                MediaPlayerState.ON if value == "on"
-                else MediaPlayerState.OFF
+                MediaPlayerState.ON if value == "on" else MediaPlayerState.OFF
             )
             self._attr_available = True
 
@@ -365,12 +360,11 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         """Update volume level."""
         try:
             command = (
-                "master-volume=query" if self._zone == "main"
+                "master-volume=query"
+                if self._zone == "main"
                 else f"{self._zone}.volume=query"
             )
-            result = await self._conn_manager.async_send_command(
-                "command", command
-            )
+            result = await self._conn_manager.async_send_command("command", command)
 
             if result:
                 try:
@@ -390,15 +384,18 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         """Update current source."""
         try:
             command = (
-                "input-selector=query" if self._zone == "main"
+                "input-selector=query"
+                if self._zone == "main"
                 else f"{self._zone}.selector=query"
             )
-            result = await self._conn_manager.async_send_command(
-                "command", command
-            )
+            result = await self._conn_manager.async_send_command("command", command)
 
             if result:
-                if isinstance(result, tuple) and len(result) > 1 and isinstance(result[1], tuple):
+                if (
+                    isinstance(result, tuple)
+                    and len(result) > 1
+                    and isinstance(result[1], tuple)
+                ):
                     if result[1]:
                         self._attr_source = result[1][0]
                 elif isinstance(result, tuple):
@@ -413,12 +410,11 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         """Update mute state."""
         try:
             command = (
-                "audio-muting=query" if self._zone == "main"
+                "audio-muting=query"
+                if self._zone == "main"
                 else f"{self._zone}.muting=query"
             )
-            result = await self._conn_manager.async_send_command(
-                "command", command
-            )
+            result = await self._conn_manager.async_send_command("command", command)
 
             if result:
                 self._attr_is_volume_muted = str(result) == "on"
@@ -441,20 +437,17 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
                 _LOGGER.debug(
                     "Loaded %d sources for %s",
                     len(self._attr_source_list),
-                    self._attr_name
+                    self._attr_name,
                 )
             else:
                 _LOGGER.info(
-                    "No sources returned for %s. This may be normal.",
-                    self._attr_name
+                    "No sources returned for %s. This may be normal.", self._attr_name
                 )
                 self._attr_source_list = []
 
         except OSError as err:
             _LOGGER.debug(
-                "Could not fetch source list for %s: %s",
-                self._attr_name,
-                err
+                "Could not fetch source list for %s: %s", self._attr_name, err
             )
             # Keep empty list instead of failing
             self._attr_source_list = []
@@ -474,20 +467,18 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
                 _LOGGER.debug(
                     "Loaded %d listening modes for %s",
                     len(self._listening_modes),
-                    self._attr_name
+                    self._attr_name,
                 )
             else:
                 _LOGGER.info(
                     "No listening modes returned for %s. This may be normal.",
-                    self._attr_name
+                    self._attr_name,
                 )
                 self._listening_modes = []
 
         except OSError as err:
             _LOGGER.debug(
-                "Could not fetch listening modes for %s: %s",
-                self._attr_name,
-                err
+                "Could not fetch listening modes for %s: %s", self._attr_name, err
             )
             # Keep empty list instead of failing
             self._listening_modes = []
@@ -498,8 +489,7 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         """Turn the media player on."""
         try:
             command = (
-                "system-power=on" if self._zone == "main"
-                else f"{self._zone}.power=on"
+                "system-power=on" if self._zone == "main" else f"{self._zone}.power=on"
             )
             await self._conn_manager.async_send_command("command", command)
 
@@ -512,9 +502,7 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
                 await asyncio.sleep(0.5)
 
             if not power_on:
-                _LOGGER.warning(
-                    "%s did not power on within 5 seconds", self._attr_name
-                )
+                _LOGGER.warning("%s did not power on within 5 seconds", self._attr_name)
                 # Set state optimistically and let the next update correct it
                 self._attr_state = MediaPlayerState.ON
                 self._attr_available = True
@@ -540,7 +528,8 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         """Turn the media player off."""
         try:
             command = (
-                "system-power=standby" if self._zone == "main"
+                "system-power=standby"
+                if self._zone == "main"
                 else f"{self._zone}.power=standby"
             )
             await self._conn_manager.async_send_command("command", command)
@@ -565,7 +554,8 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
             receiver_volume = self._ha_volume_to_receiver(volume)
 
             command = (
-                f"master-volume={receiver_volume}" if self._zone == "main"
+                f"master-volume={receiver_volume}"
+                if self._zone == "main"
                 else f"{self._zone}.volume={receiver_volume}"
             )
             await self._conn_manager.async_send_command("command", command)
@@ -581,7 +571,8 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         """Volume up the media player."""
         try:
             command = (
-                "master-volume=level-up" if self._zone == "main"
+                "master-volume=level-up"
+                if self._zone == "main"
                 else f"{self._zone}.volume=level-up"
             )
             await self._conn_manager.async_send_command("command", command)
@@ -599,7 +590,8 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         """Volume down the media player."""
         try:
             command = (
-                "master-volume=level-down" if self._zone == "main"
+                "master-volume=level-down"
+                if self._zone == "main"
                 else f"{self._zone}.volume=level-down"
             )
             await self._conn_manager.async_send_command("command", command)
@@ -623,7 +615,8 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         try:
             mute_state = "on" if mute else "off"
             command = (
-                f"audio-muting={mute_state}" if self._zone == "main"
+                f"audio-muting={mute_state}"
+                if self._zone == "main"
                 else f"{self._zone}.muting={mute_state}"
             )
             await self._conn_manager.async_send_command("command", command)
@@ -644,7 +637,8 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         """
         try:
             command = (
-                f"input-selector={source}" if self._zone == "main"
+                f"input-selector={source}"
+                if self._zone == "main"
                 else f"{self._zone}.selector={source}"
             )
             await self._conn_manager.async_send_command("command", command)
@@ -674,7 +668,11 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
                 await asyncio.sleep(0.5)
 
                 # Select preset
-                command = f"preset={media_id}" if self._zone == "main" else f"{self._zone}.preset={media_id}"
+                command = (
+                    f"preset={media_id}"
+                    if self._zone == "main"
+                    else f"{self._zone}.preset={media_id}"
+                )
                 await self._conn_manager.async_send_command("command", command)
 
                 _LOGGER.debug("Playing radio preset %s", media_id)
@@ -731,13 +729,11 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         from .const import CONF_MAX_VOLUME, CONF_VOLUME_RESOLUTION
 
         max_volume = self._entry.options.get(
-            CONF_MAX_VOLUME,
-            self._entry.data.get(CONF_MAX_VOLUME, 100)
+            CONF_MAX_VOLUME, self._entry.data.get(CONF_MAX_VOLUME, 100)
         )
 
         resolution = self._entry.options.get(
-            CONF_VOLUME_RESOLUTION,
-            self._entry.data.get(CONF_VOLUME_RESOLUTION, 80)
+            CONF_VOLUME_RESOLUTION, self._entry.data.get(CONF_VOLUME_RESOLUTION, 80)
         )
 
         # Scale: HA volume -> max volume % -> receiver steps
@@ -761,13 +757,11 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         from .const import CONF_MAX_VOLUME, CONF_VOLUME_RESOLUTION
 
         max_volume = self._entry.options.get(
-            CONF_MAX_VOLUME,
-            self._entry.data.get(CONF_MAX_VOLUME, 100)
+            CONF_MAX_VOLUME, self._entry.data.get(CONF_MAX_VOLUME, 100)
         )
 
         resolution = self._entry.options.get(
-            CONF_VOLUME_RESOLUTION,
-            self._entry.data.get(CONF_VOLUME_RESOLUTION, 80)
+            CONF_VOLUME_RESOLUTION, self._entry.data.get(CONF_VOLUME_RESOLUTION, 80)
         )
 
         # Scale: receiver steps -> HA volume
@@ -843,6 +837,7 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
 
 # Additional helper functions for the platform
 
+
 def validate_source_list(sources: list[str] | None) -> list[str]:
     """
     Validate and sanitize source list.
@@ -860,8 +855,7 @@ def validate_source_list(sources: list[str] | None) -> list[str]:
 
     if not isinstance(sources, list):
         _LOGGER.warning(
-            "Source list is not a list type: %s, attempting conversion",
-            type(sources)
+            "Source list is not a list type: %s, attempting conversion", type(sources)
         )
         try:
             return list(sources)
@@ -873,8 +867,7 @@ def validate_source_list(sources: list[str] | None) -> list[str]:
 
     if len(valid_sources) != len(sources):
         _LOGGER.debug(
-            "Filtered out %d invalid sources",
-            len(sources) - len(valid_sources)
+            "Filtered out %d invalid sources", len(sources) - len(valid_sources)
         )
 
     return valid_sources
@@ -898,7 +891,7 @@ def validate_listening_modes(modes: list[str] | None) -> list[str]:
     if not isinstance(modes, list):
         _LOGGER.warning(
             "Listening mode list is not a list type: %s, attempting conversion",
-            type(modes)
+            type(modes),
         )
         try:
             return list(modes)
@@ -910,14 +903,14 @@ def validate_listening_modes(modes: list[str] | None) -> list[str]:
 
     if len(valid_modes) != len(modes):
         _LOGGER.debug(
-            "Filtered out %d invalid listening modes",
-            len(modes) - len(valid_modes)
+            "Filtered out %d invalid listening modes", len(modes) - len(valid_modes)
         )
 
     return valid_modes
 
 
 # Testing utilities for development
+
 
 class MockOnkyoReceiver:
     """Mock receiver for testing without hardware."""
