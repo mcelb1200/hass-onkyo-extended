@@ -1,9 +1,9 @@
 """Tests for the Onkyo connection manager."""
 
 import pytest
-import asyncio
-from unittest.mock import MagicMock, AsyncMock, patch
+from unittest.mock import MagicMock, patch
 from custom_components.onkyo.connection import OnkyoConnectionManager
+
 
 @pytest.fixture
 def mock_receiver():
