@@ -56,6 +56,10 @@ async def test_send_command_failure(hass, connection_manager, mock_receiver):
 
     assert result is None
     assert not connection_manager.connected
+    # Ensure disconnect is called to reset the library state
+    # Since disconnect is called in executor, we need to verify the mock interaction
+    # Note: hass.async_add_executor_job calls the function.
+    assert mock_receiver.disconnect.called
 
 
 @pytest.mark.asyncio
@@ -88,6 +92,5 @@ async def test_close(hass, connection_manager, mock_receiver):
     """Test closing the connection."""
     await connection_manager.async_close()
 
-    # Disconnect is run in executor, so we can't check if it was called directly on the mock
-    # unless we mock add_executor_job, but the simpler check is _is_connected state
+    # Disconnect is run in executor
     assert not connection_manager.connected
