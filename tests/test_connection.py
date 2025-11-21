@@ -1,7 +1,9 @@
 """Tests for the Onkyo connection manager."""
 
-import pytest
 from unittest.mock import MagicMock, patch
+
+import pytest
+
 from custom_components.onkyo.connection import OnkyoConnectionManager
 
 

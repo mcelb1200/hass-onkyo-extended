@@ -1,6 +1,7 @@
 """Tests for Onkyo helpers."""
 
 from unittest.mock import patch
+
 from custom_components.onkyo import helpers
 
 # Mock COMMANDS structure

@@ -1,11 +1,12 @@
 """Tests for the Onkyo config flow."""
 
-import pytest
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock, patch
 
+import pytest
 from homeassistant import config_entries
 from homeassistant.data_entry_flow import FlowResultType
-from custom_components.onkyo.const import DOMAIN, CONF_RECEIVER_MAX_VOLUME
+
+from custom_components.onkyo.const import CONF_RECEIVER_MAX_VOLUME, DOMAIN
 
 
 @pytest.fixture(name="mock_setup_entry")
