@@ -32,6 +32,7 @@ from .connection import OnkyoConnectionManager
 from .const import (
     ATTR_HDMI_OUTPUT,
     DOMAIN,
+    HDMI_OUTPUT_OPTIONS,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -664,8 +665,16 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         try:
             if media_type.lower() == "radio":
                 # Select radio tuner as source first
-                await self.async_select_source("radio")
-                await asyncio.sleep(0.5)
+                # Use "tuner" instead of "radio" as eiscp doesn't support "radio" for input-selector
+                await self.async_select_source("tuner")
+
+                # Poll until source changes to tuner (max 5 seconds)
+                for _ in range(10):
+                    await self._async_update_source()
+                    # Check if source is tuner/fm/am (heuristics)
+                    if self._attr_source and "tuner" in self._attr_source.lower():
+                        break
+                    await asyncio.sleep(0.5)
 
                 # Select preset
                 command = (
@@ -695,6 +704,10 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         if self._zone != "main":
             _LOGGER.warning("HDMI output selection only available for main zone")
             return
+
+        if hdmi_output not in HDMI_OUTPUT_OPTIONS:
+            _LOGGER.error("Invalid HDMI output: %s. Options: %s", hdmi_output, HDMI_OUTPUT_OPTIONS)
+            raise ValueError(f"Invalid HDMI output: {hdmi_output}")
 
         try:
             command = f"hdmi-output-selector={hdmi_output}"
@@ -833,208 +846,3 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         pass
 
         _LOGGER.debug("Cleaned up entity: %s", self._attr_name)
-
-
-# Additional helper functions for the platform
-
-
-def validate_source_list(sources: list[str] | None) -> list[str]:
-    """
-    Validate and sanitize source list.
-
-    Issue #125768 fix: Ensure source list is never None or invalid.
-
-    Args:
-        sources: Source list to validate
-
-    Returns:
-        list[str]: Valid source list (may be empty)
-    """
-    if not sources:
-        return []
-
-    if not isinstance(sources, list):
-        _LOGGER.warning(
-            "Source list is not a list type: %s, attempting conversion", type(sources)
-        )
-        try:
-            return list(sources)
-        except (TypeError, ValueError):
-            return []
-
-    # Filter out invalid entries
-    valid_sources = [s for s in sources if s and isinstance(s, str)]
-
-    if len(valid_sources) != len(sources):
-        _LOGGER.debug(
-            "Filtered out %d invalid sources", len(sources) - len(valid_sources)
-        )
-
-    return valid_sources
-
-
-def validate_listening_modes(modes: list[str] | None) -> list[str]:
-    """
-    Validate and sanitize listening mode list.
-
-    Issue #125768 fix: Ensure listening mode list is never None or invalid.
-
-    Args:
-        modes: Listening mode list to validate
-
-    Returns:
-        list[str]: Valid listening mode list (may be empty)
-    """
-    if not modes:
-        return []
-
-    if not isinstance(modes, list):
-        _LOGGER.warning(
-            "Listening mode list is not a list type: %s, attempting conversion",
-            type(modes),
-        )
-        try:
-            return list(modes)
-        except (TypeError, ValueError):
-            return []
-
-    # Filter out invalid entries
-    valid_modes = [m for m in modes if m and isinstance(m, str)]
-
-    if len(valid_modes) != len(modes):
-        _LOGGER.debug(
-            "Filtered out %d invalid listening modes", len(modes) - len(valid_modes)
-        )
-
-    return valid_modes
-
-
-# Testing utilities for development
-
-
-class MockOnkyoReceiver:
-    """Mock receiver for testing without hardware."""
-
-    def __init__(self, host: str = "192.168.1.100"):
-        """
-        Initialize mock receiver.
-
-        Args:
-            host: Hostname or IP address.
-        """
-        self.host = host
-        self.port = 60128
-        self._power = "standby"
-        self._volume = 50
-        self._mute = False
-        self._source = "bd-dvd"
-        self._sources = {
-            "bd-dvd": "BD/DVD",
-            "video1": "Video 1",
-            "video2": "Video 2",
-            "game": "Game",
-            "pc": "PC",
-            "tv-cd": "TV/CD",
-        }
-        self._listening_modes = ["stereo", "direct", "all-ch-stereo"]
-
-    def command(self, cmd: str) -> Any:
-        """
-        Process a command.
-
-        Args:
-            cmd: The command string.
-
-        Returns:
-            Any: The result of the command.
-        """
-        if "power=query" in cmd:
-            return self._power
-        elif "power=on" in cmd:
-            self._power = "on"
-            return True
-        elif "power=standby" in cmd:
-            self._power = "standby"
-            return True
-        elif "volume=query" in cmd:
-            return self._volume
-        elif "volume=" in cmd:
-            try:
-                self._volume = int(cmd.split("=")[1])
-            except ValueError:
-                pass
-            return True
-        elif "muting=query" in cmd:
-            return "on" if self._mute else "off"
-        elif "muting=" in cmd:
-            self._mute = "on" in cmd
-            return True
-        elif "selector=query" in cmd or "input-selector=query" in cmd:
-            return self._source
-        elif "selector=" in cmd or "input-selector=" in cmd:
-            self._source = cmd.split("=")[1]
-            return True
-
-        return None
-
-    def raw(self, cmd: str) -> Any:
-        """
-        Process raw command.
-
-        Args:
-            cmd: The raw command string.
-
-        Returns:
-            Any: The result of the raw command.
-        """
-        if cmd == "SLIQSTN":
-            return self._sources
-        elif cmd == "LMQSTN":
-            return self._listening_modes
-        return None
-
-    def disconnect(self) -> None:
-        """Disconnect (mock)."""
-        pass
-
-
-# Example usage and testing
-if __name__ == "__main__":
-    print("Onkyo Media Player - Complete Implementation")
-    print("=" * 60)
-    print()
-    print("This file contains the complete, production-ready media player")
-    print("implementation with all critical fixes integrated:")
-    print()
-    print("✓ Issue #125768 Fixed:")
-    print("  - Graceful handling of empty source/listening mode lists")
-    print("  - Setup continues even when receiver is off")
-    print("  - Lists populated dynamically when receiver powers on")
-    print()
-    print("✓ Issue #123143 Fixed:")
-    print("  - All commands go through connection manager")
-    print("  - Command locking prevents concurrent access")
-    print("  - Rate limiting prevents command flooding")
-    print("  - Automatic reconnection with exponential backoff")
-    print()
-    print("Key Features:")
-    print("  - Multi-zone support (main, zone2, zone3)")
-    print("  - Volume control with scaling")
-    print("  - Source selection")
-    print("  - HDMI output selection")
-    print("  - Radio preset playback")
-    print("  - Comprehensive error handling")
-    print("  - Local push mode support")
-    print("  - Automatic state updates")
-    print()
-    print("Usage:")
-    print("  1. Copy this file to custom_components/onkyo/media_player.py")
-    print("  2. Ensure connection.py is in the same directory")
-    print("  3. Ensure const.py contains required constants")
-    print("  4. Restart Home Assistant")
-    print("  5. Add Onkyo integration via UI")
-    print()
-    print("Testing:")
-    print("  - Use MockOnkyoReceiver class for unit tests")
-    print("  - Validate with pytest")
-    print("  - Test all scenarios from implementation guide")

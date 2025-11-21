@@ -23,6 +23,7 @@ class MockConfigEntry(ConfigEntry):
             unique_id=kwargs.get("unique_id", "12345"),
             version=kwargs.get("version", 1),
             minor_version=kwargs.get("minor_version", 1),
+            discovery_keys={},
         )
 
 
