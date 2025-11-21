@@ -1,11 +1,14 @@
+from unittest.mock import AsyncMock, MagicMock
 
 import pytest
-from unittest.mock import MagicMock, AsyncMock
 from homeassistant.config_entries import ConfigEntry
+
 from custom_components.onkyo.media_player import OnkyoMediaPlayer
+
 
 class MockConfigEntry(ConfigEntry):
     """Mock config entry."""
+
     def __init__(self, *, data, options, entry_id="test-entry-id", **kwargs):
         super().__init__(
             entry_id=entry_id,
@@ -19,6 +22,7 @@ class MockConfigEntry(ConfigEntry):
             minor_version=kwargs.get("minor_version", 1),
             discovery_keys={},
         )
+
 
 @pytest.mark.asyncio
 async def test_select_hdmi_output_validation():

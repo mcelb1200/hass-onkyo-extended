@@ -7,7 +7,6 @@ import logging
 from typing import Any
 
 from eiscp import eISCP
-
 from homeassistant.core import HomeAssistant
 
 _LOGGER = logging.getLogger(__name__)

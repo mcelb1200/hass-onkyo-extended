@@ -1,5 +1,7 @@
-import pytest
 from unittest.mock import MagicMock
+
+import pytest
+
 from custom_components.onkyo.media_player import OnkyoMediaPlayer
 
 

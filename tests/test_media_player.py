@@ -1,8 +1,8 @@
 """Tests for the Onkyo media_player."""
 
-import pytest
-from unittest.mock import MagicMock, AsyncMock
+from unittest.mock import AsyncMock, MagicMock
 
+import pytest
 from homeassistant.config_entries import ConfigEntry
 
 from custom_components.onkyo.media_player import OnkyoMediaPlayer
