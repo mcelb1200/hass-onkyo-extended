@@ -285,7 +285,11 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
                 self.hass.async_create_task(self._async_update_all())
 
         elif command == "volume":
-            self._attr_volume_level = self._receiver_volume_to_ha(value)
+            try:
+                volume = int(value)
+                self._attr_volume_level = self._receiver_volume_to_ha(volume)
+            except (ValueError, TypeError):
+                _LOGGER.debug("Received non-numeric volume update: %s", value)
 
         elif command == "muting":
             self._attr_is_volume_muted = value == "on"
