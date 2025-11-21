@@ -1,22 +1,18 @@
 """Tests for the Onkyo config flow."""
 
-from unittest.mock import MagicMock, patch
-
 import pytest
+from unittest.mock import patch, MagicMock
+
 from homeassistant import config_entries
 from homeassistant.data_entry_flow import FlowResultType
-
-from custom_components.onkyo.const import CONF_RECEIVER_MAX_VOLUME, DOMAIN
-
+from custom_components.onkyo.config_flow import OnkyoConfigFlow
+from custom_components.onkyo.const import DOMAIN, CONF_RECEIVER_MAX_VOLUME
 
 @pytest.fixture(name="mock_setup_entry")
 def mock_setup_entry():
     """Mock setting up a config entry."""
-    with patch(
-        "custom_components.onkyo.async_setup_entry", return_value=True
-    ) as mock_setup:
+    with patch("custom_components.onkyo.async_setup_entry", return_value=True) as mock_setup:
         yield mock_setup
-
 
 @pytest.fixture(name="mock_eiscp")
 def mock_eiscp():
@@ -25,7 +21,6 @@ def mock_eiscp():
         receiver = mock_eiscp.return_value
         receiver.command = MagicMock()
         yield mock_eiscp
-
 
 @pytest.mark.asyncio
 async def test_form(hass, mock_setup_entry, mock_eiscp):
@@ -60,7 +55,6 @@ async def test_form(hass, mock_setup_entry, mock_eiscp):
     assert result2["options"]["receiver_max_volume"] == 80
     assert len(mock_setup_entry.mock_calls) == 1
 
-
 @pytest.mark.asyncio
 async def test_form_connect_timeout(hass, mock_eiscp):
     """Test connection timeout."""
@@ -86,7 +80,6 @@ async def test_form_connect_timeout(hass, mock_eiscp):
     assert result2["type"] == FlowResultType.CREATE_ENTRY
     assert result2["title"] == "Test Receiver"
 
-
 @pytest.mark.asyncio
 async def test_form_connect_refused(hass, mock_eiscp):
     """Test connection refused."""
@@ -111,7 +104,6 @@ async def test_form_connect_refused(hass, mock_eiscp):
     # Should still create entry
     assert result2["type"] == FlowResultType.CREATE_ENTRY
 
-
 @pytest.mark.asyncio
 async def test_form_import_error(hass):
     """Test library import error."""
@@ -130,7 +122,6 @@ async def test_form_import_error(hass):
 
     assert result2["type"] == FlowResultType.FORM
     assert result2["errors"] == {"base": "library_missing"}
-
 
 @pytest.mark.asyncio
 async def test_ssdp_discovery(hass, mock_setup_entry, mock_eiscp):
@@ -162,7 +153,6 @@ async def test_ssdp_discovery(hass, mock_setup_entry, mock_eiscp):
     assert result2["type"] == FlowResultType.CREATE_ENTRY
     assert result2["title"] == "Onkyo Receiver"
     assert result2["data"]["host"] == "1.1.1.1"
-
 
 @pytest.mark.asyncio
 async def test_options_flow(hass, mock_setup_entry):

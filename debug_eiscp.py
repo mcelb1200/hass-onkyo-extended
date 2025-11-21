@@ -1,5 +1,6 @@
-from eiscp.core import command_to_iscp
 
+import eiscp
+from eiscp.core import command_to_iscp
 
 def verify_radio_command():
     print("Verifying 'input-selector=radio'...")
@@ -14,7 +15,6 @@ def verify_radio_command():
         print(f"tuner -> {iscp}")
     except Exception as e:
         print(f"tuner -> Error: {e}")
-
 
 if __name__ == "__main__":
     verify_radio_command()

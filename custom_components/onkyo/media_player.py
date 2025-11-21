@@ -706,9 +706,7 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
             return
 
         if hdmi_output not in HDMI_OUTPUT_OPTIONS:
-            _LOGGER.error(
-                "Invalid HDMI output: %s. Options: %s", hdmi_output, HDMI_OUTPUT_OPTIONS
-            )
+            _LOGGER.error("Invalid HDMI output: %s. Options: %s", hdmi_output, HDMI_OUTPUT_OPTIONS)
             raise ValueError(f"Invalid HDMI output: {hdmi_output}")
 
         try:

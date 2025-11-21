@@ -19,8 +19,8 @@ from __future__ import annotations
 import asyncio
 import logging
 
-import homeassistant.helpers.config_validation as cv
 from eiscp import eISCP
+
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_HOST, CONF_NAME, Platform
 from homeassistant.core import HomeAssistant
@@ -37,6 +37,7 @@ from .const import (
     DEFAULT_VOLUME_RESOLUTION,
     DOMAIN,
 )
+import homeassistant.helpers.config_validation as cv
 
 CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
 
@@ -89,7 +90,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     try:
         receiver = await _async_setup_receiver(hass, entry)
 
-    except TimeoutError:
+    except asyncio.TimeoutError:
         _LOGGER.warning(
             "Timeout connecting to Onkyo receiver at %s. "
             "The receiver may be powered off or in standby. "
@@ -173,7 +174,7 @@ async def _async_setup_receiver(hass: HomeAssistant, entry: ConfigEntry) -> eISC
         _LOGGER.info("Successfully connected to Onkyo receiver at %s", host)
         return receiver
 
-    except TimeoutError:
+    except asyncio.TimeoutError:
         _LOGGER.debug("Connection to %s timed out", host)
         # Clean up the connection attempt
         try:
