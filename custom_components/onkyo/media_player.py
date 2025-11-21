@@ -665,8 +665,16 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         try:
             if media_type.lower() == "radio":
                 # Select radio tuner as source first
-                await self.async_select_source("radio")
-                await asyncio.sleep(0.5)
+                # Use "tuner" instead of "radio" as eiscp doesn't support "radio" for input-selector
+                await self.async_select_source("tuner")
+
+                # Poll until source changes to tuner (max 5 seconds)
+                for _ in range(10):
+                    await self._async_update_source()
+                    # Check if source is tuner/fm/am (heuristics)
+                    if self._attr_source and "tuner" in self._attr_source.lower():
+                        break
+                    await asyncio.sleep(0.5)
 
                 # Select preset
                 command = (
@@ -698,7 +706,9 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
             return
 
         if hdmi_output not in HDMI_OUTPUT_OPTIONS:
-            _LOGGER.error("Invalid HDMI output: %s. Options: %s", hdmi_output, HDMI_OUTPUT_OPTIONS)
+            _LOGGER.error(
+                "Invalid HDMI output: %s. Options: %s", hdmi_output, HDMI_OUTPUT_OPTIONS
+            )
             raise ValueError(f"Invalid HDMI output: {hdmi_output}")
 
         try:

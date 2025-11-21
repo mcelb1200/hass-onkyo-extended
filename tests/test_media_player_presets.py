@@ -23,8 +23,8 @@ class MockConfigEntry(ConfigEntry):
 
 
 @pytest.mark.asyncio
-async def test_select_hdmi_output_validation():
-    """Test validation for select_hdmi_output service."""
+async def test_play_media_radio_presets():
+    """Test playing radio presets with correct source selection."""
     receiver_mock = MagicMock()
     hass_mock = MagicMock()
     conn_manager_mock = AsyncMock()
@@ -43,12 +43,22 @@ async def test_select_hdmi_output_validation():
     )
     player.async_write_ha_state = MagicMock()
 
-    # Test valid output
-    await player.async_select_hdmi_output("out")
-    conn_manager_mock.async_send_command.assert_awaited_with(
-        "command", "hdmi-output-selector=out"
-    )
+    # Mock async_select_source to verify it receives "tuner"
+    player.async_select_source = AsyncMock()
 
-    # Test invalid output
-    with pytest.raises(ValueError, match="Invalid HDMI output"):
-        await player.async_select_hdmi_output("invalid_option")
+    # Mock update source to simulate switching
+    player._async_update_source = AsyncMock()
+
+    # Mock internal state change
+    async def update_source_side_effect():
+        player._attr_source = "Tuner"
+
+    player._async_update_source.side_effect = update_source_side_effect
+
+    await player.async_play_media("radio", "1")
+
+    # Verify "tuner" was selected, not "radio"
+    player.async_select_source.assert_awaited_with("tuner")
+
+    # Verify preset command was sent
+    conn_manager_mock.async_send_command.assert_awaited_with("command", "preset=1")

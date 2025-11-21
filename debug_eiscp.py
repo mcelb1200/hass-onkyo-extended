@@ -1,17 +1,20 @@
+from eiscp.core import command_to_iscp
 
-import eiscp
-from eiscp import eISCP
-import inspect
 
-def inspect_conn_logic():
-    print("Inspecting eISCP._ensure_socket_connected and disconnect...")
+def verify_radio_command():
+    print("Verifying 'input-selector=radio'...")
     try:
-        print("--- ENSURE ---")
-        print(inspect.getsource(eISCP._ensure_socket_connected))
-        print("\n--- DISCONNECT ---")
-        print(inspect.getsource(eISCP.disconnect))
+        iscp = command_to_iscp("input-selector=radio")
+        print(f"radio -> {iscp}")
     except Exception as e:
-        print(f"Could not get source: {e}")
+        print(f"radio -> Error: {e}")
+
+    try:
+        iscp = command_to_iscp("input-selector=tuner")
+        print(f"tuner -> {iscp}")
+    except Exception as e:
+        print(f"tuner -> Error: {e}")
+
 
 if __name__ == "__main__":
-    inspect_conn_logic()
+    verify_radio_command()
