@@ -1,11 +1,10 @@
-from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
+import asyncio
+from unittest.mock import MagicMock, patch, call, AsyncMock
+from custom_components.onkyo.media_player import OnkyoMediaPlayer
 from homeassistant.components.media_player import MediaPlayerState
 from homeassistant.core import HomeAssistant
-
-from custom_components.onkyo.media_player import OnkyoMediaPlayer
-
 
 @pytest.mark.asyncio
 async def test_async_turn_on_delay(hass: HomeAssistant):
@@ -29,19 +28,14 @@ async def test_async_turn_on_delay(hass: HomeAssistant):
     # Mock asyncio.sleep
     with patch("asyncio.sleep", new_callable=AsyncMock) as mock_sleep:
         # Mock _async_get_power_state to return 'on' immediately
-        with patch.object(
-            player, "_async_get_power_state", return_value="on"
-        ) as mock_get_power:
+        with patch.object(player, "_async_get_power_state", return_value="on") as mock_get_power:
             await player.async_turn_on()
 
             # Verify sleep was called with 1.5
             mock_sleep.assert_any_call(1.5)
 
             # Verify command sent
-            connection_manager.async_send_command.assert_any_call(
-                "command", "system-power=on"
-            )
-
+            connection_manager.async_send_command.assert_any_call("command", "system-power=on")
 
 @pytest.mark.asyncio
 async def test_handle_receiver_update_triggers_update(hass: HomeAssistant):
@@ -84,7 +78,6 @@ async def test_handle_receiver_update_triggers_update(hass: HomeAssistant):
 
     # Verify no update task created (since power didn't change from OFF to ON)
     hass.async_create_task.assert_not_called()
-
 
 @pytest.mark.asyncio
 async def test_handle_receiver_update_volume_robustness(hass: HomeAssistant):
