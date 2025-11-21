@@ -1,6 +1,7 @@
 """Tests for Onkyo helpers."""
 
-from unittest.mock import patch
+import pytest
+from unittest.mock import patch, MagicMock
 from custom_components.onkyo import helpers
 
 # Mock COMMANDS structure
@@ -19,10 +20,9 @@ MOCK_COMMANDS = {
                 "01": {"name": ("direct", "Direct")},
                 "up": {"name": "up"},  # Should be skipped
             }
-        },
+        }
     }
 }
-
 
 def test_build_sources_list():
     """Test building sources list."""
@@ -35,7 +35,6 @@ def test_build_sources_list():
         assert sources["video2"] == "video2"
         assert "07" not in sources
 
-
 def test_build_sounds_mode_list():
     """Test building sound modes list."""
     with patch.dict("custom_components.onkyo.helpers.COMMANDS", MOCK_COMMANDS):
@@ -44,7 +43,6 @@ def test_build_sounds_mode_list():
         assert "Stereo" in modes.values()
         assert "Direct" in modes.values()
         assert "up" not in modes
-
 
 def test_build_selected_dict():
     """Test building selected dictionary."""
@@ -58,7 +56,6 @@ def test_build_selected_dict():
         selected = helpers.build_selected_dict(sounds={"stereo": "ignored"})
         assert "stereo" in selected
         assert "direct" not in selected
-
 
 def test_reverse_mapping():
     """Test reverse mapping."""

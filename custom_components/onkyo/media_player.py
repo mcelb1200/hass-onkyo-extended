@@ -32,6 +32,7 @@ from .connection import OnkyoConnectionManager
 from .const import (
     ATTR_HDMI_OUTPUT,
     DOMAIN,
+    HDMI_OUTPUT_OPTIONS,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -695,6 +696,10 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         if self._zone != "main":
             _LOGGER.warning("HDMI output selection only available for main zone")
             return
+
+        if hdmi_output not in HDMI_OUTPUT_OPTIONS:
+            _LOGGER.error("Invalid HDMI output: %s. Options: %s", hdmi_output, HDMI_OUTPUT_OPTIONS)
+            raise ValueError(f"Invalid HDMI output: {hdmi_output}")
 
         try:
             command = f"hdmi-output-selector={hdmi_output}"
