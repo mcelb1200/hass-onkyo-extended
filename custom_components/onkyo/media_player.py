@@ -271,10 +271,18 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
 
         # Update state based on command
         if command == "power":
+            previous_state = self._attr_state
             self._attr_state = (
                 MediaPlayerState.ON if value == "on" else MediaPlayerState.OFF
             )
             self._attr_available = True
+
+            # Trigger full update when power turns ON to ensure volume/source are correct
+            if (
+                previous_state == MediaPlayerState.OFF
+                and self._attr_state == MediaPlayerState.ON
+            ):
+                self.hass.async_create_task(self._async_update_all())
 
         elif command == "volume":
             self._attr_volume_level = self._receiver_volume_to_ha(value)
@@ -493,6 +501,10 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
                 "system-power=on" if self._zone == "main" else f"{self._zone}.power=on"
             )
             await self._conn_manager.async_send_command("command", command)
+
+            # Wait for receiver to initialize before polling (Issue #125768 / Performance Improvement)
+            # External implementation (onpc) suggests at least 1-1.5s delay after PWON.
+            await asyncio.sleep(1.5)
 
             # Poll for power on state with a timeout
             power_on = False
