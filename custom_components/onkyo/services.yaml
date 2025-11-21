@@ -7,9 +7,18 @@ select_hdmi_output:
   fields:
     hdmi_output:
       description: >-
-        Known possible values are
-        no, analog, tes, out, out-sub, sub, hdbaset, both, up
+        Select the HDMI output mode.
       example: "no"
       required: true
       selector:
-        text:
+        select:
+          options:
+            - "no"
+            - "analog"
+            - "yes"
+            - "out"
+            - "out-sub"
+            - "sub"
+            - "hdbaset"
+            - "both"
+            - "up"
