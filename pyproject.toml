@@ -12,6 +12,9 @@ dependencies = [
     "onkyo-eiscp>=1.2.7",
 ]
 
+[tool.setuptools.packages.find]
+include = ["custom_components*"]
+
 [tool.ruff]
 target-version = "py311"
 line-length = 88
