@@ -1,10 +1,10 @@
 """Additional coverage tests for Onkyo Media Player."""
+
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 from homeassistant.components.media_player import (
     MediaPlayerDeviceClass,
-    MediaPlayerEntityFeature,
     MediaPlayerState,
 )
 from homeassistant.config_entries import ConfigEntry
@@ -16,6 +16,7 @@ from custom_components.onkyo.media_player import (
     _detect_zones_safe,
     async_setup_entry,
 )
+
 
 class MockConfigEntry(ConfigEntry):
     """Mock config entry."""
@@ -79,6 +80,7 @@ async def test_detect_zones_safe_main_only(mock_connection_manager):
 @pytest.mark.asyncio
 async def test_detect_zones_safe_all_zones(mock_connection_manager):
     """Test detection of all zones."""
+
     async def command_side_effect(type_, command):
         if command == "zone2.power=query":
             return "on"
@@ -96,7 +98,9 @@ async def test_detect_zones_safe_all_zones(mock_connection_manager):
 
 
 @pytest.mark.asyncio
-async def test_async_setup_entry(hass, mock_config_entry, mock_connection_manager, mock_receiver):
+async def test_async_setup_entry(
+    hass, mock_config_entry, mock_connection_manager, mock_receiver
+):
     """Test async_setup_entry with zone detection."""
 
     # Setup hass.data
@@ -110,7 +114,10 @@ async def test_async_setup_entry(hass, mock_config_entry, mock_connection_manage
 
     async_add_entities = MagicMock()
 
-    with patch("custom_components.onkyo.media_player._detect_zones_safe", return_value=["main", "zone2"]) as mock_detect:
+    with patch(
+        "custom_components.onkyo.media_player._detect_zones_safe",
+        return_value=["main", "zone2"],
+    ) as mock_detect:
         await async_setup_entry(hass, mock_config_entry, async_add_entities)
 
         mock_detect.assert_awaited_once()
@@ -122,7 +129,9 @@ async def test_async_setup_entry(hass, mock_config_entry, mock_connection_manage
 
 
 @pytest.mark.asyncio
-async def test_async_setup_entry_fail_safe(hass, mock_config_entry, mock_connection_manager, mock_receiver):
+async def test_async_setup_entry_fail_safe(
+    hass, mock_config_entry, mock_connection_manager, mock_receiver
+):
     """Test async_setup_entry creates main zone even if detection fails."""
 
     hass.data[DOMAIN] = {
@@ -135,7 +144,10 @@ async def test_async_setup_entry_fail_safe(hass, mock_config_entry, mock_connect
 
     async_add_entities = MagicMock()
 
-    with patch("custom_components.onkyo.media_player._detect_zones_safe", side_effect=Exception("Detection error")):
+    with patch(
+        "custom_components.onkyo.media_player._detect_zones_safe",
+        side_effect=Exception("Detection error"),
+    ):
         await async_setup_entry(hass, mock_config_entry, async_add_entities)
 
         assert async_add_entities.call_count == 1
@@ -146,7 +158,9 @@ async def test_async_setup_entry_fail_safe(hass, mock_config_entry, mock_connect
 
 
 @pytest.mark.asyncio
-async def test_async_setup_entry_no_zones_returned(hass, mock_config_entry, mock_connection_manager, mock_receiver):
+async def test_async_setup_entry_no_zones_returned(
+    hass, mock_config_entry, mock_connection_manager, mock_receiver
+):
     """Test async_setup_entry when _detect_zones_safe returns empty list (shouldn't happen but safe to test)."""
 
     hass.data[DOMAIN] = {
@@ -159,7 +173,9 @@ async def test_async_setup_entry_no_zones_returned(hass, mock_config_entry, mock
 
     async_add_entities = MagicMock()
 
-    with patch("custom_components.onkyo.media_player._detect_zones_safe", return_value=[]):
+    with patch(
+        "custom_components.onkyo.media_player._detect_zones_safe", return_value=[]
+    ):
         await async_setup_entry(hass, mock_config_entry, async_add_entities)
 
         # Should fall back to creating main zone
@@ -170,7 +186,6 @@ async def test_async_setup_entry_no_zones_returned(hass, mock_config_entry, mock
 
 
 class TestOnkyoMediaPlayer:
-
     @pytest.fixture
     def player(self, hass, mock_config_entry, mock_connection_manager, mock_receiver):
         hass.async_create_task = MagicMock()
@@ -267,7 +282,7 @@ class TestOnkyoMediaPlayer:
 
         # Invalid volume
         player._handle_receiver_update("main", "volume", "invalid")
-        assert player.volume_level == 0.5 # Unchanged
+        assert player.volume_level == 0.5  # Unchanged
 
     @pytest.mark.asyncio
     async def test_handle_receiver_update_muting(self, player):
@@ -300,7 +315,9 @@ class TestOnkyoMediaPlayer:
     async def test_async_turn_off(self, player):
         """Test turning off."""
         await player.async_turn_off()
-        player._conn_manager.async_send_command.assert_awaited_with("command", "system-power=standby")
+        player._conn_manager.async_send_command.assert_awaited_with(
+            "command", "system-power=standby"
+        )
         assert player.state == MediaPlayerState.OFF
 
     @pytest.mark.asyncio
@@ -311,7 +328,9 @@ class TestOnkyoMediaPlayer:
             await player.async_turn_off()
 
     @pytest.mark.asyncio
-    async def test_async_turn_off_zone2(self, hass, mock_config_entry, mock_connection_manager, mock_receiver):
+    async def test_async_turn_off_zone2(
+        self, hass, mock_config_entry, mock_connection_manager, mock_receiver
+    ):
         """Test turning off zone 2."""
         player = OnkyoMediaPlayer(
             receiver=mock_receiver,
@@ -324,7 +343,9 @@ class TestOnkyoMediaPlayer:
         player.async_write_ha_state = MagicMock()
 
         await player.async_turn_off()
-        player._conn_manager.async_send_command.assert_awaited_with("command", "zone2.power=standby")
+        player._conn_manager.async_send_command.assert_awaited_with(
+            "command", "zone2.power=standby"
+        )
 
     @pytest.mark.asyncio
     async def test_async_volume_ops(self, player):
@@ -332,18 +353,24 @@ class TestOnkyoMediaPlayer:
         # Set Volume
         # HA Volume 0.5 -> Receiver Volume: 0.5 * (100/100) * 80 = 40
         await player.async_set_volume_level(0.5)
-        player._conn_manager.async_send_command.assert_awaited_with("command", "master-volume=40")
+        player._conn_manager.async_send_command.assert_awaited_with(
+            "command", "master-volume=40"
+        )
         assert player.volume_level == 0.5
 
         # Volume Up
         player._async_update_volume = AsyncMock()
         await player.async_volume_up()
-        player._conn_manager.async_send_command.assert_awaited_with("command", "master-volume=level-up")
+        player._conn_manager.async_send_command.assert_awaited_with(
+            "command", "master-volume=level-up"
+        )
         player._async_update_volume.assert_awaited()
 
         # Volume Down
         await player.async_volume_down()
-        player._conn_manager.async_send_command.assert_awaited_with("command", "master-volume=level-down")
+        player._conn_manager.async_send_command.assert_awaited_with(
+            "command", "master-volume=level-down"
+        )
 
     @pytest.mark.asyncio
     async def test_async_volume_ops_fail(self, player):
@@ -360,11 +387,15 @@ class TestOnkyoMediaPlayer:
     async def test_async_mute_volume(self, player):
         """Test mute operations."""
         await player.async_mute_volume(True)
-        player._conn_manager.async_send_command.assert_awaited_with("command", "audio-muting=on")
+        player._conn_manager.async_send_command.assert_awaited_with(
+            "command", "audio-muting=on"
+        )
         assert player.is_volume_muted is True
 
         await player.async_mute_volume(False)
-        player._conn_manager.async_send_command.assert_awaited_with("command", "audio-muting=off")
+        player._conn_manager.async_send_command.assert_awaited_with(
+            "command", "audio-muting=off"
+        )
         assert player.is_volume_muted is False
 
     @pytest.mark.asyncio
@@ -378,7 +409,9 @@ class TestOnkyoMediaPlayer:
     async def test_async_select_source(self, player):
         """Test selecting source."""
         await player.async_select_source("dvd")
-        player._conn_manager.async_send_command.assert_awaited_with("command", "input-selector=dvd")
+        player._conn_manager.async_send_command.assert_awaited_with(
+            "command", "input-selector=dvd"
+        )
         assert player.source == "dvd"
 
     @pytest.mark.asyncio
@@ -393,7 +426,9 @@ class TestOnkyoMediaPlayer:
         """Test selecting HDMI output."""
         # Valid output
         await player.async_select_hdmi_output("out")
-        player._conn_manager.async_send_command.assert_awaited_with("command", "hdmi-output-selector=out")
+        player._conn_manager.async_send_command.assert_awaited_with(
+            "command", "hdmi-output-selector=out"
+        )
 
         # Invalid output
         with pytest.raises(ValueError):
@@ -424,7 +459,9 @@ class TestOnkyoMediaPlayer:
         await player.async_play_media("radio", "1")
 
         # Should select tuner first
-        player._conn_manager.async_send_command.assert_any_await("command", "input-selector=tuner")
+        player._conn_manager.async_send_command.assert_any_await(
+            "command", "input-selector=tuner"
+        )
         # Then select preset
         player._conn_manager.async_send_command.assert_any_await("command", "preset=1")
 
@@ -457,7 +494,10 @@ class TestOnkyoMediaPlayer:
     @pytest.mark.asyncio
     async def test_fetch_source_list_success(self, player):
         """Test fetching source list successfully."""
-        player._conn_manager.async_send_command.return_value = {"dvd": "DVD", "tv": "TV"}
+        player._conn_manager.async_send_command.return_value = {
+            "dvd": "DVD",
+            "tv": "TV",
+        }
 
         await player._async_fetch_source_list()
 
@@ -468,7 +508,9 @@ class TestOnkyoMediaPlayer:
     @pytest.mark.asyncio
     async def test_fetch_source_list_failure(self, player):
         """Test fetching source list failure."""
-        player._conn_manager.async_send_command.side_effect = OSError("Connection error")
+        player._conn_manager.async_send_command.side_effect = OSError(
+            "Connection error"
+        )
 
         await player._async_fetch_source_list()
 
@@ -477,7 +519,10 @@ class TestOnkyoMediaPlayer:
     @pytest.mark.asyncio
     async def test_fetch_listening_modes_success(self, player):
         """Test fetching listening modes successfully."""
-        player._conn_manager.async_send_command.return_value = {"stereo": "Stereo", "direct": "Direct"}
+        player._conn_manager.async_send_command.return_value = {
+            "stereo": "Stereo",
+            "direct": "Direct",
+        }
 
         await player._async_fetch_listening_modes()
 
@@ -491,7 +536,9 @@ class TestOnkyoMediaPlayer:
     @pytest.mark.asyncio
     async def test_fetch_listening_modes_failure(self, player):
         """Test fetching listening modes failure."""
-        player._conn_manager.async_send_command.side_effect = OSError("Connection error")
+        player._conn_manager.async_send_command.side_effect = OSError(
+            "Connection error"
+        )
 
         await player._async_fetch_listening_modes()
 
