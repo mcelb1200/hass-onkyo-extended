@@ -1,10 +1,10 @@
 """Additional coverage tests for Onkyo Media Player."""
-
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 from homeassistant.components.media_player import (
     MediaPlayerDeviceClass,
+    MediaPlayerEntityFeature,
     MediaPlayerState,
 )
 from homeassistant.config_entries import ConfigEntry
@@ -161,7 +161,7 @@ async def test_async_setup_entry_fail_safe(
 async def test_async_setup_entry_no_zones_returned(
     hass, mock_config_entry, mock_connection_manager, mock_receiver
 ):
-    """Test async_setup_entry when _detect_zones_safe returns empty list (shouldn't happen but safe to test)."""
+    """Test async_setup_entry when _detect_zones_safe returns empty list."""
 
     hass.data[DOMAIN] = {
         mock_config_entry.entry_id: {
@@ -253,17 +253,11 @@ class TestOnkyoMediaPlayer:
         assert player.state == MediaPlayerState.ON
 
         # Check that async_create_task was called with a coroutine
-        # Since hass.async_create_task is mocked, the coroutine passed to it is never awaited
-        # so we can't use assert_awaited_once(). We check call_count instead.
+        # Since hass.async_create_task is mocked, the coroutine passed to it
+        # is never awaited so we can't use assert_awaited_once().
+        # We check call_count instead.
         assert player._async_update_all.call_count == 1
         player.hass.async_create_task.assert_called_once()
-
-        # Manually close the coroutine to avoid "coroutine was never awaited" warning
-        # because the mocked async_create_task didn't schedule it.
-        # We can extract the coroutine from the mock call args if needed,
-        # but simply calling the mock creates a new coroutine each time.
-        # Actually, the one passed to async_create_task is the one we want to close if we care about warnings.
-        # But let's just proceed.
 
         # Power OFF
         player._handle_receiver_update("main", "power", "standby")

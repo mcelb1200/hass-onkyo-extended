@@ -332,7 +332,7 @@ class OnkyoOptionsFlowHandler(config_entries.OptionsFlow):
             CONF_RECEIVER_MAX_VOLUME, DEFAULT_RECEIVER_MAX_VOLUME
         )
 
-        current_resolution = self.config_entry.options.get(
+        self.config_entry.options.get(
             CONF_VOLUME_RESOLUTION, DEFAULT_VOLUME_RESOLUTION
         )
 
