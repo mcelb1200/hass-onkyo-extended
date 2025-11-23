@@ -29,9 +29,7 @@ async def test_async_turn_on_delay(hass: HomeAssistant):
     # Mock asyncio.sleep
     with patch("asyncio.sleep", new_callable=AsyncMock) as mock_sleep:
         # Mock _async_get_power_state to return 'on' immediately
-        with patch.object(
-            player, "_async_get_power_state", return_value="on"
-        ):
+        with patch.object(player, "_async_get_power_state", return_value="on"):
             await player.async_turn_on()
 
             # Verify sleep was called with 1.5

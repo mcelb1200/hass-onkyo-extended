@@ -1,10 +1,10 @@
 """Additional coverage tests for Onkyo Media Player."""
+
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 from homeassistant.components.media_player import (
     MediaPlayerDeviceClass,
-    MediaPlayerEntityFeature,
     MediaPlayerState,
 )
 from homeassistant.config_entries import ConfigEntry
