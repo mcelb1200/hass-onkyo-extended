@@ -161,7 +161,7 @@ async def test_update_source_parses_tuple():
 
 @pytest.mark.asyncio
 async def test_turn_on_waits_for_power_on_state():
-    """Test that async_turn_on waits for the receiver to power on before fetching sources."""
+    """Test async_turn_on waits for the receiver to power on before fetching sources."""
     # pylint: disable=all
     receiver_mock = MagicMock()
     hass_mock = MagicMock()

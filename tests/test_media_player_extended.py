@@ -71,7 +71,7 @@ async def test_setup_entry_successful(
     with patch(
         "custom_components.onkyo.media_player._detect_zones_safe",
         return_value=["main", "zone2"],
-    ) as mock_detect:
+    ):
         await async_setup_entry(hass, mock_config_entry, async_add_entities)
 
     assert async_add_entities.called
@@ -189,8 +189,10 @@ async def test_volume_operations(
     mock_connection_manager.async_send_command.reset_mock()
 
     # Test volume up
-    # async_volume_up calls command="master-volume=level-up" then sleeps then calls update command="master-volume=query"
-    # We need to mock the sequence of calls if we want to verify all of them, or just check the first one
+    # async_volume_up calls command="master-volume=level-up"
+    # then sleeps then calls update command="master-volume=query"
+    # We need to mock the sequence of calls if we want to verify all of them,
+    # or just check the first one
 
     # Mocking side effect to avoid errors if any return value is expected
     mock_connection_manager.async_send_command.return_value = None

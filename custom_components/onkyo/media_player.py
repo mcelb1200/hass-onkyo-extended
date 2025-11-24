@@ -277,7 +277,8 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
             )
             self._attr_available = True
 
-            # Trigger full update when power turns ON to ensure volume/source are correct
+            # Trigger full update when power turns ON to ensure volume/source
+            # are correct
             if (
                 previous_state == MediaPlayerState.OFF
                 and self._attr_state == MediaPlayerState.ON
@@ -506,7 +507,8 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
             )
             await self._conn_manager.async_send_command("command", command)
 
-            # Wait for receiver to initialize before polling (Issue #125768 / Performance Improvement)
+            # Wait for receiver to initialize before polling
+            # (Issue #125768 / Performance Improvement)
             # External implementation (onpc) suggests at least 1-1.5s delay after PWON.
             await asyncio.sleep(1.5)
 
@@ -681,7 +683,8 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         try:
             if media_type.lower() == "radio":
                 # Select radio tuner as source first
-                # Use "tuner" instead of "radio" as eiscp doesn't support "radio" for input-selector
+                # Use "tuner" instead of "radio" as eiscp doesn't support
+                # "radio" for input-selector
                 await self.async_select_source("tuner")
 
                 # Poll until source changes to tuner (max 5 seconds)
@@ -715,7 +718,8 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         Select HDMI output (custom service).
 
         Args:
-            hdmi_output: Output selector (no, analog, yes, out, out-sub, sub, hdbaset, both, up).
+            hdmi_output: Output selector
+                (no, analog, yes, out, out-sub, sub, hdbaset, both, up).
         """
         if self._zone != "main":
             _LOGGER.warning("HDMI output selection only available for main zone")

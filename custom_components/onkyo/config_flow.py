@@ -99,7 +99,8 @@ class OnkyoConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             if result["success"] or result.get("allow_setup", False):
                 if not result["success"]:
                     _LOGGER.warning(
-                        "Could not verify connection to %s, but allowing setup. Error: %s",
+                        "Could not verify connection to %s, but allowing setup. "
+                        "Error: %s",
                         host,
                         result.get("error"),
                     )
@@ -332,7 +333,7 @@ class OnkyoOptionsFlowHandler(config_entries.OptionsFlow):
             CONF_RECEIVER_MAX_VOLUME, DEFAULT_RECEIVER_MAX_VOLUME
         )
 
-        current_resolution = self.config_entry.options.get(
+        self.config_entry.options.get(
             CONF_VOLUME_RESOLUTION, DEFAULT_VOLUME_RESOLUTION
         )
 

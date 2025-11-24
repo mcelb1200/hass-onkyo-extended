@@ -51,7 +51,7 @@ async def test_setup_entry_timeout(hass, mock_entry):
     """Test setup with connection timeout."""
     mock_entry.add_to_hass(hass)
     with (
-        patch("custom_components.onkyo.eISCP") as mock_eiscp,
+        patch("custom_components.onkyo.eISCP"),
         patch("custom_components.onkyo._test_connection", side_effect=TimeoutError),
         patch(
             "homeassistant.config_entries.ConfigEntries.async_forward_entry_setups"
@@ -68,7 +68,7 @@ async def test_setup_entry_os_error(hass, mock_entry):
     """Test setup with network error."""
     mock_entry.add_to_hass(hass)
     with (
-        patch("custom_components.onkyo.eISCP") as mock_eiscp,
+        patch("custom_components.onkyo.eISCP"),
         patch(
             "custom_components.onkyo._test_connection",
             side_effect=OSError("Network unreachable"),
@@ -88,7 +88,7 @@ async def test_setup_entry_unexpected_error(hass, mock_entry):
     """Test setup with unexpected error."""
     mock_entry.add_to_hass(hass)
     with (
-        patch("custom_components.onkyo.eISCP") as mock_eiscp,
+        patch("custom_components.onkyo.eISCP"),
         patch(
             "custom_components.onkyo._test_connection", side_effect=Exception("Boom")
         ),
@@ -105,7 +105,7 @@ async def test_unload_entry(hass, mock_entry):
     # Mock forward entry setups to avoid loading platform
     with (
         patch("homeassistant.config_entries.ConfigEntries.async_forward_entry_setups"),
-        patch("custom_components.onkyo.eISCP") as mock_eiscp,
+        patch("custom_components.onkyo.eISCP"),
         patch("custom_components.onkyo._test_connection", return_value=True),
     ):
         await async_setup_entry(hass, mock_entry)
