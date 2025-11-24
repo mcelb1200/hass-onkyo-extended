@@ -38,7 +38,9 @@ from .const import (
     DOMAIN,
 )
 
+# pylint: disable=invalid-name
 CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
+# pylint: enable=invalid-name
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -110,7 +112,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         # Allow setup to continue - will reconnect later
         receiver = eISCP(host)
 
-    except Exception as err:
+    except Exception as err:  # pylint: disable=broad-exception-caught
         _LOGGER.error("Unexpected error setting up Onkyo receiver at %s: %s", host, err)
         # Only raise for truly unexpected errors
         raise ConfigEntryNotReady(
@@ -178,16 +180,16 @@ async def _async_setup_receiver(hass: HomeAssistant, entry: ConfigEntry) -> eISC
         # Clean up the connection attempt
         try:
             await hass.async_add_executor_job(receiver.disconnect)
-        except Exception:
+        except Exception:  # pylint: disable=broad-exception-caught
             pass
         raise
 
-    except Exception as err:
+    except Exception as err:  # pylint: disable=broad-exception-caught
         _LOGGER.debug("Error connecting to %s: %s", host, err)
         # Clean up
         try:
             await hass.async_add_executor_job(receiver.disconnect)
-        except Exception:
+        except Exception:  # pylint: disable=broad-exception-caught
             pass
         raise
 
@@ -210,7 +212,7 @@ def _test_connection(receiver: eISCP) -> bool:
         # Query power state - this is a lightweight command
         receiver.command("system-power", "query")
         return True
-    except Exception as err:
+    except Exception as err:  # pylint: disable=broad-exception-caught
         _LOGGER.debug("Connection test failed: %s", err)
         raise
 
@@ -247,7 +249,7 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
                 try:
                     await hass.async_add_executor_job(receiver.disconnect)
                     _LOGGER.debug("Disconnected from receiver")
-                except Exception as err:
+                except Exception as err:  # pylint: disable=broad-exception-caught
                     _LOGGER.debug("Error disconnecting receiver: %s", err)
 
             # Remove from hass.data

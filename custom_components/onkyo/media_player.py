@@ -94,7 +94,7 @@ async def async_setup_entry(
             )
             entities.append(entity)
 
-    except Exception as err:
+    except Exception as err:  # pylint: disable=broad-exception-caught
         _LOGGER.warning(
             "Error detecting zones for %s: %s. Creating main zone only.", name, err
         )
@@ -136,7 +136,7 @@ async def _detect_zones_safe(connection_manager: OnkyoConnectionManager) -> list
             )
             if zone2_power:
                 zones.append("zone2")
-        except Exception:
+        except Exception:  # pylint: disable=broad-exception-caught
             pass
 
         # Check for Zone 3
@@ -146,16 +146,17 @@ async def _detect_zones_safe(connection_manager: OnkyoConnectionManager) -> list
             )
             if zone3_power:
                 zones.append("zone3")
-        except Exception:
+        except Exception:  # pylint: disable=broad-exception-caught
             pass
 
         return zones
 
-    except Exception as err:
+    except Exception as err:  # pylint: disable=broad-exception-caught
         _LOGGER.debug("Zone detection failed: %s", err)
         return ["main"]
 
 
+# pylint: disable=abstract-method
 class OnkyoMediaPlayer(MediaPlayerEntity):
     """
     Representation of an Onkyo media player.
@@ -859,7 +860,7 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         if hasattr(self._receiver, "unregister_callback"):
             try:
                 self._receiver.unregister_callback(self._handle_receiver_update)
-            except OSError as err:
+            except OSError as err:  # pylint: disable=broad-exception-caught
                 _LOGGER.debug("Error unregistering callback: %s", err)
 
         # Close connection manager

@@ -73,13 +73,13 @@ class OnkyoConnectionManager:
                 self._last_command_time = self.hass.loop.time()
                 self._reconnect_attempt = 0  # Reset on success
                 return result
-            except Exception as err:
+            except Exception as err:  # pylint: disable=broad-exception-caught
                 _LOGGER.debug("Error sending command %s: %s", command, err)
                 self._is_connected = False
                 # Force disconnect to reset the eISCP state
                 try:
                     await self.hass.async_add_executor_job(self._receiver.disconnect)
-                except Exception:
+                except Exception:  # pylint: disable=broad-exception-caught
                     pass
                 # Don't raise, return None to allow graceful degradation
                 return None
@@ -128,7 +128,7 @@ class OnkyoConnectionManager:
                 _LOGGER.info("Successfully reconnected to Onkyo receiver.")
             else:
                 raise ConnectionError("Command returned no result")
-        except Exception as err:
+        except Exception as err:  # pylint: disable=broad-exception-caught
             _LOGGER.warning("Reconnect failed: %s", err)
             if self._reconnect_attempt >= 5:
                 _LOGGER.error(
@@ -146,7 +146,7 @@ class OnkyoConnectionManager:
         _LOGGER.debug("Closing connection to Onkyo receiver.")
         try:
             await self.hass.async_add_executor_job(self._receiver.disconnect)
-        except Exception as err:
+        except Exception as err:  # pylint: disable=broad-exception-caught
             _LOGGER.debug("Error during disconnect: %s", err)
         finally:
             self._is_connected = False

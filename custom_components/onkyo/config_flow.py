@@ -38,6 +38,7 @@ VOLUME_RESOLUTION_OPTIONS = [50, 80, 100, 200]
 DEFAULT_NAME = "Onkyo Receiver"
 
 
+# pylint: disable=abstract-method
 class OnkyoConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     """
     Handle a config flow for Onkyo.
@@ -262,14 +263,14 @@ class OnkyoConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 # Clean up connection
                 try:
                     await self.hass.async_add_executor_job(receiver.disconnect)
-                except Exception:
+                except Exception:  # pylint: disable=broad-exception-caught
                     pass
 
         except ImportError:
             _LOGGER.error("onkyo-eiscp library not found")
             return {"success": False, "error": "library_missing", "allow_setup": False}
 
-        except Exception as err:
+        except Exception as err:  # pylint: disable=broad-exception-caught
             _LOGGER.error("Unexpected error connecting to %s: %s", host, err)
             return {"success": False, "error": "unknown", "allow_setup": False}
 
@@ -333,7 +334,9 @@ class OnkyoOptionsFlowHandler(config_entries.OptionsFlow):
             CONF_RECEIVER_MAX_VOLUME, DEFAULT_RECEIVER_MAX_VOLUME
         )
 
-        self.config_entry.options.get(CONF_VOLUME_RESOLUTION, DEFAULT_VOLUME_RESOLUTION)
+        self.config_entry.options.get(
+            CONF_VOLUME_RESOLUTION, DEFAULT_VOLUME_RESOLUTION
+        )
 
         current_max_vol_pct = self.config_entry.options.get(CONF_MAX_VOLUME, 100)
 
