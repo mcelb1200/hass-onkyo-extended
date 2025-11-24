@@ -94,7 +94,7 @@ async def async_setup_entry(
             )
             entities.append(entity)
 
-    except Exception as err:
+    except Exception as err:  # pylint: disable=broad-exception-caught
         _LOGGER.warning(
             "Error detecting zones for %s: %s. Creating main zone only.", name, err
         )
@@ -136,7 +136,7 @@ async def _detect_zones_safe(connection_manager: OnkyoConnectionManager) -> list
             )
             if zone2_power:
                 zones.append("zone2")
-        except Exception:
+        except Exception:  # pylint: disable=broad-exception-caught
             pass
 
         # Check for Zone 3
@@ -146,16 +146,17 @@ async def _detect_zones_safe(connection_manager: OnkyoConnectionManager) -> list
             )
             if zone3_power:
                 zones.append("zone3")
-        except Exception:
+        except Exception:  # pylint: disable=broad-exception-caught
             pass
 
         return zones
 
-    except Exception as err:
+    except Exception as err:  # pylint: disable=broad-exception-caught
         _LOGGER.debug("Zone detection failed: %s", err)
         return ["main"]
 
 
+# pylint: disable=abstract-method
 class OnkyoMediaPlayer(MediaPlayerEntity):
     """
     Representation of an Onkyo media player.
@@ -277,7 +278,8 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
             )
             self._attr_available = True
 
-            # Trigger full update when power turns ON to ensure volume/source are correct
+            # Trigger full update when power turns ON to ensure volume/source
+            # are correct
             if (
                 previous_state == MediaPlayerState.OFF
                 and self._attr_state == MediaPlayerState.ON
@@ -506,7 +508,8 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
             )
             await self._conn_manager.async_send_command("command", command)
 
-            # Wait for receiver to initialize before polling (Issue #125768 / Performance Improvement)
+            # Wait for receiver to initialize before polling
+            # (Issue #125768 / Performance Improvement)
             # External implementation (onpc) suggests at least 1-1.5s delay after PWON.
             await asyncio.sleep(1.5)
 
@@ -681,7 +684,8 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         try:
             if media_type.lower() == "radio":
                 # Select radio tuner as source first
-                # Use "tuner" instead of "radio" as eiscp doesn't support "radio" for input-selector
+                # Use "tuner" instead of "radio" as eiscp doesn't support
+                # "radio" for input-selector
                 await self.async_select_source("tuner")
 
                 # Poll until source changes to tuner (max 5 seconds)
@@ -715,7 +719,8 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         Select HDMI output (custom service).
 
         Args:
-            hdmi_output: Output selector (no, analog, yes, out, out-sub, sub, hdbaset, both, up).
+            hdmi_output: Output selector
+                (no, analog, yes, out, out-sub, sub, hdbaset, both, up).
         """
         if self._zone != "main":
             _LOGGER.warning("HDMI output selection only available for main zone")
@@ -855,7 +860,7 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         if hasattr(self._receiver, "unregister_callback"):
             try:
                 self._receiver.unregister_callback(self._handle_receiver_update)
-            except OSError as err:
+            except OSError as err:  # pylint: disable=broad-exception-caught
                 _LOGGER.debug("Error unregistering callback: %s", err)
 
         # Close connection manager

@@ -44,7 +44,8 @@ async def test_send_command_reconnect_success(hass, connection_manager, mock_rec
 
     assert result == "success"
     assert connection_manager.connected
-    # Should have called command twice: once for reconnect check, once for actual command
+    # Should have called command twice:
+    # once for reconnect check, once for actual command
     assert mock_receiver.command.call_count >= 2
 
 
