@@ -413,6 +413,8 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
                 ):
                     if result[1]:
                         self._attr_source = result[1][0]
+                elif isinstance(result, tuple) and len(result) >= 2:
+                    self._attr_source = result[1]
                 elif isinstance(result, tuple):
                     self._attr_source = result[0]
                 else:
