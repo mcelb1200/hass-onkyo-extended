@@ -1,9 +1,12 @@
 """Test for source parsing bug."""
 
 from unittest.mock import AsyncMock, MagicMock
+
 import pytest
 from homeassistant.config_entries import ConfigEntry
+
 from custom_components.onkyo.media_player import OnkyoMediaPlayer
+
 
 class MockConfigEntry(ConfigEntry):
     """Mock config entry."""
@@ -22,6 +25,7 @@ class MockConfigEntry(ConfigEntry):
             minor_version=kwargs.get("minor_version", 1),
             discovery_keys={},
         )
+
 
 @pytest.mark.asyncio
 async def test_update_source_wrong_command_tuple():
