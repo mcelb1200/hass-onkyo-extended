@@ -183,7 +183,7 @@ class OnkyoConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         result = await self._async_try_connect(host)
 
         if result.get("model_name"):
-            self._discovered_devices[host]["model_name"] = result["model_name"]
+             self._discovered_devices[host]["model_name"] = result["model_name"]
 
         if not result["success"]:
             _LOGGER.info("Discovered Onkyo receiver at %s but cannot connect yet", host)
