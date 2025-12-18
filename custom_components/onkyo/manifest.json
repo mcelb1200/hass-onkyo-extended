@@ -8,7 +8,7 @@
   "iot_class": "local_polling",
   "issue_tracker": "https://github.com/sillyfrog/hass-onkyo/issues",
   "loggers": ["eiscp"],
-  "requirements": ["onkyo-eiscp==1.2.7"],
+  "requirements": ["onkyo-eiscp==1.2.7", "pyeiscp"],
   "ssdp": [
     {
       "manufacturer": "Onkyo & Pioneer Corporation",
