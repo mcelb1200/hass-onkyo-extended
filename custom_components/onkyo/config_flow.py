@@ -373,8 +373,7 @@ class OnkyoOptionsFlowHandler(config_entries.OptionsFlow):
         # Sort sources by name for better UX
         sorted_sources = sorted(all_sources.items(), key=lambda x: x[1])
         source_options = [
-            {"value": key, "label": f"{name} ({key})"}
-            for key, name in sorted_sources
+            {"value": key, "label": f"{name} ({key})"} for key, name in sorted_sources
         ]
 
         options_schema = vol.Schema(
@@ -385,9 +384,7 @@ class OnkyoOptionsFlowHandler(config_entries.OptionsFlow):
                 vol.Required(CONF_MAX_VOLUME, default=current_max_vol_pct): vol.All(
                     vol.Coerce(int), vol.Range(min=1, max=100)
                 ),
-                vol.Optional(
-                    CONF_SOURCES, default=current_source_keys
-                ): SelectSelector(
+                vol.Optional(CONF_SOURCES, default=current_source_keys): SelectSelector(
                     SelectSelectorConfig(
                         options=source_options,
                         multiple=True,
