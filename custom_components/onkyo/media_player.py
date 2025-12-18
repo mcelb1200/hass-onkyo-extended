@@ -31,6 +31,8 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from .connection import OnkyoConnectionManager
 from .const import (
     ATTR_HDMI_OUTPUT,
+    CONF_MAX_VOLUME,
+    CONF_VOLUME_RESOLUTION,
     DOMAIN,
     HDMI_OUTPUT_OPTIONS,
 )
@@ -232,6 +234,14 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
             name=entry.data.get("name", "Onkyo Receiver"),
             manufacturer="Onkyo",
             model="Network Receiver",
+        )
+
+        # Cache volume settings to avoid repeated config lookups
+        self._max_volume = entry.options.get(
+            CONF_MAX_VOLUME, entry.data.get(CONF_MAX_VOLUME, 100)
+        )
+        self._volume_resolution = entry.options.get(
+            CONF_VOLUME_RESOLUTION, entry.data.get(CONF_VOLUME_RESOLUTION, 80)
         )
 
     async def async_added_to_hass(self) -> None:
@@ -764,18 +774,8 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         Returns:
             int: The receiver volume step.
         """
-        from .const import CONF_MAX_VOLUME, CONF_VOLUME_RESOLUTION
-
-        max_volume = self._entry.options.get(
-            CONF_MAX_VOLUME, self._entry.data.get(CONF_MAX_VOLUME, 100)
-        )
-
-        resolution = self._entry.options.get(
-            CONF_VOLUME_RESOLUTION, self._entry.data.get(CONF_VOLUME_RESOLUTION, 80)
-        )
-
         # Scale: HA volume -> max volume % -> receiver steps
-        scaled_volume = ha_volume * (max_volume / 100) * resolution
+        scaled_volume = ha_volume * (self._max_volume / 100) * self._volume_resolution
         return round(scaled_volume)
 
     def _receiver_volume_to_ha(self, receiver_volume: int) -> float:
@@ -792,19 +792,9 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         Returns:
             float: The Home Assistant volume level.
         """
-        from .const import CONF_MAX_VOLUME, CONF_VOLUME_RESOLUTION
-
-        max_volume = self._entry.options.get(
-            CONF_MAX_VOLUME, self._entry.data.get(CONF_MAX_VOLUME, 100)
-        )
-
-        resolution = self._entry.options.get(
-            CONF_VOLUME_RESOLUTION, self._entry.data.get(CONF_VOLUME_RESOLUTION, 80)
-        )
-
         # Scale: receiver steps -> HA volume
         # The HA volume should be a percentage of the *usable* volume range
-        max_receiver_volume = resolution * (max_volume / 100)
+        max_receiver_volume = self._volume_resolution * (self._max_volume / 100)
         if max_receiver_volume == 0:
             return 0.0
 
