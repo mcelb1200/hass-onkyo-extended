@@ -18,6 +18,11 @@ from homeassistant import config_entries
 from homeassistant.const import CONF_HOST, CONF_NAME
 from homeassistant.core import callback
 from homeassistant.data_entry_flow import FlowResult
+from homeassistant.helpers.selector import (
+    SelectSelector,
+    SelectSelectorConfig,
+    SelectSelectorMode,
+)
 
 from .const import (
     CONF_MAX_VOLUME,
@@ -326,6 +331,21 @@ class OnkyoOptionsFlowHandler(config_entries.OptionsFlow):
             if max_volume < 1 or max_volume > 200:
                 errors[CONF_RECEIVER_MAX_VOLUME] = "invalid_max_volume"
             else:
+                # Handle source selection
+                # We need to convert the list of selected keys back to the dict format expected by the integration
+                selected_source_keys = user_input.get(CONF_SOURCES, [])
+                full_source_list = build_sources_list()
+
+                # Filter full list to only include selected keys
+                new_sources = {
+                    key: full_source_list[key]
+                    for key in selected_source_keys
+                    if key in full_source_list
+                }
+
+                # Update user_input with the new dictionary
+                user_input[CONF_SOURCES] = new_sources
+
                 # Update the config entry options
                 return self.async_create_entry(title="", data=user_input)
 
@@ -338,6 +358,25 @@ class OnkyoOptionsFlowHandler(config_entries.OptionsFlow):
 
         current_max_vol_pct = self.config_entry.options.get(CONF_MAX_VOLUME, 100)
 
+        # Get available and currently configured sources
+        all_sources = build_sources_list()
+
+        # Get currently selected source IDs (keys of the dict)
+        current_sources = self.config_entry.options.get(CONF_SOURCES)
+
+        # If no sources are configured (e.g., first time or old config), select all by default
+        if current_sources is None:
+            current_source_keys = list(all_sources.keys())
+        else:
+            current_source_keys = list(current_sources.keys())
+
+        # Sort sources by name for better UX
+        sorted_sources = sorted(all_sources.items(), key=lambda x: x[1])
+        source_options = [
+            {"value": key, "label": f"{name} ({key})"}
+            for key, name in sorted_sources
+        ]
+
         options_schema = vol.Schema(
             {
                 vol.Required(
@@ -345,6 +384,15 @@ class OnkyoOptionsFlowHandler(config_entries.OptionsFlow):
                 ): vol.All(vol.Coerce(int), vol.Range(min=1, max=200)),
                 vol.Required(CONF_MAX_VOLUME, default=current_max_vol_pct): vol.All(
                     vol.Coerce(int), vol.Range(min=1, max=100)
+                ),
+                vol.Optional(
+                    CONF_SOURCES, default=current_source_keys
+                ): SelectSelector(
+                    SelectSelectorConfig(
+                        options=source_options,
+                        multiple=True,
+                        mode=SelectSelectorMode.DROPDOWN,
+                    )
                 ),
             }
         )
