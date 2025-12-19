@@ -12,33 +12,18 @@ devices:
   - brand: Pioneer
     model: VSX-831
     product_page:
-      - "https://www.manua.ls/pioneer/vsx-831/manual" # manual (basic + link to advanced)  # [6](https://www.manua.ls/pioneer/vsx-831/manual)
-      - "https://www.manualslib.com/manual/1100480/Pioneer-Vsx-831.html" # manual mirror         # [7](https://www.manualslib.com/manual/1100480/Pioneer-Vsx-831.html)
+      - "https://www.manua.ls/pioneer/vsx-831/manual"         # manual (basic + link to advanced)  # [6](https://www.manua.ls/pioneer/vsx-831/manual)
+      - "https://www.manualslib.com/manual/1100480/Pioneer-Vsx-831.html"  # manual mirror         # [7](https://www.manualslib.com/manual/1100480/Pioneer-Vsx-831.html)
     eiscp_port: 60128
-    zones: { main: true, zone2: false, zone3: false, zone_b: false } # 5.x-class; no documented Zone 2/3  # [6](https://www.manua.ls/pioneer/vsx-831/manual)
+    zones: { main: true, zone2: false, zone3: false, zone_b: false }  # 5.x-class; no documented Zone 2/3  # [6](https://www.manua.ls/pioneer/vsx-831/manual)
     hdmi_outputs:
       dual_main_sub: false
-      notes: "Single HDMI OUT with ARC; 4K/60 pass‑through generation." # [6](https://www.manua.ls/pioneer/vsx-831/manual)
-      service_codes: []
-    tuners: { fm: true, am: true, dab: false } # AM/FM per manual  # [7](https://www.manualslib.com/manual/1100480/Pioneer-Vsx-831.html)
-    net_services: [] # Network functions exist but vary by region; see Advanced Manual link in basic manual.  # [6](https://www.manua.ls/pioneer/vsx-831/manual)
-    inputs_present: [
-        bd,
-        dvd,
-        cbl/sat,
-        game,
-        pc,
-        tv,
-        cd,
-        phono,
-        net,
-        fm,
-        am,
-        usb,
-        bluetooth,
-      ] # per platform/eISCP  # [5](https://intl.pioneer-av.com/parts)
-    listening_mode_families:
-      ["Stereo", "Direct", "Dolby", "DTS", "AllChStereo", "Dolby Surround"]
+      notes: "Single HDMI OUT with ARC; 4K/60 pass‑through generation."  # [6](https://www.manua.ls/pioneer/vsx-831/manual)
+      service_codes: [ ]
+    tuners: { fm: true, am: true, dab: false }  # AM/FM per manual  # [7](https://www.manualslib.com/manual/1100480/Pioneer-Vsx-831.html)
+    net_services: [ ]  # Network functions exist but vary by region; see Advanced Manual link in basic manual.  # [6](https://www.manua.ls/pioneer/vsx-831/manual)
+    inputs_present: [ bd, dvd, cbl/sat, game, pc, tv, cd, phono, net, fm, am, usb, bluetooth ]   # per platform/eISCP  # [5](https://intl.pioneer-av.com/parts)
+    listening_mode_families: [ "Stereo", "Direct", "Dolby", "DTS", "AllChStereo", "Dolby Surround" ]
     ha_defaults:
       volume_resolution: null
       max_volume_percent: 55
@@ -53,5 +38,4 @@ devices:
         phono: "Phono"
         bluetooth: "Bluetooth"
         cd: "CD"
-      listening_modes:
-        ["Stereo", "Direct", "Dolby Surround", "All Channel Stereo"]
+      listening_modes: [ "Stereo", "Direct", "Dolby Surround", "All Channel Stereo" ]

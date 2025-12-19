@@ -17,24 +17,24 @@ devices:
   - brand: Pioneer
     model: VSX-932
     product_page:
-      - "https://intl.pioneer-audiovisual.com/products/av_receiver/vsx-932/" # features overview  # [2](https://intl.pioneer-audiovisual.com/products/av_receiver/vsx-932/)
-      - "https://pioneerhomeusa.com/vsx-932" # regional page      # [3](https://pioneerhomeusa.com/vsx-932)
-      - "https://intl.pioneer-audiovisual.com/manuals/docs/SN29402804B_VSX-932_BAS_En_171113_web.pdf" # manual  # [4](https://intl.pioneer-audiovisual.com/manuals/docs/SN29402804B_VSX-932_BAS_En_171113_web.pdf)
+      - "https://intl.pioneer-audiovisual.com/products/av_receiver/vsx-932/"   # features overview  # [2](https://intl.pioneer-audiovisual.com/products/av_receiver/vsx-932/)
+      - "https://pioneerhomeusa.com/vsx-932"                                    # regional page      # [3](https://pioneerhomeusa.com/vsx-932)
+      - "https://intl.pioneer-audiovisual.com/manuals/docs/SN29402804B_VSX-932_BAS_En_171113_web.pdf"  # manual  # [4](https://intl.pioneer-audiovisual.com/manuals/docs/SN29402804B_VSX-932_BAS_En_171113_web.pdf)
     eiscp_port: 60128
     zones:
       main: true
-      zone2: false # No explicit Zone 2 in public docs; HA will expose if present.  # [2](https://intl.pioneer-audiovisual.com/products/av_receiver/vsx-932/)[4](https://intl.pioneer-audiovisual.com/manuals/docs/SN29402804B_VSX-932_BAS_En_171113_web.pdf)
+      zone2: false         # No explicit Zone 2 in public docs; HA will expose if present.  # [2](https://intl.pioneer-audiovisual.com/products/av_receiver/vsx-932/)[4](https://intl.pioneer-audiovisual.com/manuals/docs/SN29402804B_VSX-932_BAS_En_171113_web.pdf)
       zone3: false
       zone_b: false
     hdmi_outputs:
       dual_main_sub: false # Single HDMI OUT; product family emphasizes 4K/HDR pass‑through on all HDMI inputs.  # [2](https://intl.pioneer-audiovisual.com/products/av_receiver/vsx-932/)
       notes: "Single HDMI OUT (ARC); 4K/60, BT.2020, HDCP 2.2; HDR10 & Dolby Vision passtrough."
-      service_codes: [] # Not applicable for single HDMI OUT
-    tuners: { fm: true, am: true, dab: false } # AM/FM per manual; DAB not listed for VSX‑932.   # [4](https://intl.pioneer-audiovisual.com/manuals/docs/SN29402804B_VSX-932_BAS_En_171113_web.pdf)
+      service_codes: [ ]   # Not applicable for single HDMI OUT
+    tuners: { fm: true, am: true, dab: false }  # AM/FM per manual; DAB not listed for VSX‑932.   # [4](https://intl.pioneer-audiovisual.com/manuals/docs/SN29402804B_VSX-932_BAS_En_171113_web.pdf)
     net_services:
       - chromecast
       - dts_play_fi
-      - flareconnect # per product pages (Chromecast, Play‑Fi, FlareConnect)  # [2](https://intl.pioneer-audiovisual.com/products/av_receiver/vsx-932/)
+      - flareconnect         # per product pages (Chromecast, Play‑Fi, FlareConnect)  # [2](https://intl.pioneer-audiovisual.com/products/av_receiver/vsx-932/)
     inputs_present:
       - bd
       - dvd
@@ -48,7 +48,7 @@ devices:
       - fm
       - am
       - usb
-      - bluetooth # eISCP source IDs commonly exposed on Pioneer models  # [5](https://intl.pioneer-av.com/parts)
+      - bluetooth            # eISCP source IDs commonly exposed on Pioneer models  # [5](https://intl.pioneer-av.com/parts)
     listening_mode_families:
       - Stereo
       - Direct
@@ -56,7 +56,7 @@ devices:
       - DTS
       - AllChStereo
       - Dolby Surround
-      - DTS Neural:X # Atmos/DTS:X generation with MCACC & Reflex Optimizer  # [2](https://intl.pioneer-audiovisual.com/products/av_receiver/vsx-932/)
+      - DTS Neural:X         # Atmos/DTS:X generation with MCACC & Reflex Optimizer  # [2](https://intl.pioneer-audiovisual.com/products/av_receiver/vsx-932/)
     ha_defaults:
       volume_resolution: null
       max_volume_percent: 55
