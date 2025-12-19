@@ -1,4 +1,3 @@
-
 from eiscp.commands import COMMANDS
 
 from custom_components.onkyo.helpers import build_sources_list
@@ -14,8 +13,8 @@ def test_build_sources_list_known_model():
     sources = build_sources_list(model)
 
     # Assertions should check for the names
-    assert 'dvd' in sources
-    assert 'video2' in sources
+    assert "dvd" in sources
+    assert "video2" in sources
 
     # Verify filtering worked - check for a source NOT in this model
     # MODEL_SOURCES contains names.
@@ -42,9 +41,10 @@ def test_build_sources_list_known_model():
             break
 
     if excluded_name:
-        assert excluded_name not in sources, (
-            f"Source {excluded_name} should be excluded for {model}"
-        )
+        assert (
+            excluded_name not in sources
+        ), f"Source {excluded_name} should be excluded for {model}"
+
 
 def test_build_sources_list_unknown_model():
     model = "UnknownModel"
@@ -54,6 +54,7 @@ def test_build_sources_list_unknown_model():
     all_sources = build_sources_list()
     assert len(sources) == len(all_sources)
     assert len(sources) > 0
+
 
 def test_build_sources_list_no_model():
     sources = build_sources_list()

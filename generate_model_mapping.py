@@ -1,10 +1,9 @@
-
 import yaml
 
 
 def generate_mapping():
     try:
-        with open('eiscp_commands_filtered.yaml') as f:
+        with open("eiscp_commands_filtered.yaml") as f:
             try:
                 data = yaml.load(f, Loader=yaml.FullLoader)
             except AttributeError:
@@ -13,7 +12,7 @@ def generate_mapping():
         print(f"Error loading YAML: {e}")
         return
 
-    model_sets = data.get('modelsets', {})
+    model_sets = data.get("modelsets", {})
 
     model_to_sets = {}
     for set_name, models in model_sets.items():
@@ -22,20 +21,20 @@ def generate_mapping():
                 model_to_sets[model] = set()
             model_to_sets[model].add(set_name)
 
-    sli_values = data.get('main', {}).get('SLI', {}).get('values', {})
+    sli_values = data.get("main", {}).get("SLI", {}).get("values", {})
 
     model_to_source_list = {}
 
     for model, sets in model_to_sets.items():
         sources = []
         for value_data in sli_values.values():
-            names = value_data.get('name')
+            names = value_data.get("name")
             if isinstance(names, list):
                 source_id = names[0]
             else:
                 source_id = names
 
-            required_sets = value_data.get('models')
+            required_sets = value_data.get("models")
             if not required_sets:
                 continue
 
@@ -59,33 +58,36 @@ def generate_mapping():
             counter += 1
 
     print('"""Model to source mapping for Onkyo receivers."""')
-    print('# Generated from eiscp-commands.yaml')
-    print('# pylint: disable=line-too-long')
-    print('')
+    print("# Generated from eiscp-commands.yaml")
+    print("# pylint: disable=line-too-long")
+    print("")
 
-    print('SOURCE_SETS = {')
-    for sid, sources in sorted(unique_source_lists.items(), key=lambda x: int(x[0][1:])): # noqa: E501
+    print("SOURCE_SETS = {")
+    for sid, sources in sorted(
+        unique_source_lists.items(), key=lambda x: int(x[0][1:])
+    ):  # noqa: E501
         # Split source list into chunks of 5
-        chunks = [sources[i:i + 5] for i in range(0, len(sources), 5)]
+        chunks = [sources[i : i + 5] for i in range(0, len(sources), 5)]
         print(f'    "{sid}": [')
         for chunk in chunks:
             items = ", ".join([f"'{s}'" for s in chunk])
-            print(f'        {items},')
-        print('    ],')
+            print(f"        {items},")
+        print("    ],")
 
-    print('}')
-    print('')
+    print("}")
+    print("")
 
-    print('MODEL_SET_MAPPING = {')
+    print("MODEL_SET_MAPPING = {")
     for model, s_tuple in sorted(model_to_source_list.items()):
         sid = source_list_to_id[s_tuple]
         print(f'    "{model}": "{sid}",')
-    print('}')
-    print('')
+    print("}")
+    print("")
 
-    print('MODEL_SOURCES = {')
-    print('    model: SOURCE_SETS[sid] for model, sid in MODEL_SET_MAPPING.items()')
-    print('}')
+    print("MODEL_SOURCES = {")
+    print("    model: SOURCE_SETS[sid] for model, sid in MODEL_SET_MAPPING.items()")
+    print("}")
+
 
 if __name__ == "__main__":
     generate_mapping()

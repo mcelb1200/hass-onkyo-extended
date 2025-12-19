@@ -11,19 +11,19 @@
 main:
   PWR:
     name: system-power
-    aliases: ['power']
+    aliases: ["power"]
     description: System Power Command
     values:
-      '00':
+      "00":
         name: [standby, "off"]
         description: sets System Standby
         models: set1
-      '01':
-        name: 'on'
+      "01":
+        name: "on"
         description: sets System On
         models: set1
       ALL:
-        name: 'standby-all'
+        name: "standby-all"
         description: All Zone(including Main Zone) Standby
         models: set1
       QSTN:
@@ -34,12 +34,12 @@ main:
     name: audio-muting
     description: Audio Muting Command
     values:
-      '00':
-        name: 'off'
+      "00":
+        name: "off"
         description: sets Audio Muting Off
         models: set1
-      '01':
-        name: 'on'
+      "01":
+        name: "on"
         description: sets Audio Muting On
         models: set1
       TG:
@@ -56,7 +56,7 @@ main:
     values:
       aabbccddeeffgghhiijjkkllmm:
         name: aabbccddeeffgghhiijjkkllmm
-        description: 'sets Audio Muting by Channel
+        description: "sets Audio Muting by Channel
 
           xx=00 Muting Off
 
@@ -91,7 +91,7 @@ main:
 
           ll:Height2 Right
 
-          mm:Subwoofer 2'
+          mm:Subwoofer 2"
         models: set1
       QSTN:
         name: query
@@ -101,12 +101,12 @@ main:
     name: speaker-a
     description: Speaker A Command
     values:
-      '00':
-        name: 'off'
+      "00":
+        name: "off"
         description: sets Speaker Off
         models: set3
-      '01':
-        name: 'on'
+      "01":
+        name: "on"
         description: sets Speaker On
         models: set4
       UP:
@@ -121,12 +121,12 @@ main:
     name: speaker-b
     description: Speaker B Command
     values:
-      '00':
-        name: 'off'
+      "00":
+        name: "off"
         description: sets Speaker Off
         models: set7
-      '01':
-        name: 'on'
+      "01":
+        name: "on"
         description: sets Speaker On
         models: set7
       UP:
@@ -199,7 +199,7 @@ main:
         models: set1
   MVL:
     name: master-volume
-    aliases: ['volume']
+    aliases: ["volume"]
     description: Master Volume Command
     values:
       ? - 0
@@ -406,12 +406,14 @@ main:
     values:
       B{xx}:
         name: b-xx
-        description: Surround Back Bass (xx is "-A"..."00"..."+A"[-10...0...+10 2
+        description:
+          Surround Back Bass (xx is "-A"..."00"..."+A"[-10...0...+10 2
           step]
         models: set1
       T{xx}:
         name: t-xx
-        description: Surround Back Treble (xx is "-A"..."00"..."+A"[-10...0...+10
+        description:
+          Surround Back Treble (xx is "-A"..."00"..."+A"[-10...0...+10
           2 step]
         models: set1
       BUP:
@@ -458,12 +460,12 @@ main:
     name: phase-matching-bass
     description: Phase Matching Bass Command
     values:
-      '00':
-        name: 'off'
+      "00":
+        name: "off"
         description: sets Off
         models: set1
-      '01':
-        name: 'on'
+      "01":
+        name: "on"
         description: sets On
         models: set1
       TG:
@@ -483,7 +485,7 @@ main:
       : name: time-1-90min
         description: sets Sleep Time 1 - 90min ( In hexadecimal representation)
         models: set1
-      'OFF':
+      "OFF":
         name: time-off
         description: sets Sleep Time Off
         models: set1
@@ -503,7 +505,7 @@ main:
         name: test
         description: TEST Key
         models: set1
-      'OFF':
+      "OFF":
         name: test-tone-off
         description: sets TEST TONE OFF
         models: set1
@@ -603,7 +605,7 @@ main:
     values:
       aaabbbcccdddeeefffggghhhiiijjjkkklllmmm:
         name: levels
-        description: 'sets Temporary Channel Level
+        description: "sets Temporary Channel Level
 
           Subwoofer1/2 xxx=-1E(-15.0dB)~000(0.0dB)~+18(+12.0dB)
 
@@ -636,7 +638,7 @@ main:
 
           lll:Height2 Right
 
-          mmm:Subwoofer 2'
+          mmm:Subwoofer 2"
         models: set1
       QSTN:
         name: query
@@ -646,20 +648,20 @@ main:
     name: display-mode
     description: Display Mode Command
     values:
-      '00':
+      "00":
         name: [selector-volume-1line, default-2line]
         description: sets Selector + Volume Display Mode@1line, Default@2line
         models: set1
-      '01':
+      "01":
         name: selector-listening-1line
         description: sets Selector + Listening Mode Display Mode@1line
         models: set1
-      '02':
-        name: '02'
+      "02":
+        name: "02"
         description: Display Digital Format(temporary display)
         models: set1
-      '03':
-        name: '03'
+      "03":
+        name: "03"
         description: Display Video Format(temporary display)
         models: set1
       TG:
@@ -674,19 +676,19 @@ main:
     name: dimmer-level
     description: Dimmer Level Command
     values:
-      '00':
+      "00":
         name: bright
         description: sets Dimmer Level "Bright"
         models: set1
-      '01':
+      "01":
         name: dim
         description: sets Dimmer Level "Dim"
         models: set1
-      '02':
+      "02":
         name: dark
         description: sets Dimmer Level "Dark"
         models: set1
-      '03':
+      "03":
         name: shut-off
         description: sets Dimmer Level "Shut-Off"
         models: set1
@@ -788,14 +790,16 @@ main:
     values:
       "a..a,b..b,c\u2026c,d..d,e\u2026e,f\u2026f,":
         name: a-a-b-b-c-c-d-d-e-e-f-f
-        description: "Infomation of Audio(Same Immediate Display ',' is separator\
+        description:
+          "Infomation of Audio(Same Immediate Display ',' is separator\
           \ of infomations)\na...a: Audio Input Port\nb\u2026b: Input Signal Format\n\
           c\u2026c: Sampling Frequency\nd\u2026d: Input Signal Channel\ne\u2026e:\
           \ Listening Mode\nf\u2026f: Output Signal Channel"
         models: set1
       "a..a,b..b,c\u2026c,d..d,e\u2026e,f\u2026f,g\u2026g,h\u2026h,i\u2026I,j\u2026j,k\u2026k":
         name: a-a-b-b-c-c-d-d-e-e-f-f-g-g-h-h-i-i-j-j
-        description: "Information of Audio(Same Immediate Display ',' is separator\
+        description:
+          "Information of Audio(Same Immediate Display ',' is separator\
           \ of infomartions)\na...a: Audio Input Port\nb\u2026b: Input Signal Format\n\
           c\u2026c: Sampling Frequency\nd\u2026d: Input Signal Channel\ne\u2026e:\
           \ Listening Mode\nf\u2026f: Output Signal Channel\ng\u2026g: Output Sampling\
@@ -813,7 +817,8 @@ main:
     values:
       "a..a,b..b,c\u2026c,d..d,e\u2026e,f\u2026f,g\u2026g,h\u2026h,i\u2026i,":
         name: a-a-b-b-c-c-d-d-e-e-f-f-g-g-h-h-i-i
-        description: "information of Video(Same Immediate Display ',' is separator\
+        description:
+          "information of Video(Same Immediate Display ',' is separator\
           \ of informations)\na\u2026a: Video Input Port\nb\u2026b: Input Resolution,\
           \ Frame Rate\nc\u2026c: RGB/YCbCr\nd\u2026d: Color Depth \ne\u2026e: Video\
           \ Output Port\nf\u2026f: Output Resolution, Frame Rate\ng\u2026g: RGB/YCbCr\n\
@@ -827,11 +832,11 @@ main:
     name: fl-display-information
     description: FL Display Information Command
     values:
-      '{xx}{xx}{xx}{xx}{xx}x':
+      "{xx}{xx}{xx}{xx}{xx}x":
         name: xx-xx-xx-xx-xx-x
-        description: 'FL Display Information
+        description: "FL Display Information
 
-          Character Code for FL Display (UTF-8 encoded)'
+          Character Code for FL Display (UTF-8 encoded)"
         models: set1
       QSTN:
         name: query
@@ -839,39 +844,39 @@ main:
         models: set1
   SLI:
     name: input-selector
-    aliases: ['source']
+    aliases: ["source"]
     description: Input Selector Command
     values:
-      '00':
+      "00":
         name: [video1, vcr, dvr, stb, dvr]
         description: sets VIDEO1, VCR/DVR, STB/DVR
         models: set1
-      '01':
+      "01":
         name: [video2, cbl, sat]
         description: sets VIDEO2, CBL/SAT
         models: set1
-      '02':
+      "02":
         name: [video3, game/tv, game, game1]
         description: sets VIDEO3, GAME/TV, GAME, GAME1
         models: set1
-      '03':
+      "03":
         name: [video4, aux1]
         description: sets VIDEO4, AUX1(AUX)
         models: set1
-      '04':
+      "04":
         name: [video5, aux2, game2]
         description: sets VIDEO5, AUX2, GAME2
         models: set1
-      '05':
+      "05":
         name: [video6, pc]
         description: sets VIDEO6, PC
         models: set1
-      '06':
+      "06":
         name: video7
         description: sets VIDEO7
         models: set1
-      '07':
-        name: '07'
+      "07":
+        name: "07"
         description: Hidden1     EXTRA1
         models: set1
       08:
@@ -882,55 +887,55 @@ main:
         name: 09
         description: Hidden3     EXTRA3
         models: set1
-      '10':
+      "10":
         name: [dvd, bd, dvd]
         description: sets DVD, BD/DVD
         models: set1
-      '11':
+      "11":
         name: strm-box
         description: sets STRM BOX
         models: set1
-      '12':
+      "12":
         name: tv
         description: sets TV
         models: set1
-      '20':
+      "20":
         name: [tape-1, tv/tape]
         description: sets TAPE(1), TV/TAPE
         models: set1
-      '21':
+      "21":
         name: tape2
         description: sets TAPE2
         models: set1
-      '22':
+      "22":
         name: phono
         description: sets PHONO
         models: set1
-      '23':
+      "23":
         name: [cd, tv/cd]
         description: sets CD, TV/CD
         models: set1
-      '24':
+      "24":
         name: fm
         description: sets FM
         models: set1
-      '25':
+      "25":
         name: am
         description: sets AM
         models: set1
-      '26':
+      "26":
         name: tuner
         description: sets TUNER
         models: set1
-      '27':
+      "27":
         name: [music-server, p4s, dlna]
         description: sets MUSIC SERVER, P4S, DLNA
         models: set1
-      '28':
+      "28":
         name: [internet-radio, iradio-favorite]
         description: sets INTERNET RADIO, iRadio Favorite
         models: set1
-      '29':
+      "29":
         name: [usb, usb]
         description: sets USB/USB(Front)
         models: set1
@@ -958,51 +963,51 @@ main:
         name: usb-dac-in
         description: sets USB DAC In
         models: set2
-      '41':
+      "41":
         name: line
         description: sets LINE
         models: set2
-      '42':
+      "42":
         name: line2
         description: sets LINE2
         models: set2
-      '44':
+      "44":
         name: optical
         description: sets OPTICAL
         models: set2
-      '45':
+      "45":
         name: coaxial
         description: sets COAXIAL
         models: set2
-      '40':
+      "40":
         name: universal-port
         description: sets Universal PORT
         models: set1
-      '30':
+      "30":
         name: multi-ch
         description: sets MULTI CH
         models: set1
-      '31':
+      "31":
         name: xm
         description: sets XM
         models: set1
-      '32':
+      "32":
         name: sirius
         description: sets SIRIUS
         models: set1
-      '33':
+      "33":
         name: dab
-        description: 'sets DAB '
+        description: "sets DAB "
         models: set1
-      '55':
+      "55":
         name: hdmi-5
         description: sets HDMI 5
         models: set1
-      '56':
+      "56":
         name: hdmi-6
         description: sets HDMI 6
         models: set1
-      '57':
+      "57":
         name: hdmi-7
         description: sets HDMI 7
         models: set1
@@ -1022,87 +1027,87 @@ main:
     name: recout-selector
     description: RECOUT Selector Command
     values:
-      '00':
+      "00":
         name: video1
         description: sets VIDEO1
         models: set1
-      '01':
+      "01":
         name: video2
         description: sets VIDEO2
         models: set1
-      '02':
+      "02":
         name: video3
         description: sets VIDEO3
         models: set1
-      '03':
+      "03":
         name: video4
         description: sets VIDEO4
         models: set1
-      '04':
+      "04":
         name: video5
         description: sets VIDEO5
         models: set1
-      '05':
+      "05":
         name: video6
         description: sets VIDEO6
         models: set1
-      '06':
+      "06":
         name: video7
         description: sets VIDEO7
         models: set1
-      '10':
+      "10":
         name: dvd
         description: sets DVD
         models: set1
-      '20':
+      "20":
         name: tape
         description: sets TAPE(1)
         models: set1
-      '21':
+      "21":
         name: tape2
         description: sets TAPE2
         models: set1
-      '22':
+      "22":
         name: phono
         description: sets PHONO
         models: set1
-      '23':
+      "23":
         name: cd
         description: sets CD
         models: set1
-      '24':
+      "24":
         name: fm
         description: sets FM
         models: set1
-      '25':
+      "25":
         name: am
         description: sets AM
         models: set1
-      '26':
+      "26":
         name: tuner
         description: sets TUNER
         models: set1
-      '27':
+      "27":
         name: music-server
         description: sets MUSIC SERVER
         models: set1
-      '28':
+      "28":
         name: internet-radio
         description: sets INTERNET RADIO
         models: set1
-      '30':
+      "30":
         name: multi-ch
         description: sets MULTI CH
         models: set1
-      '31':
+      "31":
         name: xm
         description: sets XM
         models: set1
       7F:
-        name: 'off'
+        name: "off"
         description: sets OFF
         models: set1
-      '80':
+      "80":
         name: source
         description: sets SOURCE
         models: set1
@@ -1114,35 +1119,35 @@ main:
     name: audio-selector
     description: Audio Selector Command
     values:
-      '00':
+      "00":
         name: auto
         description: sets AUTO
         models: set1
-      '01':
+      "01":
         name: multi-channel
         description: sets MULTI-CHANNEL
         models: set1
-      '02':
+      "02":
         name: analog
         description: sets ANALOG
         models: set1
-      '03':
+      "03":
         name: ilink
         description: sets iLINK
         models: set1
-      '04':
+      "04":
         name: hdmi
         description: sets HDMI
         models: set1
-      '05':
+      "05":
         name: [coax, opt]
         description: sets COAX/OPT
         models: set1
-      '06':
+      "06":
         name: balance
         description: sets BALANCE
         models: set1
-      '07':
+      "07":
         name: arc
         description: sets ARC
         models: set1
@@ -1162,12 +1167,12 @@ main:
     name: 12v-trigger-a
     description: 12V Trigger A Command
     values:
-      '00':
-        name: 'off'
+      "00":
+        name: "off"
         description: sets 12V Trigger A Off
         models: set1
-      '01':
-        name: 'on'
+      "01":
+        name: "on"
         description: sets 12V Trigger A On
         models: set1
       QSTN:
@@ -1178,12 +1183,12 @@ main:
     name: 12v-trigger-b
     description: 12V Trigger B Command
     values:
-      '00':
-        name: 'off'
+      "00":
+        name: "off"
         description: sets 12V Trigger B Off
         models: set1
-      '01':
-        name: 'on'
+      "01":
+        name: "on"
         description: sets 12V Trigger B On
         models: set1
       QSTN:
@@ -1194,12 +1199,12 @@ main:
     name: 12v-trigger-c
     description: 12V Trigger C Command
     values:
-      '00':
-        name: 'off'
+      "00":
+        name: "off"
         description: sets 12V Trigger C Off
         models: set1
-      '01':
-        name: 'on'
+      "01":
+        name: "on"
         description: sets 12V Trigger C On
         models: set1
       QSTN:
@@ -1210,11 +1215,11 @@ main:
     name: video-output-selector
     description: Video Output Selector (Japanese Model Only)
     values:
-      '00':
+      "00":
         name: d4
         description: sets D4
         models: set1
-      '01':
+      "01":
         name: component
         description: sets Component
         models: set1
@@ -1226,27 +1231,27 @@ main:
     name: hdmi-output-selector
     description: HDMI Output Selector
     values:
-      '00':
-        name: ['no', analog]
+      "00":
+        name: ["no", analog]
         description: sets No, Analog
         models: set1
-      '01':
-        name: ['yes', out]
+      "01":
+        name: ["yes", out]
         description: sets Yes/Out Main, HDMI Main, HDMI
         models: set1
-      '02':
+      "02":
         name: [out-sub, sub, hdbaset]
         description: sets Out Sub, HDMI Sub, HDBaseT
         models: set1
-      '03':
+      "03":
         name: [both, sub]
         description: sets, Both, Main+Sub
         models: set1
-      '04':
+      "04":
         name: [both]
         description: sets, Both(Main)
         models: set1
-      '05':
+      "05":
         name: [both]
         description: sets, Both(Sub)
         models: set1
@@ -1262,15 +1267,15 @@ main:
     name: hdmi-audio-out
     description: HDMI Audio Out (Main)
     values:
-      '00':
-        name: 'off'
+      "00":
+        name: "off"
         description: sets Off
         models: set1
-      '01':
-        name: 'on'
+      "01":
+        name: "on"
         description: sets On
         models: set1
-      '02':
+      "02":
         name: auto
         description: sets Auto
         models: set1
@@ -1286,12 +1291,12 @@ main:
     name: hdmi-audio-out-sub
     description: HDMI Audio Out (Sub)
     values:
-      '00':
-        name: 'off'
+      "00":
+        name: "off"
         description: sets Off
         models: set1
-      '01':
-        name: 'on'
+      "01":
+        name: "on"
         description: sets On
         models: set1
       UP:
@@ -1306,12 +1311,12 @@ main:
     name: hdmi-cec
     description: HDMI CEC
     values:
-      '00':
-        name: 'off'
+      "00":
+        name: "off"
         description: sets Off
         models: set1
-      '01':
-        name: 'on'
+      "01":
+        name: "on"
         description: sets On
         models: set1
       UP:
@@ -1326,15 +1331,15 @@ main:
     name: hdmi-cec-control-monitor
     description: HDMI CEC Control Monitor
     values:
-      '01':
+      "01":
         name: main
         description: sets Main
         models: set1
-      '02':
+      "02":
         name: zone2
         description: sets Zone2
         models: set1
-      '10':
+      "10":
         name: sub
         description: sets Sub
         models: set1
@@ -1350,39 +1355,39 @@ main:
     name: monitor-out-resolution
     description: Monitor Out Resolution
     values:
-      '00':
+      "00":
         name: through
         description: sets Through
         models: set1
-      '01':
+      "01":
         name: auto
         description: sets Auto(HDMI Output Only)
         models: set1
-      '02':
+      "02":
         name: 480p
         description: sets 480p
         models: set1
-      '03':
+      "03":
         name: 720p
         description: sets 720p
         models: set1
-      '13':
+      "13":
         name: 1680x720p
         description: sets 1680x720p
         models: set1
-      '04':
+      "04":
         name: 1080i
         description: sets 1080i
         models: set1
-      '05':
+      "05":
         name: 1080p
         description: sets 1080p(HDMI Output Only)
         models: set1
-      '07':
+      "07":
         name: [1080p, 24fs]
         description: sets 1080p/24fs(HDMI Output Only)
         models: set1
-      '15':
+      "15":
         name: 2560x1080p
         description: sets 2560x1080p
         models: set1
@@ -1390,7 +1395,7 @@ main:
         name: 4k-upcaling
         description: sets 4K Upcaling(HDMI Output Only) 4K(HDMI Output Only)
         models: set1
-      '06':
+      "06":
         name: source
         description: sets Source
         models: set1
@@ -1429,11 +1434,11 @@ main:
     values:
       ab:
         name: [a-1-for-zone-b-sub-0-none, 1-for-zone, 2-for-zone-2]
-        description: 'sets HDMI Information
+        description: "sets HDMI Information
 
           a:HDMI Out MAIN 1:for Main Zone
 
-          b:HDMI Out SUB 0:None,1:for Main Zone,2:for Zone 2'
+          b:HDMI Out SUB 0:None,1:for Main Zone,2:for Zone 2"
         models: set1
       QSTN:
         name: query
@@ -1443,15 +1448,15 @@ main:
     name: isf-mode
     description: ISF Mode
     values:
-      '00':
+      "00":
         name: custom
         description: sets ISF Mode Custom
         models: set1
-      '01':
+      "01":
         name: day
         description: sets ISF Mode Day
         models: set1
-      '02':
+      "02":
         name: night
         description: sets ISF Mode Night
         models: set1
@@ -1467,27 +1472,27 @@ main:
     name: video-wide-mode
     description: Video Wide Mode
     values:
-      '00':
+      "00":
         name: auto
         description: sets Auto
         models: set1
-      '01':
+      "01":
         name: 4-3
         description: sets 4:3
         models: set1
-      '02':
+      "02":
         name: full
         description: sets Full
         models: set1
-      '03':
+      "03":
         name: zoom
         description: sets Zoom
         models: set1
-      '04':
+      "04":
         name: zoom
         description: sets Wide Zoom
         models: set1
-      '05':
+      "05":
         name: smart-zoom
         description: sets Smart Zoom
         models: set1
@@ -1503,31 +1508,31 @@ main:
     name: video-picture-mode
     description: Video Picture Mode
     values:
-      '00':
+      "00":
         name: [through, standard]
         description: sets Through, Standard
         models: set1
-      '01':
+      "01":
         name: custom
         description: sets Custom
         models: set1
-      '02':
+      "02":
         name: cinema
         description: sets Cinema
         models: set1
-      '03':
+      "03":
         name: game
         description: sets Game
         models: set1
-      '05':
+      "05":
         name: isf-day
         description: sets ISF Day
         models: set1
-      '06':
+      "06":
         name: isf-night
         description: sets ISF Night
         models: set1
-      '07':
+      "07":
         name: streaming
         description: sets Streaming
         models: set1
@@ -1547,35 +1552,35 @@ main:
     name: listening-mode
     description: Listening Mode Command
     values:
-      '00':
+      "00":
         name: stereo
         description: sets STEREO
         models: set1
-      '01':
+      "01":
         name: direct
         description: sets DIRECT
         models: set1
-      '02':
+      "02":
         name: surround
         description: sets SURROUND
         models: set1
-      '03':
+      "03":
         name: [film, game-rpg]
         description: sets FILM, Game-RPG
         models: set1
-      '04':
+      "04":
         name: thx
         description: sets THX
         models: set1
-      '05':
+      "05":
         name: [action, game-action]
         description: sets ACTION, Game-Action
         models: set1
-      '06':
+      "06":
         name: [musical, game-rock]
         description: sets MUSICAL, Game-Rock
         models: set1
-      '07':
+      "07":
         name: mono-movie
         description: sets MONO MOVIE
         models: set1
@@ -1611,27 +1616,27 @@ main:
         name: mono
         description: sets MONO
         models: set1
-      '11':
+      "11":
         name: pure-audio
         description: sets PURE AUDIO
         models: set1
-      '12':
+      "12":
         name: multiplex
         description: sets MULTIPLEX
         models: set1
-      '13':
+      "13":
         name: full-mono
         description: sets FULL MONO
         models: set1
-      '14':
+      "14":
         name: [dolby-virtual, surround-enhancer]
         description: sets DOLBY VIRTUAL / Surround Enhancer
         models: set1
-      '15':
+      "15":
         name: dts-surround-sensation
         description: sets DTS Surround Sensation
         models: set1
-      '16':
+      "16":
         name: audyssey-dsx
         description: sets Audyssey DSX
         models: set1
@@ -1639,15 +1644,15 @@ main:
         name: whole-house
         description: sets Whole House Mode
         models: set1
-      '23':
+      "23":
         name: stage
         description: sets Stage (when Genre Control is Enable in Japan Model)
         models: set1
-      '25':
+      "25":
         name: action
         description: sets Action (when Genre Control is Enable in Japan Model)
         models: set1
-      '26':
+      "26":
         name: music
         description: sets Music (when Genre Contorl is Enable in Japan Model)
         models: set1
@@ -1655,79 +1660,79 @@ main:
         name: sports
         description: sets Sports (when Genre Control is Enable in Japan Model)
         models: set1
-      '40':
+      "40":
         name: straight-decode
         description: sets Straight Decode
         models: set1
-      '41':
+      "41":
         name: dolby-ex
         description: sets Dolby EX
         models: set1
-      '42':
+      "42":
         name: thx-cinema
         description: sets THX Cinema
         models: set1
-      '43':
+      "43":
         name: thx-surround-ex
         description: sets THX Surround EX
         models: set1
-      '44':
+      "44":
         name: thx-music
         description: sets THX Music
         models: set1
-      '45':
+      "45":
         name: thx-games
         description: sets THX Games
         models: set1
-      '50':
+      "50":
         name: [thx-u2, s2, i, s-cinema, cinema2]
         description: sets THX U2/S2/I/S Cinema/Cinema2
         models: set1
-      '51':
+      "51":
         name: [thx-musicmode, thx-u2, s2, i, s-music]
         description: sets THX MusicMode,THX U2/S2/I/S Music
         models: set1
-      '52':
+      "52":
         name: [thx-games, thx-u2, s2, i, s-games]
         description: sets THX Games Mode,THX U2/S2/I/S Games
         models: set1
-      '80':
+      "80":
         name: [plii, pliix-movie, dolby-atmos, dolby-surround]
         description: sets PLII/PLIIx Movie, Dolby Atmos/Dolby Surround
         models: set1
-      '81':
+      "81":
         name: [plii, pliix-music]
         description: sets PLII/PLIIx Music
         models: set1
-      '82':
+      "82":
         name: [neo-6-cinema, neo-x-cinema, dts-x, neural-x]
         description: sets Neo:6 Cinema/Neo:X Cinema, DTS:X/Neural:X
         models: set1
-      '83':
+      "83":
         name: [neo-6-music, neo-x-music]
         description: sets Neo:6 Music/Neo:X Music
         models: set1
-      '84':
+      "84":
         name: [plii, pliix-thx-cinema, dolby-surround-thx-cinema]
         description: sets PLII/PLIIx THX Cinema, Dolby Surround THX Cinema
         models: set1
-      '85':
+      "85":
         name: [neo-6, neo-x-thx-cinema, dts-neural-x-thx-cinema]
         description: sets Neo:6/Neo:X THX Cinema, DTS Neural:X THX Cinema
         models: set1
-      '86':
+      "86":
         name: [plii, pliix-game]
         description: sets PLII/PLIIx Game
         models: set1
-      '87':
+      "87":
         name: neural-surr
         description: sets Neural Surr
         models: set1
-      '88':
+      "88":
         name: [neural-thx, neural-surround]
         description: sets Neural THX/Neural Surround
         models: set1
-      '89':
+      "89":
         name: [plii, pliix-thx-games, dolby-surround-thx-games]
         description: sets PLII/PLIIx THX Games, Dolby Surround THX Games
         models: set1
@@ -1755,43 +1760,43 @@ main:
         name: neural-thx-games
         description: sets Neural THX Games
         models: set1
-      '90':
+      "90":
         name: pliiz-height
         description: sets PLIIz Height
         models: set1
-      '91':
+      "91":
         name: neo-6-cinema-dts-surround-sensation
         description: sets Neo:6 Cinema DTS Surround Sensation
         models: set1
-      '92':
+      "92":
         name: neo-6-music-dts-surround-sensation
         description: sets Neo:6 Music DTS Surround Sensation
         models: set1
-      '93':
+      "93":
         name: neural-digital-music
         description: sets Neural Digital Music
         models: set1
-      '94':
+      "94":
         name: pliiz-height-thx-cinema
         description: sets PLIIz Height + THX Cinema
         models: set1
-      '95':
+      "95":
         name: pliiz-height-thx-music
         description: sets PLIIz Height + THX Music
         models: set1
-      '96':
+      "96":
         name: pliiz-height-thx-games
         description: sets PLIIz Height + THX Games
         models: set1
-      '97':
+      "97":
         name: [pliiz-height-thx-u2, s2-cinema]
         description: sets PLIIz Height + THX U2/S2 Cinema
         models: set1
-      '98':
+      "98":
         name: [pliiz-height-thx-u2, s2-music]
         description: sets PLIIz Height + THX U2/S2 Music
         models: set1
-      '99':
+      "99":
         name: [pliiz-height-thx-u2, s2-games]
         description: sets PLIIz Height + THX U2/S2 Games
         models: set1
@@ -1879,12 +1884,12 @@ main:
     name: direct
     description: Direct Command
     values:
-      '00':
-        name: 'off'
+      "00":
+        name: "off"
         description: sets Off
         models: set2
-      '01':
-        name: 'on'
+      "01":
+        name: "on"
         description: sets On
         models: set2
       TG:
@@ -1899,19 +1904,19 @@ main:
     name: late-night
     description: Late Night Command
     values:
-      '00':
-        name: 'off'
+      "00":
+        name: "off"
         description: sets Late Night Off
         models: set1
-      '01':
+      "01":
         name: [low-dolbydigital, on-dolby-truehd]
         description: sets Late Night Low@DolbyDigital,On@Dolby TrueHD
         models: set1
-      '02':
+      "02":
         name: [high-dolbydigital]
         description: sets Late Night High@DolbyDigital,(On@Dolby TrueHD)
         models: set1
-      '03':
+      "03":
         name: auto-dolby-truehd
         description: sets Late Night Auto@Dolby TrueHD
         models: set1
@@ -1927,12 +1932,12 @@ main:
     name: cinema-filter
     description: Cinema Filter Command
     values:
-      '00':
-        name: 'off'
+      "00":
+        name: "off"
         description: sets Cinema Filter Off
         models: set1
-      '01':
-        name: 'on'
+      "01":
+        name: "on"
         description: sets Cinema Filter On
         models: set1
       UP:
@@ -1947,15 +1952,15 @@ main:
     name: audyssey-2eq-multeq-multeq-xt
     description: Audyssey 2EQ/MultEQ/MultEQ XT
     values:
-      '00':
-        name: ['off']
+      "00":
+        name: ["off"]
         description: sets Audyssey 2EQ/MultEQ/MultEQ XT Off
         models: set1
-      '01':
-        name: ['on', movie]
+      "01":
+        name: ["on", movie]
         description: sets Audyssey 2EQ/MultEQ/MultEQ XT On/Movie
         models: set1
-      '02':
+      "02":
         name: [music]
         description: sets Audyssey 2EQ/MultEQ/MultEQ XT Music
         models: set1
@@ -1971,12 +1976,12 @@ main:
     name: audyssey-dynamic-eq
     description: Audyssey Dynamic EQ
     values:
-      '00':
-        name: 'off'
+      "00":
+        name: "off"
         description: sets Audyssey Dynamic EQ Off
         models: set1
-      '01':
-        name: 'on'
+      "01":
+        name: "on"
         description: sets Audyssey Dynamic EQ On
         models: set1
       UP:
@@ -1991,19 +1996,19 @@ main:
     name: audyssey-dynamic-volume
     description: Audyssey Dynamic Volume
     values:
-      '00':
-        name: 'off'
+      "00":
+        name: "off"
         description: sets Audyssey Dynamic Volume Off
         models: set1
-      '01':
+      "01":
         name: light
         description: sets Audyssey Dynamic Volume Light
         models: set1
-      '02':
+      "02":
         name: medium
         description: sets Audyssey Dynamic Volume Medium
         models: set1
-      '03':
+      "03":
         name: heavy
         description: sets Audyssey Dynamic Volume Heavy
         models: set1
@@ -2019,19 +2024,19 @@ main:
     name: dolby-volume
     description: Dolby Volume
     values:
-      '00':
-        name: 'off'
+      "00":
+        name: "off"
         description: sets Dolby Volume Off
         models: set1
-      '01':
-        name: [low, 'on']
+      "01":
+        name: [low, "on"]
         description: sets Dolby Volume Low/On
         models: set1
-      '02':
+      "02":
         name: mid
         description: sets Dolby Volume Mid
         models: set1
-      '03':
+      "03":
         name: high
         description: sets Dolby Volume High
         models: set1
@@ -2047,16 +2052,16 @@ main:
     name: accueq
     description: AccuEQ
     values:
-      '00':
-        name: 'off'
+      "00":
+        name: "off"
         description: sets AccuEQ Off
         models: set1
-      '01':
-        name: ['on', 'on']
+      "01":
+        name: ["on", "on"]
         description: sets AccuEQ On, On(All Ch)
         models: set1
-      '02':
-        name: ['on']
+      "02":
+        name: ["on"]
         description: sets AccuEQ, On(ex. Front L/R)
         models: set1
       UP:
@@ -2071,27 +2076,27 @@ main:
     name: mcacc-eq
     description: MCACC EQ
     values:
-      '01':
+      "01":
         name: memory-1
         description: sets MCACC MEMORY 1
         models: set1
-      '02':
+      "02":
         name: memory-2
         description: sets MCACC MEMORY 2
         models: set1
-      '03':
+      "03":
         name: memory-3
         description: sets MCACC MEMORY 3
         models: set1
-      '04':
+      "04":
         name: memory-4
         description: sets MCACC MEMORY 4
         models: set1
-      '05':
+      "05":
         name: memory-5
         description: sets MCACC MEMORY 5
         models: set1
-      '06':
+      "06":
         name: memory-6
         description: sets MCACC MEMORY 6
         models: set1
@@ -2111,19 +2116,19 @@ main:
     name: equalizer-select
     description: Equalizer Select(O/I:Equalizer, P:Manual EQ Select)
     values:
-      '00':
-        name: 'off'
+      "00":
+        name: "off"
         description: sets Equalizer Off
         models: set1
-      '01':
+      "01":
         name: preset-1
         description: sets Equalizer Preset 1
         models: set1
-      '02':
+      "02":
         name: preset-2
         description: sets Equalizer Preset 2
         models: set1
-      '03':
+      "03":
         name: preset-3
         description: sets Equalizer Preset 3
         models: set1
@@ -2143,12 +2148,12 @@ main:
     name: eq-for-standing-wave-standing-wave
     description: EQ for Standing Wave / Standing Wave
     values:
-      '00':
-        name: 'off'
+      "00":
+        name: "off"
         description: sets Standing Wave Off
         models: set1
-      '01':
-        name: 'on'
+      "01":
+        name: "on"
         description: sets Standing Wave On
         models: set1
       UP:
@@ -2163,15 +2168,15 @@ main:
     name: phase-control
     description: Phase Control
     values:
-      '00':
-        name: 'off'
+      "00":
+        name: "off"
         description: sets Phase Control Off
         models: set1
-      '01':
-        name: 'on'
+      "01":
+        name: "on"
         description: sets Phase Control On
         models: set1
-      '02':
+      "02":
         name: full-band-on
         description: sets Full Band Phase Control On
         models: set1
@@ -2214,7 +2219,7 @@ main:
     values:
       xx:
         name: 00-0db-01-1db-02-2db-03-3db-04-4db-05-5db-0a-10db-0f-15db-14-20db-ff-oodb
-        description: 'sets LFE Mute Level
+        description: "sets LFE Mute Level
 
           00:0dB
 
@@ -2234,7 +2239,7 @@ main:
 
           14:-20dB
 
-          FF:-oodB'
+          FF:-oodB"
         models: set1
       UP:
         name: up
@@ -2254,7 +2259,7 @@ main:
     values:
       aaabbbcccdddeeefffggghhhiii:
         name: eq
-        description: 'sets All Channel EQ for Temporary Value
+        description: "sets All Channel EQ for Temporary Value
 
           xxx=-18(-12.0dB)~000(0.0dB)~+18(+12.0dB)
 
@@ -2275,7 +2280,7 @@ main:
 
           hhh:8kHz
 
-          iii:16kHz'
+          iii:16kHz"
         models: set1
       QSTN:
         name: query
@@ -2285,12 +2290,12 @@ main:
     name: mcacc-calibration
     description: MCACC Calibration
     values:
-      '00':
-        name: '00'
+      "00":
+        name: "00"
         description: not complete MCACC calibration
         models: set1
-      '01':
-        name: '01'
+      "01":
+        name: "01"
         description: complete MCACC calibration
         models: set1
       QSTN:
@@ -2301,14 +2306,14 @@ main:
     name: fullband-mcacc-calibration
     description: Fullband MCACC Calibration
     values:
-      '00':
-        name: '00'
-        description: 'not complete Fullband MCACC calibration or
+      "00":
+        name: "00"
+        description: "not complete Fullband MCACC calibration or
 
-          not have Fullband MCACC function'
+          not have Fullband MCACC function"
         models: set1
-      '01':
-        name: '01'
+      "01":
+        name: "01"
         description: complete Fullband MCACC calibration
         models: set1
       QSTN:
@@ -2319,12 +2324,12 @@ main:
     name: music-optimizer-sound-retriever
     description: Music Optimizer / Sound Retriever
     values:
-      '00':
-        name: 'off'
+      "00":
+        name: "off"
         description: sets Music Optimizer Off
         models: set1
-      '01':
-        name: 'on'
+      "01":
+        name: "on"
         description: sets Music Optimizer On
         models: set1
       UP:
@@ -2341,7 +2346,8 @@ main:
     values:
       snnn:
         name: offset
-        description: "sets A/V Sync\n s: sign ( \"+\" or \"-\" or \"0\")\n If set\
+        description:
+          "sets A/V Sync\n s: sign ( \"+\" or \"-\" or \"0\")\n If set\
           \ minus value, s=\"-\". (only HDMI Lipsync is available)\n If set plus value,\
           \ s=\"+\"\n If set zero value, s=\"0\"\nnnn : value; If set 100msec, nnn=\"\
           100\""
@@ -2362,11 +2368,11 @@ main:
     name: audio-scalar
     description: Audio Scalar
     values:
-      '00':
+      "00":
         name: auto
         description: sets Audio Scalar Auto
         models: set1
-      '01':
+      "01":
         name: manual
         description: sets Audio Scalar Manual
         models: set1
@@ -2382,19 +2388,19 @@ main:
     name: upsampling
     description: Upsampling
     values:
-      '00':
+      "00":
         name: x1
         description: sets Upsampling x1
         models: set1
-      '01':
+      "01":
         name: x2
         description: sets Upsampling x2
         models: set1
-      '02':
+      "02":
         name: x4
         description: sets Upsampling x4
         models: set1
-      '03':
+      "03":
         name: x8
         description: sets Upsampling x8
         models: set2
@@ -2410,12 +2416,12 @@ main:
     name: hi-bit
     description: Hi-Bit
     values:
-      '00':
-        name: 'off'
+      "00":
+        name: "off"
         description: sets Hi-Bit Off
         models: set1
-      '01':
-        name: 'on'
+      "01":
+        name: "on"
         description: sets Hi-Bit On
         models: set1
       UP:
@@ -2430,15 +2436,15 @@ main:
     name: digital-filter
     description: Digital Filter
     values:
-      '00':
+      "00":
         name: slow
         description: sets Digital Filter Slow
         models: set1
-      '01':
+      "01":
         name: sharp
         description: sets Digital Filter Sharp
         models: set1
-      '02':
+      "02":
         name: short
         description: sets Digital Filter Short
         models: set1
@@ -2475,12 +2481,12 @@ main:
     name: p-bass
     description: P.BASS
     values:
-      '00':
-        name: 'off'
+      "00":
+        name: "off"
         description: sets P.BASS Off
         models: set2
-      '01':
-        name: 'on'
+      "01":
+        name: "on"
         description: sets P.BASS On
         models: set2
       UP:
@@ -2495,12 +2501,12 @@ main:
     name: s-bass
     description: S.BASS
     values:
-      '00':
-        name: 'off'
+      "00":
+        name: "off"
         description: sets S.BASS Off
         models: set4
-      '01':
-        name: 'on'
+      "01":
+        name: "on"
         description: sets S.BASS On
         models: set4
       UP:
@@ -2515,11 +2521,11 @@ main:
     name: screen-centered-dialog-dialog-enahncement
     description: Screen Centered Dialog / Dialog Enahncement
     values:
-      '00':
+      "00":
         name: enhancement-off
         description: sets Dialog Enhancement Off
         models: set1
-      '01':
+      "01":
         name: enhancement-on
         description: sets Dialog Enhancement On
         models: set1
@@ -2540,11 +2546,11 @@ main:
     name: center-spread-for-dolby-surround
     description: Center Spread for Dolby Surround
     values:
-      '00':
+      "00":
         name: center-off
         description: sets Center Spread Off
         models: set1
-      '01':
+      "01":
         name: center-on
         description: sets Center Spread On
         models: set1
@@ -2560,12 +2566,12 @@ main:
     name: panorama-for-plii-music
     description: Panorama for PLII Music
     values:
-      '00':
-        name: 'off'
+      "00":
+        name: "off"
         description: sets Panorama Off
         models: set1
-      '01':
-        name: 'on'
+      "01":
+        name: "on"
         description: sets Panorama On
         models: set1
       TG:
@@ -2663,12 +2669,12 @@ main:
     name: dialog-control-enabled
     description: Dialog Control Enabled
     values:
-      '00':
-        name: 'off'
+      "00":
+        name: "off"
         description: Dialog Control is disabled
         models: set1
-      '01':
-        name: 'on'
+      "01":
+        name: "on"
         description: Dialog Control is enabled
         models: set1
       QSTN:
@@ -2680,14 +2686,50 @@ main:
     description: Speaker Information
     values:
       abcdefghhhijk:
-        name: [a-subwoofer-0-no, 1-yes, 1ch, 2-2ch-b-front-1-small, 2-large-c-center-0-none,
-          1-small, 2-lage-d-surround-0-none, 1-small, 2-lage-e-surround-back-0-none,
-          1-small, 2-lage-f-height-1-0-none, 1-small, 2-lage-g-height-2-0-none, 1-small,
-          2-lage-hhh-crossover-50, '80', '100', '150', 200-i-height-1-position-0-no,
-          1-fh, 2-tf, 3-tm, 4-tr, 5-rh, 6-dd-sp-f, 7-dd-sp-s, 8-dd-sp-b-j-height-2-position-0-no,
-          1-fh, 2-tf, 3-tm, 4-tr, 5-rh, 6-dd-sp-f, 7-dd-sp-s, 8-dd-sp-b-k-bi-amp-0-no,
-          1-f, 3-f-c, 5-f-s, 6-c-s, 7-f-c-s]
-        description: 'sets Speaker Information
+        name:
+          [
+            a-subwoofer-0-no,
+            1-yes,
+            1ch,
+            2-2ch-b-front-1-small,
+            2-large-c-center-0-none,
+            1-small,
+            2-lage-d-surround-0-none,
+            1-small,
+            2-lage-e-surround-back-0-none,
+            1-small,
+            2-lage-f-height-1-0-none,
+            1-small,
+            2-lage-g-height-2-0-none,
+            1-small,
+            2-lage-hhh-crossover-50,
+            "80",
+            "100",
+            "150",
+            200-i-height-1-position-0-no,
+            1-fh,
+            2-tf,
+            3-tm,
+            4-tr,
+            5-rh,
+            6-dd-sp-f,
+            7-dd-sp-s,
+            8-dd-sp-b-j-height-2-position-0-no,
+            1-fh,
+            2-tf,
+            3-tm,
+            4-tr,
+            5-rh,
+            6-dd-sp-f,
+            7-dd-sp-s,
+            8-dd-sp-b-k-bi-amp-0-no,
+            1-f,
+            3-f-c,
+            5-f-s,
+            6-c-s,
+            7-f-c-s,
+          ]
+        description: "sets Speaker Information
 
 
           a:Subwoofer 0:No,1:Yes/1ch,2:2ch
@@ -2712,7 +2754,7 @@ main:
           j:Height 2 Position 0:No,1:FH,2:TF,3:TM,4:TR,5:RH,6:DD SP(F),7:DD SP(S),8:DD
           SP(B)
 
-          k:Bi-Amp 0:No,1:F,3:F+C,5:F+S,6:C+S,7:F+C+S'
+          k:Bi-Amp 0:No,1:F,3:F+C,5:F+S,6:C+S,7:F+C+S"
         models: set1
       QSTN:
         name: query
@@ -2772,15 +2814,15 @@ main:
     name: input-channel-multiplex-dual-mono
     description: Input Channel (Multiplex) / Dual Mono
     values:
-      '00':
+      "00":
         name: main
         description: sets DUAL MONO MAIN
         models: set1
-      '01':
+      "01":
         name: sub
         description: sets DUAL MONO SUB
         models: set1
-      '02':
+      "02":
         name: main-sub
         description: sets DUAL MONO MAIN+SUB
         models: set1
@@ -2796,12 +2838,12 @@ main:
     name: loudness-management
     description: Loudness Management
     values:
-      '00':
-        name: 'off'
+      "00":
+        name: "off"
         description: sets Loudness Management Off
         models: set1
-      '01':
-        name: 'on'
+      "01":
+        name: "on"
         description: sets Loudness management On
         models: set1
       UP:
@@ -2839,22 +2881,22 @@ main:
     values:
       iixxxxxxxxxx:
         name: name-10-characters-ii-number-the-same-as-for-sli-command-xxxxxxxxxx-name
-        description: 'sets Input Selector Name (10 characters)
+        description: "sets Input Selector Name (10 characters)
 
           ii: Selector Number (the same as for SLI command)
 
-          xxxxxxxxxx: Name(Max 10 characters)'
+          xxxxxxxxxx: Name(Max 10 characters)"
         models: set1
   FXP:
     name: pcm-fixed-mode-fixed-pcm-mode
     description: PCM Fixed Mode / Fixed PCM Mode
     values:
-      '00':
-        name: 'off'
+      "00":
+        name: "off"
         description: sets PCM Fixed Mode Off
         models: set1
-      '01':
-        name: 'on'
+      "01":
+        name: "on"
         description: sets PCM Fixed Mode On
         models: set1
       UP:
@@ -2873,8 +2915,8 @@ main:
         name: xx-sli-number
         description: sets HDMI Standby Through xx=SLI Number
         models: set1
-      'OFF':
-        name: 'off'
+      "OFF":
+        name: "off"
         description: sets HDMI Standby Through Off
         models: set1
       LAST:
@@ -2901,12 +2943,12 @@ main:
     name: pqls
     description: PQLS
     values:
-      '00':
-        name: 'off'
+      "00":
+        name: "off"
         description: sets PQLS Off
         models: set1
-      '01':
-        name: 'on'
+      "01":
+        name: "on"
         description: sets PQLS On
         models: set1
       UP:
@@ -2921,11 +2963,11 @@ main:
     name: audio-return-channel
     description: Audio Return Channel
     values:
-      '00':
-        name: 'off'
+      "00":
+        name: "off"
         description: sets Audio Return Channel Off
         models: set1
-      '01':
+      "01":
         name: auto
         description: sets Audio Return Channel Auto
         models: set1
@@ -2941,12 +2983,12 @@ main:
     name: lip-sync-auto-delay
     description: Lip Sync / Auto Delay
     values:
-      '00':
-        name: 'off'
+      "00":
+        name: "off"
         description: sets Lip Sync Off
         models: set1
-      '01':
-        name: 'on'
+      "01":
+        name: "on"
         description: sets Lip Sync On
         models: set1
       UP:
@@ -2961,12 +3003,12 @@ main:
     name: auto-power-down
     description: Auto Power Down
     values:
-      '00':
-        name: 'off'
+      "00":
+        name: "off"
         description: sets Auto Power Down Off
         models: set1
-      '01':
-        name: 'on'
+      "01":
+        name: "on"
         description: sets Auto Power Down On
         models: set1
       UP:
@@ -2981,19 +3023,19 @@ main:
     name: pre-amp-mode-amp-mode
     description: Pre Amp Mode / AMP Mode
     values:
-      '00':
-        name: 'off'
+      "00":
+        name: "off"
         description: sets Pre Amp Mode Off
         models: set1
-      '01':
+      "01":
         name: front
         description: sets Pre Amp Mode Front
         models: set1
-      '03':
+      "03":
         name: front-center
         description: sets Pre Amp Mode Front+Center
         models: set1
-      '07':
+      "07":
         name: all
         description: sets Pre Amp Mode All
         models: set1
@@ -3009,15 +3051,15 @@ main:
     name: for-smart-grid
     description: for Smart Grid Command
     values:
-      '01':
+      "01":
         name: volume-1db-down-and-dimmer-level-dark
         description: sets Volume 1dB down and Dimmer Level "Dark"
         models: set1
-      '03':
+      "03":
         name: volume-3db-down-and-dimmer-level-dark
         description: sets Volume 3dB down and Dimmer Level "Dark"
         models: set1
-      '06':
+      "06":
         name: volume-6db-down-and-dimmer-level-dark
         description: sets Volume 6dB down and Dimmer Level "Dark"
         models: set1
@@ -3047,7 +3089,7 @@ main:
         models: set1
       D**-nn:
         name: d-nn
-        description: 'nn Progress (%)
+        description: "nn Progress (%)
 
           **=DL Downloading
 
@@ -3063,7 +3105,7 @@ main:
 
           **=OS OSD
 
-          **=MP MMPU'
+          **=MP MMPU"
         models: set1
       CMP:
         name: cmp
@@ -3071,19 +3113,19 @@ main:
         models: set1
       E{xx}-yy:
         name: e-xx-yy
-        description: 'xx=ErrorCode1
+        description: "xx=ErrorCode1
 
-          yy=ErrorCode2'
+          yy=ErrorCode2"
         models: set1
-      '00':
-        name: '00'
+      "00":
+        name: "00"
         description: not exist new firmware
         models: set1
-      '01':
-        name: '01'
+      "01":
+        name: "01"
         description: exist new firmware
         models: set1
-      '02':
+      "02":
         name: force
         description: exist new firmware(force)
         models: set1
@@ -3097,15 +3139,16 @@ main:
     values:
       t----<.....>:
         name: t
-        description: 't -> message type ''X'' : XML
+        description: "t -> message type 'X' : XML
 
           ---- -> reserved
 
-          <.....> : XML data ( [CR] and [LF] are removed )'
+          <.....> : XML data ( [CR] and [LF] are removed )"
         models: set1
       Ullt<.....>:
         name: ullt
-        description: "U : UI Type\n 0 : List, 1 : Menu, 2 : Playback, 3 : Popup, 4\
+        description:
+          "U : UI Type\n 0 : List, 1 : Menu, 2 : Playback, 3 : Popup, 4\
           \ : Keyboard, 5 : Menu List\nll -> number of layer (00-FF)\nt : Update Type\n\
           \ 0 : All, 1 : Button, 2 : Textbox, 3 : Listbox\n<.....> : XML data ( [CR]\
           \ and [LF] are removed )"
@@ -3116,7 +3159,8 @@ main:
     values:
       -99-999:
         name: temp
-        description: "The temperature Data(Fahrenheit and Celsius) 0 \u2013 999\n\"\
+        description:
+          "The temperature Data(Fahrenheit and Celsius) 0 \u2013 999\n\"\
           F-99C-73\": -99 degree Fahrenheit / -73 degree Celsius\n\"F 32C  0\": 32\
           \ degree Fahrenheit / 0 degree Celsius\n\"F 41C  5\": 41 degree Fahrenheit\
           \ / 5 degree Celsius\n\"F 50C 10\": 50 degree Fahrenheit / 10 degree Celsius\n\
@@ -3138,10 +3182,11 @@ main:
     values:
       nnnnn:
         name: freq-nnnnn
-        description: 'sets Directly Tuning Frequency (FM nnn.nn MHz / AM nnnnn kHz
+        description:
+          "sets Directly Tuning Frequency (FM nnn.nn MHz / AM nnnnn kHz
           / SR nnnnn ch)
 
-          put 0 in the first two digits of nnnnn at SR'
+          put 0 in the first two digits of nnnnn at SR"
         models: set1
       BAND:
         name: band
@@ -3151,43 +3196,43 @@ main:
         name: direct
         description: starts/restarts Direct Tuning Mode
         models: set1
-      '0':
+      "0":
         name: 0-in-direct-mode
         description: sets 0 in Direct Tuning Mode
         models: set1
-      '1':
+      "1":
         name: 1-in-direct-mode
         description: sets 1 in Direct Tuning Mode
         models: set1
-      '2':
+      "2":
         name: 2-in-direct-mode
         description: sets 2 in Direct Tuning Mode
         models: set1
-      '3':
+      "3":
         name: 3-in-direct-mode
         description: sets 3 in Direct Tuning Mode
         models: set1
-      '4':
+      "4":
         name: 4-in-direct-mode
         description: sets 4 in Direct Tuning Mode
         models: set1
-      '5':
+      "5":
         name: 5-in-direct-mode
         description: sets 5 in Direct Tuning Mode
         models: set1
-      '6':
+      "6":
         name: 6-in-direct-mode
         description: sets 6 in Direct Tuning Mode
         models: set1
-      '7':
+      "7":
         name: 7-in-direct-mode
         description: sets 7 in Direct Tuning Mode
         models: set1
-      '8':
+      "8":
         name: 8-in-direct-mode
         description: sets 8 in Direct Tuning Mode
         models: set1
-      '9':
+      "9":
         name: 9-in-direct-mode
         description: sets 9 in Direct Tuning Mode
         models: set1
@@ -3247,16 +3292,16 @@ main:
     name: rds-information
     description: RDS Information Command (RDS Model Only)
     values:
-      '00':
-        name: '00'
+      "00":
+        name: "00"
         description: Display RT Information
         models: set1
-      '01':
-        name: '01'
+      "01":
+        name: "01"
         description: Display PTY Information
         models: set1
-      '02':
-        name: '02'
+      "02":
+        name: "02"
         description: Display TP Information
         models: set1
       UP:
@@ -3523,11 +3568,11 @@ main:
     name: hd-radio-blend-mode
     description: HD Radio Blend Mode Command (HD Radio Model Only)
     values:
-      '00':
+      "00":
         name: auto
         description: sets HD Radio Blend Mode "Auto"
         models: set1
-      '01':
+      "01":
         name: analog
         description: sets HD Radio Blend Mode "Analog"
         models: set1
@@ -3558,23 +3603,23 @@ main:
     name: battery-charge-status
     description: Battery Charge Status Command (Battery Model Only)
     values:
-      '00':
+      "00":
         name: charging
         description: charging
         models: set6
-      '01':
+      "01":
         name: completed
         description: charge completed
         models: set6
-      '10':
+      "10":
         name: low
         description: battery level Low
         models: set6
-      '11':
+      "11":
         name: middle
         description: battery level Middle
         models: set2
-      '12':
+      "12":
         name: high
         description: battery level High
         models: set2
@@ -3600,7 +3645,7 @@ main:
         models: set2
       SKIP.F:
         name: next
-        description: '>>I'
+        description: ">>I"
         models: set2
       SKIP.R:
         name: previous
@@ -3636,15 +3681,15 @@ main:
     name: current-disc-status-notice
     description: Current disc status notice
     values:
-      '00':
+      "00":
         name: none
         description: No disc
         models: set2
-      '04':
+      "04":
         name: cd
         description: Audio CD
         models: set2
-      '07':
+      "07":
         name: mp3-cd
         description: MP3 CD
         models: set2
@@ -3695,7 +3740,8 @@ main:
     values:
       "xx\u2026xx":
         name: station-name
-        description: "xx\u2026xx   : DAB Station Name (UTF-8)\n\u4E0B\u8A18\u6587\u5B57\
+        description:
+          "xx\u2026xx   : DAB Station Name (UTF-8)\n\u4E0B\u8A18\u6587\u5B57\
           \u306F\u7279\u6B8A\u30B3\u30FC\u30C9\u3067\u9001\u4FE1\u3059\u308B\n0x02\
           \  \uFF1A \u2190\n0x03  \uFF1A \u2191\n0x04  \uFF1A \u2192\n0x05  \uFF1A\
           \ \u2193\n0x06  \uFF1A \u2551\n\u4E0A\u8A18\u4EE5\u5916\u306E0x00~0x1F\u3001\
@@ -3749,44 +3795,44 @@ main:
         name: input
         description: Input
         models: set1
-      '1':
-        name: '1'
+      "1":
+        name: "1"
         description: 1 command
         models: set1
-      '2':
-        name: '2'
+      "2":
+        name: "2"
         description: 2 command
         models: set1
-      '3':
-        name: '3'
+      "3":
+        name: "3"
         description: 3 command
         models: set1
-      '4':
-        name: '4'
+      "4":
+        name: "4"
         description: 4 command
         models: set1
-      '5':
-        name: '5'
+      "5":
+        name: "5"
         description: 5 command
         models: set1
-      '6':
-        name: '6'
+      "6":
+        name: "6"
         description: 6 command
         models: set1
-      '7':
-        name: '7'
+      "7":
+        name: "7"
         description: 7 command
         models: set1
-      '8':
-        name: '8'
+      "8":
+        name: "8"
         description: 8 command
         models: set1
-      '9':
-        name: '9'
+      "9":
+        name: "9"
         description: 9 command
         models: set1
-      '0':
-        name: '0'
+      "0":
+        name: "0"
         description: 0 command
         models: set1
       CLEAR:
@@ -3850,12 +3896,12 @@ zone2:
     name: power
     description: Zone2 Power Command
     values:
-      '00':
+      "00":
         name: standby
         description: sets Zone2 Standby
         models: set7
-      '01':
-        name: 'on'
+      "01":
+        name: "on"
         description: sets Zone2 On
         models: set7
       QSTN:
@@ -3866,12 +3912,12 @@ zone2:
     name: zone-2-a
     description: Zone 2 A Command
     values:
-      '00':
-        name: ['off']
+      "00":
+        name: ["off"]
         description: sets Zone 2 A Off
         models: set7
-      '01':
-        name: ['on']
+      "01":
+        name: ["on"]
         description: sets Zone 2 A On
         models: set7
       QSTN:
@@ -3882,12 +3928,12 @@ zone2:
     name: zone-2-b
     description: Zone 2 B Command
     values:
-      '00':
-        name: ['off']
+      "00":
+        name: ["off"]
         description: sets Zone 2 B Off
         models: set7
-      '01':
-        name: ['on']
+      "01":
+        name: ["on"]
         description: sets Zone 2 B On
         models: set7
       QSTN:
@@ -3898,12 +3944,12 @@ zone2:
     name: muting
     description: Zone2 Muting Command
     values:
-      '00':
-        name: 'off'
+      "00":
+        name: "off"
         description: sets Zone2 Muting Off
         models: set7
-      '01':
-        name: 'on'
+      "01":
+        name: "on"
         description: sets Zone2 Muting On
         models: set7
       TG:
@@ -3987,9 +4033,10 @@ zone2:
     name: balance
     description: Zone2 Balance Command
     values:
-      '{xx}':
+      "{xx}":
         name: xx-is-a-00-a-l-10-0-r-10-1-step
-        description: sets Zone2 Balance (xx is "-A"..."00"..."+A"[L+10...0...R+10
+        description:
+          sets Zone2 Balance (xx is "-A"..."00"..."+A"[L+10...0...R+10
           1 step]
         models: set7
       UP:
@@ -4008,35 +4055,35 @@ zone2:
     name: selector
     description: ZONE2 Selector Command
     values:
-      '00':
+      "00":
         name: [video1, vcr, dvr, stb, dvr]
         description: sets VIDEO1, VCR/DVR, STB/DVR
         models: set7
-      '01':
+      "01":
         name: [video2, cbl, sat]
         description: sets VIDEO2, CBL/SAT
         models: set7
-      '02':
+      "02":
         name: [video3, game/tv, game, game1]
         description: sets VIDEO3, GAME/TV, GAME, GAME1
         models: set7
-      '03':
+      "03":
         name: [video4, aux1]
         description: sets VIDEO4, AUX1(AUX)
         models: set7
-      '04':
+      "04":
         name: [video5, aux2, game2]
         description: sets VIDEO5, AUX2, GAME2
         models: set7
-      '05':
+      "05":
         name: [video6, pc]
         description: sets VIDEO6, PC
         models: set7
-      '06':
+      "06":
         name: video7
         description: sets VIDEO7
         models: set7
-      '07':
+      "07":
         name: [hidden1, extra1]
         description: sets Hidden1, EXTRA1
         models: set7
@@ -4048,55 +4095,55 @@ zone2:
         name: [hidden3, extra3]
         description: sets Hidden3, EXTRA3
         models: set7
-      '10':
+      "10":
         name: [dvd, bd, dvd]
         description: sets DVD, BD/DVD
         models: set7
-      '11':
+      "11":
         name: strm-box
         description: sets STRM BOX
         models: set7
-      '12':
+      "12":
         name: tv
         description: sets TV
         models: set7
-      '20':
+      "20":
         name: tape
         description: sets TAPE(1)
         models: set7
-      '21':
+      "21":
         name: tape2
         description: sets TAPE2
         models: set7
-      '22':
+      "22":
         name: phono
         description: sets PHONO
         models: set7
-      '23':
+      "23":
         name: [cd, tv/cd]
         description: sets CD, TV/CD
         models: set7
-      '24':
+      "24":
         name: fm
         description: sets FM
         models: set7
-      '25':
+      "25":
         name: am
         description: sets AM
         models: set7
-      '26':
+      "26":
         name: tuner
         description: sets TUNER
         models: set7
-      '27':
+      "27":
         name: [music-server, p4s, dlna]
         description: sets MUSIC SERVER, P4S, DLNA
         models: set7
-      '28':
+      "28":
         name: [internet-radio, iradio-favorite]
         description: sets INTERNET RADIO, iRadio Favorite
         models: set7
-      '29':
+      "29":
         name: [usb, usb]
         description: sets USB/USB(Front)
         models: set7
@@ -4120,43 +4167,43 @@ zone2:
         name: bluetooth
         description: sets Bluetooth
         models: set7
-      '40':
+      "40":
         name: universal-port
         description: sets Universal PORT
         models: set7
-      '30':
+      "30":
         name: multi-ch
         description: sets MULTI CH
         models: set7
-      '31':
+      "31":
         name: xm
         description: sets XM
         models: set7
-      '32':
+      "32":
         name: sirius
         description: sets SIRIUS
         models: set7
-      '33':
+      "33":
         name: dab
-        description: 'sets DAB '
+        description: "sets DAB "
         models: set7
-      '55':
+      "55":
         name: hdmi-5
         description: sets HDMI 5
         models: set7
-      '56':
+      "56":
         name: hdmi-6
         description: sets HDMI 6
         models: set7
-      '57':
+      "57":
         name: hdmi-7
         description: sets HDMI 7
         models: set7
       7F:
-        name: 'off'
+        name: "off"
         description: sets OFF
         models: set7
-      '80':
+      "80":
         name: source
         description: sets SOURCE
         models: set7
@@ -4178,7 +4225,8 @@ zone2:
     values:
       nnnnn:
         name: freq-nnnnn
-        description: sets Directly Tuning Frequency (FM nnn.nn MHz / AM nnnnn kHz
+        description:
+          sets Directly Tuning Frequency (FM nnn.nn MHz / AM nnnnn kHz
           / XM nnnnn ch)
         models: set7
       UP:
@@ -4199,7 +4247,8 @@ zone2:
     values:
       nnnnn:
         name: freq-nnnnn
-        description: sets Directly Tuning Frequency (FM nnn.nn MHz / AM nnnnn kHz
+        description:
+          sets Directly Tuning Frequency (FM nnn.nn MHz / AM nnnnn kHz
           / SR nnnnn ch)
         models: set7
       DIRECT:
@@ -4210,43 +4259,43 @@ zone2:
         name: band
         description: Change BAND
         models: set7
-      '0':
+      "0":
         name: 0-in-direct-mode
         description: sets 0 in Direct Tuning Mode
         models: set7
-      '1':
+      "1":
         name: 1-in-direct-mode
         description: sets 1 in Direct Tuning Mode
         models: set7
-      '2':
+      "2":
         name: 2-in-direct-mode
         description: sets 2 in Direct Tuning Mode
         models: set7
-      '3':
+      "3":
         name: 3-in-direct-mode
         description: sets 3 in Direct Tuning Mode
         models: set7
-      '4':
+      "4":
         name: 4-in-direct-mode
         description: sets 4 in Direct Tuning Mode
         models: set7
-      '5':
+      "5":
         name: 5-in-direct-mode
         description: sets 5 in Direct Tuning Mode
         models: set7
-      '6':
+      "6":
         name: 6-in-direct-mode
         description: sets 6 in Direct Tuning Mode
         models: set7
-      '7':
+      "7":
         name: 7-in-direct-mode
         description: sets 7 in Direct Tuning Mode
         models: set7
-      '8':
+      "8":
         name: 8-in-direct-mode
         description: sets 8 in Direct Tuning Mode
         models: set7
-      '9':
+      "9":
         name: 9-in-direct-mode
         description: sets 9 in Direct Tuning Mode
         models: set7
@@ -4443,11 +4492,11 @@ zone2:
     name: listening-mode
     description: Listening Mode Command
     values:
-      '00':
+      "00":
         name: stereo
         description: sets STEREO
         models: set7
-      '01':
+      "01":
         name: direct
         description: sets DIRECT
         models: set7
@@ -4455,15 +4504,15 @@ zone2:
         name: mono
         description: sets MONO
         models: set7
-      '12':
+      "12":
         name: multiplex
         description: sets MULTIPLEX
         models: set7
-      '87':
+      "87":
         name: dvs
         description: sets DVS(Pl2)
         models: set7
-      '88':
+      "88":
         name: dvs
         description: sets DVS(NEO6)
         models: set7
@@ -4471,15 +4520,15 @@ zone2:
     name: late-night
     description: Late Night Command
     values:
-      '00':
-        name: 'off'
+      "00":
+        name: "off"
         description: sets Late Night Off
         models: set7
-      '01':
+      "01":
         name: low
         description: sets Late Night Low
         models: set7
-      '02':
+      "02":
         name: high
         description: sets Late Night High
         models: set7
@@ -4495,16 +4544,16 @@ zone2:
     name: re-eq-academy-filter
     description: Re-EQ/Academy Filter Command
     values:
-      '00':
+      "00":
         name: both-off
         description: sets Both Off
         models: set7
-      '01':
-        name: 'on'
+      "01":
+        name: "on"
         description: sets Re-EQ On
         models: set7
-      '02':
-        name: 'on'
+      "02":
+        name: "on"
         description: sets Academy On
         models: set7
       UP:
@@ -4520,12 +4569,12 @@ zone3:
     name: power
     description: Zone3 Power Command
     values:
-      '00':
+      "00":
         name: standby
         description: sets Zone3 Standby
         models: set8
-      '01':
-        name: 'on'
+      "01":
+        name: "on"
         description: sets Zone3 On
         models: set8
       QSTN:
@@ -4536,12 +4585,12 @@ zone3:
     name: muting
     description: Zone3 Muting Command
     values:
-      '00':
-        name: 'off'
+      "00":
+        name: "off"
         description: sets Zone3 Muting Off
         models: set8
-      '01':
-        name: 'on'
+      "01":
+        name: "on"
         description: sets Zone3 Muting On
         models: set8
       TG:
@@ -4625,7 +4674,7 @@ zone3:
     name: balance
     description: Zone3 Balance Command
     values:
-      '{xx}':
+      "{xx}":
         name: xx
         description: Zone3 Balance (xx is "-A"..."00"..."+A"[L+10...0...R+10 1 step])
         models: set8
@@ -4645,35 +4694,35 @@ zone3:
     name: selector
     description: ZONE3 Selector Command
     values:
-      '00':
+      "00":
         name: [video1, vcr, dvr, stb, dvr]
         description: sets VIDEO1, VCR/DVR, STB/DVR
         models: set8
-      '01':
+      "01":
         name: [video2, cbl, sat]
         description: sets VIDEO2, CBL/SAT
         models: set8
-      '02':
+      "02":
         name: [video3, game/tv, game, game1]
         description: sets VIDEO3, GAME/TV, GAME, GAME1
         models: set8
-      '03':
+      "03":
         name: [video4, aux1]
         description: sets VIDEO4, AUX1(AUX)
         models: set8
-      '04':
+      "04":
         name: [video5, aux2, game2]
         description: sets VIDEO5, AUX2, GAME2
         models: set8
-      '05':
+      "05":
         name: [video6, pc]
         description: sets VIDEO6, PC
         models: set8
-      '06':
+      "06":
         name: video7
         description: sets VIDEO7
         models: set8
-      '07':
+      "07":
         name: [hidden1, extra1]
         description: sets Hidden1, EXTRA1
         models: set8
@@ -4685,55 +4734,55 @@ zone3:
         name: [hidden3, extra3]
         description: sets Hidden3, EXTRA3
         models: set8
-      '10':
+      "10":
         name: dvd
         description: sets DVD
         models: set8
-      '11':
+      "11":
         name: strm-box
         description: sets STRM BOX
         models: set8
-      '12':
+      "12":
         name: tv
         description: sets TV
         models: set8
-      '20':
+      "20":
         name: tape
         description: sets TAPE(1)
         models: set8
-      '21':
+      "21":
         name: tape2
         description: sets TAPE2
         models: set8
-      '22':
+      "22":
         name: phono
         description: sets PHONO
         models: set8
-      '23':
+      "23":
         name: [cd, tv/cd]
         description: sets CD, TV/CD
         models: set8
-      '24':
+      "24":
         name: fm
         description: sets FM
         models: set8
-      '25':
+      "25":
         name: am
         description: sets AM
         models: set8
-      '26':
+      "26":
         name: tuner
         description: sets TUNER
         models: set8
-      '27':
+      "27":
         name: [music-server, p4s, dlna]
         description: sets MUSIC SERVER, P4S, DLNA
         models: set8
-      '28':
+      "28":
         name: [internet-radio, iradio-favorite]
         description: sets INTERNET RADIO, iRadio Favorite
         models: set8
-      '29':
+      "29":
         name: [usb, usb]
         description: sets USB/USB(Front)
         models: set8
@@ -4757,27 +4806,27 @@ zone3:
         name: bluetooth
         description: sets Bluetooth
         models: set8
-      '40':
+      "40":
         name: universal-port
         description: sets Universal PORT
         models: set8
-      '30':
+      "30":
         name: multi-ch
         description: sets MULTI CH
         models: set8
-      '31':
+      "31":
         name: xm
         description: sets XM
         models: set8
-      '32':
+      "32":
         name: sirius
         description: sets SIRIUS
         models: set8
-      '33':
+      "33":
         name: dab
-        description: 'sets DAB '
+        description: "sets DAB "
         models: set9
-      '80':
+      "80":
         name: source
         description: sets SOURCE
         models: set8
@@ -4819,7 +4868,8 @@ zone3:
     values:
       nnnnn:
         name: freq-nnnnn
-        description: sets Directly Tuning Frequency (FM nnn.nn MHz / AM nnnnn kHz
+        description:
+          sets Directly Tuning Frequency (FM nnn.nn MHz / AM nnnnn kHz
           / SR nnnnn ch)
         models: set8
       BAND:
@@ -4830,43 +4880,43 @@ zone3:
         name: direct
         description: starts/restarts Direct Tuning Mode
         models: set8
-      '0':
+      "0":
         name: 0-in-direct-mode
         description: sets 0 in Direct Tuning Mode
         models: set8
-      '1':
+      "1":
         name: 1-in-direct-mode
         description: sets 1 in Direct Tuning Mode
         models: set8
-      '2':
+      "2":
         name: 2-in-direct-mode
         description: sets 2 in Direct Tuning Mode
         models: set8
-      '3':
+      "3":
         name: 3-in-direct-mode
         description: sets 3 in Direct Tuning Mode
         models: set8
-      '4':
+      "4":
         name: 4-in-direct-mode
         description: sets 4 in Direct Tuning Mode
         models: set8
-      '5':
+      "5":
         name: 5-in-direct-mode
         description: sets 5 in Direct Tuning Mode
         models: set8
-      '6':
+      "6":
         name: 6-in-direct-mode
         description: sets 6 in Direct Tuning Mode
         models: set8
-      '7':
+      "7":
         name: 7-in-direct-mode
         description: sets 7 in Direct Tuning Mode
         models: set8
-      '8':
+      "8":
         name: 8-in-direct-mode
         description: sets 8 in Direct Tuning Mode
         models: set8
-      '9':
+      "9":
         name: 9-in-direct-mode
         description: sets 9 in Direct Tuning Mode
         models: set8
@@ -5060,12 +5110,12 @@ zone4:
     name: power
     description: Zone4 Power Command
     values:
-      '00':
+      "00":
         name: standby
         description: sets Zone4 Standby
         models: set10
-      '01':
-        name: 'on'
+      "01":
+        name: "on"
         description: sets Zone4 On
         models: set10
       QSTN:
@@ -5076,12 +5126,12 @@ zone4:
     name: muting
     description: Zone4 Muting Command
     values:
-      '00':
-        name: 'off'
+      "00":
+        name: "off"
         description: sets Zone4 Muting Off
         models: set10
-      '01':
-        name: 'on'
+      "01":
+        name: "on"
         description: sets Zone4 Muting On
         models: set10
       TG:
@@ -5121,35 +5171,35 @@ zone4:
     name: selector
     description: ZONE4 Selector Command
     values:
-      '00':
+      "00":
         name: [video1, vcr, dvr, stb, dvr]
         description: sets VIDEO1, VCR/DVR, STB/DVR
         models: set10
-      '01':
+      "01":
         name: [video2, cbl, sat]
         description: sets VIDEO2, CBL/SAT
         models: set10
-      '02':
+      "02":
         name: [video3, game/tv, game, game1]
         description: sets VIDEO3, GAME/TV, GAME, GAME1
         models: set10
-      '03':
+      "03":
         name: [video4, aux1]
         description: sets VIDEO4, AUX1(AUX)
         models: set10
-      '04':
+      "04":
         name: [video5, aux2, game2]
         description: sets VIDEO5, AUX2, GAME2
         models: set10
-      '05':
+      "05":
         name: [video6, pc]
         description: sets VIDEO6, PC
         models: set10
-      '06':
+      "06":
         name: video7
         description: sets VIDEO7
         models: set10
-      '07':
+      "07":
         name: [hidden1, extra1]
         description: sets Hidden1, EXTRA1
         models: set10
@@ -5161,47 +5211,47 @@ zone4:
         name: [hidden3, extra3]
         description: sets Hidden3, EXTRA3
         models: set10
-      '10':
+      "10":
         name: [dvd, bd, dvd]
         description: sets DVD, BD/DVD
         models: set10
-      '20':
+      "20":
         name: [tape-1, tv/tape]
         description: sets TAPE(1), TV/TAPE
         models: set10
-      '21':
+      "21":
         name: tape2
         description: sets TAPE2
         models: set10
-      '22':
+      "22":
         name: phono
         description: sets PHONO
         models: set10
-      '23':
+      "23":
         name: [cd, tv/cd]
         description: sets CD, TV/CD
         models: set10
-      '24':
+      "24":
         name: fm
         description: sets FM
         models: set10
-      '25':
+      "25":
         name: am
         description: sets AM
         models: set10
-      '26':
+      "26":
         name: tuner
         description: sets TUNER
         models: set10
-      '27':
+      "27":
         name: [music-server, p4s, dlna]
         description: sets MUSIC SERVER, P4S, DLNA
         models: set10
-      '28':
+      "28":
         name: [internet-radio, iradio-favorite]
         description: sets INTERNET RADIO, iRadio Favorite
         models: set10
-      '29':
+      "29":
         name: [usb, usb]
         description: sets USB/USB(Front)
         models: set10
@@ -5225,27 +5275,27 @@ zone4:
         name: bluetooth
         description: sets Bluetooth
         models: set10
-      '40':
+      "40":
         name: universal-port
         description: sets Universal PORT
         models: set10
-      '30':
+      "30":
         name: multi-ch
         description: sets MULTI CH
         models: set10
-      '31':
+      "31":
         name: xm
         description: sets XM
         models: set10
-      '32':
+      "32":
         name: sirius
         description: sets SIRIUS
         models: set10
-      '33':
+      "33":
         name: dab
-        description: 'sets DAB '
+        description: "sets DAB "
         models: set10
-      '80':
+      "80":
         name: source
         description: sets SOURCE
         models: set10
@@ -5293,43 +5343,43 @@ zone4:
         name: direct
         description: starts/restarts Direct Tuning Mode
         models: set10
-      '0':
+      "0":
         name: 0-in-direct-mode
         description: sets 0 in Direct Tuning Mode
         models: set10
-      '1':
+      "1":
         name: 1-in-direct-mode
         description: sets 1 in Direct Tuning Mode
         models: set10
-      '2':
+      "2":
         name: 2-in-direct-mode
         description: sets 2 in Direct Tuning Mode
         models: set10
-      '3':
+      "3":
         name: 3-in-direct-mode
         description: sets 3 in Direct Tuning Mode
         models: set10
-      '4':
+      "4":
         name: 4-in-direct-mode
         description: sets 4 in Direct Tuning Mode
         models: set10
-      '5':
+      "5":
         name: 5-in-direct-mode
         description: sets 5 in Direct Tuning Mode
         models: set10
-      '6':
+      "6":
         name: 6-in-direct-mode
         description: sets 6 in Direct Tuning Mode
         models: set10
-      '7':
+      "7":
         name: 7-in-direct-mode
         description: sets 7 in Direct Tuning Mode
         models: set10
-      '8':
+      "8":
         name: 8-in-direct-mode
         description: sets 8 in Direct Tuning Mode
         models: set10
-      '9':
+      "9":
         name: 9-in-direct-mode
         description: sets 9 in Direct Tuning Mode
         models: set10
@@ -5587,44 +5637,44 @@ dock:
         name: select
         description: SELECT KEY
         models: set1
-      '0':
-        name: '0'
+      "0":
+        name: "0"
         description: 0 KEY
         models: set1
-      '1':
-        name: '1'
+      "1":
+        name: "1"
         description: 1 KEY
         models: set1
-      '2':
-        name: '2'
+      "2":
+        name: "2"
         description: 2 KEY
         models: set1
-      '3':
-        name: '3'
+      "3":
+        name: "3"
         description: 3 KEY
         models: set1
-      '4':
-        name: '4'
+      "4":
+        name: "4"
         description: 4 KEY
         models: set1
-      '5':
-        name: '5'
+      "5":
+        name: "5"
         description: 5 KEY
         models: set1
-      '6':
-        name: '6'
+      "6":
+        name: "6"
         description: 6 KEY
         models: set1
-      '7':
-        name: '7'
+      "7":
+        name: "7"
         description: 7 KEY
         models: set1
-      '8':
-        name: '8'
+      "8":
+        name: "8"
         description: 8 KEY
         models: set1
-      '9':
-        name: '9'
+      "9":
+        name: "9"
         description: 9 KEY
         models: set1
       DELETE:
@@ -5681,22 +5731,22 @@ dock:
         models: set1
       F1:
         name: f1
-        description: 'Positive Feed or Mark/Unmark '
+        description: "Positive Feed or Mark/Unmark "
         models: set7
       F2:
         name: f2
-        description: 'Negative Feed '
+        description: "Negative Feed "
         models: set7
   NBS:
     name: bluetooth-setting
     description: Bluetooth Setting Operation Command
     values:
-      'OFF':
-        name: 'off'
+      "OFF":
+        name: "off"
         description: sets Bluetooth Off
         models: set1
-      'ON':
-        name: 'on'
+      "ON":
+        name: "on"
         description: sets Bluetooth On
         models: set1
       QSTN:
@@ -5721,7 +5771,8 @@ dock:
     values:
       nnnnnnnnnn:
         name: artist-name
-        description: NET/USB Artist Name (variable-length, 64 Unicode letters [UTF-8
+        description:
+          NET/USB Artist Name (variable-length, 64 Unicode letters [UTF-8
           encoded] max , for Network Control only)
         models: set1
       QSTN:
@@ -5734,7 +5785,8 @@ dock:
     values:
       nnnnnnn:
         name: album-name
-        description: NET/USB Album Name (variable-length, 64 Unicode letters [UTF-8
+        description:
+          NET/USB Album Name (variable-length, 64 Unicode letters [UTF-8
           encoded] max , for Network Control only)
         models: set1
       QSTN:
@@ -5747,7 +5799,8 @@ dock:
     values:
       nnnnnnnnnn:
         name: title
-        description: NET/USB Title Name (variable-length, 64 Unicode letters [UTF-8
+        description:
+          NET/USB Title Name (variable-length, 64 Unicode letters [UTF-8
           encoded] max , for Network Control only)
         models: set1
       QSTN:
@@ -5760,12 +5813,14 @@ dock:
     values:
       mm:ss/mm:ss:
         name: mm-ss-mm-ss
-        description: NET/USB Time Info (Elapsed time/Track Time Max 99:59. If time
+        description:
+          NET/USB Time Info (Elapsed time/Track Time Max 99:59. If time
           is unknown, this response is --:--)
         models: set1
       hh:mm:ss/hh:mm:ss:
         name: hh-mm-ss-hh-mm-ss
-        description: NET/USB Time Info (Elapsed time/Track Time Max 99:59:59. If time
+        description:
+          NET/USB Time Info (Elapsed time/Track Time Max 99:59:59. If time
           is unknown, this response is --:--)
         models: set1
       QSTN:
@@ -5778,7 +5833,8 @@ dock:
     values:
       cccc/tttt:
         name: cccc-tttt
-        description: NET/USB Track Info (Current Track/Toral Track Max 9999. If Track
+        description:
+          NET/USB Track Info (Current Track/Toral Track Max 9999. If Track
           is unknown, this response is ----)
         models: set1
       QSTN:
@@ -5812,7 +5868,8 @@ dock:
     values:
       maabbstii:
         name: maabbstii
-        description: "NET/USB Menu Status (9 letters)\nm -> Track Menu: \"M\": Menu\
+        description:
+          "NET/USB Menu Status (9 letters)\nm -> Track Menu: \"M\": Menu\
           \ is enable, \"x\": Menu is disable\naa -> F1 button icon (Positive Feed\
           \ or Mark/Unmark)\nbb -> F2 button icon (Negative Feed)\n aa or bb : \"\
           xx\":disable, \"01\":Like, \"02\":don't like, \"03\":Love, \"04\":Ban,\n\
@@ -5840,21 +5897,21 @@ dock:
     values:
       mm:ss:
         name: mm-ss
-        description: 'mm: munites (00-99)
+        description: "mm: munites (00-99)
 
           ss: seconds (00-59)
 
-          This command is only available when Time Seek is enable.'
+          This command is only available when Time Seek is enable."
         models: set1
       hh:mm:ss:
         name: hh-mm-ss
-        description: 'hh: hours(00-99)
+        description: "hh: hours(00-99)
 
           mm: munites (00-59)
 
           ss: seconds (00-59)
 
-          This command is only available when Time Seek is enable.'
+          This command is only available when Time Seek is enable."
         models: set1
   NPR:
     name: internet-radio-preset
@@ -5875,7 +5932,8 @@ dock:
     values:
       nfr:
         name: nfr
-        description: "NET Connection/USB Device Status (3 letters)\nn -> NET Connection\
+        description:
+          "NET Connection/USB Device Status (3 letters)\nn -> NET Connection\
           \ status: \"-\": no connection, \"E\": Ether, \"W\": Wireless\nf -> Front\
           \ USB(USB1) Device Status: \"-\": no device, \"i\": iPod/iPhone, \n    \
           \  \"M\": Memory/NAS, \"W\": Wireless Adaptor, \"B\": Bluetooth Adaptor,\n\
@@ -5893,7 +5951,8 @@ dock:
     values:
       tlpnnnnnnnnnn:
         name: info
-        description: "NET/USB List Info\nt ->Information Type (A : ASCII letter, C\
+        description:
+          "NET/USB List Info\nt ->Information Type (A : ASCII letter, C\
           \ : Cursor Info, U : Unicode letter)\nwhen t = A,\n  l ->Line Info (0-9\
           \ : 1st to 10th Line)\n  nnnnnnnnn:Listed data (variable-length, 64 ASCII\
           \ letters max)\n    when AVR is not displayed NET/USB List(Keyboard,Menu,Popup\u2026\
@@ -5913,19 +5972,22 @@ dock:
         models: set1
       ti:
         name: ti
-        description: "select the listed item\n t -> Index Type (L : Line, I : Index)\n\
+        description:
+          "select the listed item\n t -> Index Type (L : Line, I : Index)\n\
           when t = L,\n  i -> Line number (0-9 : 1st to 10th Line [1 digit] )\nwhen\
           \ t = I,\n  iiiii -> Index number (00001-99999 : 1st to 99999th Item [5\
           \ digits] )"
         models: set1
   NLA:
     name: net-usb-list-info
-    description: NET/USB List Info(All item, need processing XML data, for Network
+    description:
+      NET/USB List Info(All item, need processing XML data, for Network
       Control Only)
     values:
       tzzzzsurr<.....>:
         name: tzzzzsurr
-        description: "t -> responce type 'X' : XML\nzzzz -> sequence number (0000-FFFF)\n\
+        description:
+          "t -> responce type 'X' : XML\nzzzz -> sequence number (0000-FFFF)\n\
           s -> status 'S' : success, 'E' : error\nu -> UI type '0' : List, '1' : Menu,\
           \ '2' : Playback, '3' : Popup, '4' : Keyboard, \"5\" : Menu List\nrr ->\
           \ reserved\n<.....> : XML data ( [CR] and [LF] are removed )\n If s='S',\n\
@@ -5947,7 +6009,8 @@ dock:
         models: set1
       Lzzzzll{xx}{xx}yyyy:
         name: lzzzzll-xx-xx-yyyy
-        description: 'specifiy to get the listed data (from Network Control Only)
+        description:
+          "specifiy to get the listed data (from Network Control Only)
 
           zzzz -> sequence number (0000-FFFF)
 
@@ -5956,11 +6019,11 @@ dock:
           xxxx -> index of start item (0000-FFFF : 1st to 65536th Item [4 HEX digits]
           )
 
-          yyyy -> number of items (0000-FFFF : 1 to 65536 Items [4 HEX digits] )'
+          yyyy -> number of items (0000-FFFF : 1 to 65536 Items [4 HEX digits] )"
         models: set1
       Izzzzll{xx}{xx}----:
         name: izzzzll-xx-xx
-        description: 'select the listed item (from Network Control Only)
+        description: "select the listed item (from Network Control Only)
 
           zzzz -> sequence number (0000-FFFF)
 
@@ -5968,23 +6031,24 @@ dock:
 
           xxxx -> index number (0000-FFFF : 1st to 65536th Item [4 HEX digits] )
 
-          ---- -> not used'
+          ---- -> not used"
         models: set1
   NJA:
     name: net-usb-jacket-art
-    description: NET/USB Jacket Art (When Jacket Art is available and Output for Network
+    description:
+      NET/USB Jacket Art (When Jacket Art is available and Output for Network
       Control Only)
     values:
       tp{xx}{xx}{xx}{xx}{xx}{xx}:
         name: tp-xx-xx-xx-xx-xx-xx
-        description: 'NET/USB Jacket Art/Album Art Data
+        description: "NET/USB Jacket Art/Album Art Data
 
           t-> Image type 0:BMP, 1:JPEG, 2:URL, n:No Image
 
           p-> Packet flag 0:Start, 1:Next, 2:End, -:not used
 
           xxxxxxxxxxxxxx -> Jacket/Album Art Data (valiable length, 1024 ASCII HEX
-          letters max)'
+          letters max)"
         models: set1
       DIS:
         name: disable
@@ -6020,7 +6084,8 @@ dock:
     values:
       "ssiaaaa\u2026aaaabbbb\u2026bbbb":
         name: service-id
-        description: "select Network Service directly\nss -> Network Serveice\n 00:Music\
+        description:
+          "select Network Service directly\nss -> Network Serveice\n 00:Music\
           \ Server (DLNA), 01:Favorite, 02:vTuner, 03:SiriusXM, 04:Pandora, 05:Rhapsody,\
           \ 06:Last.fm,\n 07:Napster, 08:Slacker, 09:Mediafly, 0A:Spotify, 0B:AUPEO!,\
           \ 0C:Radiko, 0D:e-onkyo,\n 0E:TuneIn Radio, 0F:mp3tunes, 10:Simfy, 11:Home\
@@ -6035,7 +6100,8 @@ dock:
     values:
       ll:
         name: ll
-        description: "waiting Keyboard Input\nll -> category\n 00: Off ( Exit Keyboard\
+        description:
+          "waiting Keyboard Input\nll -> category\n 00: Off ( Exit Keyboard\
           \ Input )\n 01: User Name\n 02: Password\n 03: Artist Name\n 04: Album Name\n\
           \ 05: Song Name\n 06: Station Name\n 07: Tag Name\n 08: Artist or Song\n\
           \ 09: Episode Name\n 0A: Pin Code (some digit Number [0-9])\n 0B: User Name\
@@ -6054,7 +6120,8 @@ dock:
     values:
       "xaaa\u2026aaaybbb\u2026bbb":
         name: popup
-        description: "x -> Popup Display Type\n 'T': Popup text is top\n 'B': Popup\
+        description:
+          "x -> Popup Display Type\n 'T': Popup text is top\n 'B': Popup\
           \ text is bottom\n 'L': Popup text is list format\n\naaa...aaa -> Popup\
           \ Title, Massage\n when x = 'T' or 'B'\n    Top Title [0x00] Popup Title\
           \ [0x00] Popup Message [0x00]\n    (valiable-length Unicode letter [UTF-8\
@@ -6070,9 +6137,10 @@ dock:
     name: net-usb-list-title-info
     description: NET/USB List Title Info(for Network Control Only)
     values:
-      '{xx}uycccciiiillrraabbssnnn...nnn':
+      "{xx}uycccciiiillrraabbssnnn...nnn":
         name: title-info
-        description: "NET/USB List Title Info\nxx : Service Type\n 00 : DLNA, 01 :\
+        description:
+          "NET/USB List Title Info\nxx : Service Type\n 00 : DLNA, 01 :\
           \ Favorite, 02 : vTuner, 03 : SiriusXM, 04 : Pandora, 05 : Rhapsody, 06\
           \ : Last.fm,\n 07 : Napster, 08 : Slacker, 09 : Mediafly, 0A : Spotify,\
           \ 0B : AUPEO!, 0C : radiko, 0D : e-onkyo,\n 0E : TuneIn Radio, 0F : MP3tunes,\
@@ -6100,8 +6168,9 @@ dock:
           \ Skip\nnnn...nnn : Character of Title Bar (variable-length, 64 Unicode\
           \ letters [UTF-8 encoded] max)"
         models: set1
-      '{xx}uycccciiiillsraabbssnnn...nnn':
-        description: "NET/USB List Title Info\nxx : Service Type\n 00 : Music Server\
+      "{xx}uycccciiiillsraabbssnnn...nnn":
+        description:
+          "NET/USB List Title Info\nxx : Service Type\n 00 : Music Server\
           \ (DLNA), 01 : Favorite, 02 : vTuner, 03 : SiriusXM, 04 : Pandora, 05 :\
           \ Rhapsody, 06 : Last.fm,\n 07 : Napster, 08 : Slacker, 09 : Mediafly, 0A\
           \ : Spotify, 0B : AUPEO!, 0C : radiko, 0D : e-onkyo,\n 0E : TuneIn Radio,\
@@ -6157,14 +6226,15 @@ dock:
         models: set1
   NSB:
     name: network-standby-settings
-    description: Network Standby Settings (for Network Control Only and Available
+    description:
+      Network Standby Settings (for Network Control Only and Available
       in AVR is PowerOn)
     values:
-      'OFF':
+      "OFF":
         name: is-off
         description: sets Network Standby is Off
         models: set1
-      'ON':
+      "ON":
         name: is-on
         description: sets Network Standby is On
         models: set1
@@ -6186,30 +6256,33 @@ dock:
         models: set1
       t----<.....>:
         name: t
-        description: 't -> message type ''X'' : XML
+        description: "t -> message type 'X' : XML
 
           ---- -> reserved
 
-          <.....> : XML data ( [CR] and [LF] are removed )'
+          <.....> : XML data ( [CR] and [LF] are removed )"
         models: set1
       Ullt<.....>:
         name: ullt
-        description: "U : UI Type\n 0 : List, 1 : Menu, 2 : Playback, 3 : Popup, 4\
+        description:
+          "U : UI Type\n 0 : List, 1 : Menu, 2 : Playback, 3 : Popup, 4\
           \ : Keyboard, 5 : Menu List\nll -> number of layer (00-FF)\nt : Update Type\n\
           \ 0 : All, 1 : Button, 2 : Textbox, 3 : Listbox\n<.....> : XML data ( [CR]\
           \ and [LF] are removed )"
         models: set1
   NLU:
     name: net-usb-list-info
-    description: NET/USB List Info (Update item, need processing XML data, for Network
+    description:
+      NET/USB List Info (Update item, need processing XML data, for Network
       Control Only)
     values:
-      '{xx}{xx}yyyy':
+      "{xx}{xx}yyyy":
         name: xx-xx-yyyy
-        description: 'xxxx -> index of update item (0000-FFFF : 1st to 65536th Item
+        description:
+          "xxxx -> index of update item (0000-FFFF : 1st to 65536th Item
           [4 HEX digits] )
 
-          yyyy : number of items (0000-FFFF : 1 to 65536 Items [4 HEX digits] )'
+          yyyy : number of items (0000-FFFF : 1 to 65536 Items [4 HEX digits] )"
         models: set1
   NPB:
     name: net-usb-playback-view-button
@@ -6217,7 +6290,8 @@ dock:
     values:
       pudtsrrr:
         name: pudtsrrr
-        description: "NET/USB Playback view Status (5 letters)\np -> Play/Pause button:\
+        description:
+          "NET/USB Playback view Status (5 letters)\np -> Play/Pause button:\
           \ \"1\": button is enable, \"0\": button is disable\nu ->  Skip up button\
           \ : \"1\": button is enable, \"0\": button is disable\nd -> Skip down button\
           \ : \"1\": button is enable, \"0\": button is disable\nt -> Timer button\
@@ -6232,11 +6306,11 @@ dock:
     name: net-usb-add-favorite-list-in-list-view
     description: NET/USB Add Favorite List in List View
     values:
-      '{xx}{xx}':
+      "{xx}{xx}":
         name: xx-xx
-        description: 'Add Favorite Lsit in List View (from Network Control Only)
+        description: "Add Favorite Lsit in List View (from Network Control Only)
 
-          xxxx -> index number (0000-FFFF : 1st to 65536th Item [4 HEX digits] )'
+          xxxx -> index number (0000-FFFF : 1st to 65536th Item [4 HEX digits] )"
         models: set1
   NRF:
     name: net-usb-remove-favorite-list
@@ -6251,7 +6325,7 @@ dock:
     name: net-usb-music-server-dlna-search-list
     description: NET/USB Music Server(DLNA) Search List
     values:
-      '{xx}{xx}{xx}{xx}{xx}x':
+      "{xx}{xx}{xx}{xx}{xx}x":
         name: xx-xx-xx-xx-xx-x
         description: Search Word (Max 128 Character)
         models: set1
@@ -6260,7 +6334,8 @@ dock:
     description: Airplay Artist Name Info (Airplay Model Only)
     values:
       nnnnnnnnnn:
-        description: NET/USB Artist Name (variable-length, 64 Unicode letters [UTF-8
+        description:
+          NET/USB Artist Name (variable-length, 64 Unicode letters [UTF-8
           encoded] max , for Network Control only)
         models: set1
       QSTN:
@@ -6273,7 +6348,8 @@ dock:
     values:
       nnnnnnn:
         name: album-name
-        description: NET/USB Album Name (variable-length, 64 Unicode letters [UTF-8
+        description:
+          NET/USB Album Name (variable-length, 64 Unicode letters [UTF-8
           encoded] max , for Network Control only)
         models: set1
       QSTN:
@@ -6286,7 +6362,8 @@ dock:
     values:
       nnnnnnnnnn:
         name: title
-        description: NET/USB Title Name (variable-length, 64 Unicode letters [UTF-8
+        description:
+          NET/USB Title Name (variable-length, 64 Unicode letters [UTF-8
           encoded] max , for Network Control only)
         models: set1
       QSTN:
@@ -6325,935 +6402,935 @@ dock:
         models: set1
 modelsets:
   set1:
-  - /515AE(Ether)
-  - /616AE(Ether)
-  - /818AE
-  - DHC-40.1
-  - DHC-40.2
-  - DHC-60.5
-  - DHC-60.7
-  - DHC-80.1
-  - DHC-80.2
-  - DHC-80.3
-  - DHC-80.6
-  - DHC-9.9
-  - DRC-R1
-  - DRX-2
-  - DRX-2.1
-  - DRX-3
-  - DRX-3.1
-  - DRX-4
-  - DRX-4.1
-  - DRX-5
-  - DRX-5.1
-  - DRX-7
-  - DRX-R1
-  - DTC-7
-  - DTC-9.1
-  - DTC-9.4
-  - DTC-9.8
-  - DTM-7
-  - DTR-10.5
-  - DTR-20.1
-  - DTR-20.2
-  - DTR-20.3
-  - DTR-20.4
-  - DTR-20.7
-  - DTR-30.1
-  - DTR-30.2
-  - DTR-30.3
-  - DTR-30.4
-  - DTR-30.5
-  - DTR-30.6
-  - DTR-30.7
-  - DTR-4.5
-  - DTR-4.6
-  - DTR-4.9
-  - DTR-40.1
-  - DTR-40.2
-  - DTR-40.3
-  - DTR-40.4
-  - DTR-40.5
-  - DTR-40.6
-  - DTR-40.7
-  - DTR-5.2
-  - DTR-5.3
-  - DTR-5.4
-  - DTR-5.5
-  - DTR-5.6
-  - DTR-5.8
-  - DTR-5.9
-  - DTR-50.1
-  - DTR-50.2
-  - DTR-50.3
-  - DTR-50.4
-  - DTR-50.5
-  - DTR-50.6
-  - DTR-50.7
-  - DTR-6.2
-  - DTR-6.3
-  - DTR-6.4
-  - DTR-6.5
-  - DTR-6.6
-  - DTR-6.8
-  - DTR-6.9
-  - DTR-60.5
-  - DTR-60.6
-  - DTR-60.7
-  - DTR-7.1
-  - DTR-7.2
-  - DTR-7.3
-  - DTR-7.4
-  - DTR-7.6
-  - DTR-7.7
-  - DTR-7.8
-  - DTR-7.9
-  - DTR-70.1
-  - DTR-70.2
-  - DTR-70.3
-  - DTR-70.4
-  - DTR-70.6
-  - DTR-8.2
-  - DTR-8.3
-  - DTR-8.4
-  - DTR-8.8
-  - DTR-8.9
-  - DTR-80.1
-  - DTR-80.2
-  - DTR-80.3
-  - DTR-9.1
-  - DTR-9.9
-  - DTX-5.8
-  - DTX-5.9
-  - DTX-7
-  - DTX-7.7
-  - DTX-7.8
-  - DTX-8.8
-  - DTX-8.9
-  - DTX-9.9
-  - ETX-NA1000
-  - HT-R693(Ether)
-  - HT-R993(Ether)
-  - HT-RC550(Ether)
-  - HT-RC560(Ether)
-  - HT-RC660
-  - NR-365(Ether)
-  - PR-RZ5100
-  - PR-SC5507
-  - PR-SC5508
-  - PR-SC5509
-  - PR-SC5530
-  - PR-SC885
-  - PR-SC886
-  - RDC-7
-  - RDC-7(Ver2.0)
-  - RDC-7.1
-  - TX-8270(Ether)
-  - TX-DS787
-  - TX-DS797
-  - TX-DS898
-  - TX-DS989
-  - TX-DS989
-  - TX-NA900
-  - TX-NA905
-  - TX-NA906
-  - TX-NA906X
-  - TX-NR1000
-  - TX-NR1007
-  - TX-NR1008
-  - TX-NR1009
-  - TX-NR1010
-  - TX-NR1030
-  - TX-NR3007
-  - TX-NR3008
-  - TX-NR3009
-  - TX-NR3010
-  - TX-NR3030
-  - TX-NR414(Ether)
-  - TX-NR474(Ether)
-  - TX-NR5000
-  - TX-NR5007
-  - TX-NR5008
-  - TX-NR5009
-  - TX-NR5010
-  - TX-NR509(Ether)
-  - TX-NR515
-  - TX-NR525
-  - TX-NR535(Ether)
-  - TX-NR545(Ether)
-  - TX-NR555(Ether)
-  - TX-NR575(Ether)
-  - TX-NR575DAB(Ether)
-  - TX-NR575E(Ether)
-  - TX-NR579(Ether)
-  - TX-NR609(Ether)
-  - TX-NR616
-  - TX-NR626
-  - TX-NR636
-  - TX-NR646(Ether)
-  - TX-NR656(Ether)
-  - TX-NR676(Ether)
-  - TX-NR676E(Ether)
-  - TX-NR708
-  - TX-NR709
-  - TX-NR717(Ether)
-  - TX-NR727(Ether)
-  - TX-NR737(Ether)
-  - TX-NR747(Ether)
-  - TX-NR757
-  - TX-NR777
-  - TX-NR807
-  - TX-NR808
-  - TX-NR809
-  - TX-NR818
-  - TX-NR828(Ether)
-  - TX-NR838(Ether)
-  - TX-NR900
-  - TX-NR901
-  - TX-NR905
-  - TX-NR906
-  - TX-NR929
-  - TX-RZ1100
-  - TX-RZ3100
-  - TX-RZ610
-  - TX-RZ620
-  - TX-RZ710
-  - TX-RZ720
-  - TX-RZ800
-  - TX-RZ810
-  - TX-RZ820
-  - TX-RZ900
-  - TX-SA706
-  - TX-SA706X
-  - TX-SA805
-  - TX-SA806
-  - TX-SA806X
-  - TX-SA875
-  - TX-SA876
-  - TX-SR702
-  - TX-SR703
-  - TX-SR705
-  - TX-SR706
-  - TX-SR707
-  - TX-SR803
-  - TX-SR804
-  - TX-SR805
-  - TX-SR806
-  - TX-SR875
-  - TX-SR876
+    - /515AE(Ether)
+    - /616AE(Ether)
+    - /818AE
+    - DHC-40.1
+    - DHC-40.2
+    - DHC-60.5
+    - DHC-60.7
+    - DHC-80.1
+    - DHC-80.2
+    - DHC-80.3
+    - DHC-80.6
+    - DHC-9.9
+    - DRC-R1
+    - DRX-2
+    - DRX-2.1
+    - DRX-3
+    - DRX-3.1
+    - DRX-4
+    - DRX-4.1
+    - DRX-5
+    - DRX-5.1
+    - DRX-7
+    - DRX-R1
+    - DTC-7
+    - DTC-9.1
+    - DTC-9.4
+    - DTC-9.8
+    - DTM-7
+    - DTR-10.5
+    - DTR-20.1
+    - DTR-20.2
+    - DTR-20.3
+    - DTR-20.4
+    - DTR-20.7
+    - DTR-30.1
+    - DTR-30.2
+    - DTR-30.3
+    - DTR-30.4
+    - DTR-30.5
+    - DTR-30.6
+    - DTR-30.7
+    - DTR-4.5
+    - DTR-4.6
+    - DTR-4.9
+    - DTR-40.1
+    - DTR-40.2
+    - DTR-40.3
+    - DTR-40.4
+    - DTR-40.5
+    - DTR-40.6
+    - DTR-40.7
+    - DTR-5.2
+    - DTR-5.3
+    - DTR-5.4
+    - DTR-5.5
+    - DTR-5.6
+    - DTR-5.8
+    - DTR-5.9
+    - DTR-50.1
+    - DTR-50.2
+    - DTR-50.3
+    - DTR-50.4
+    - DTR-50.5
+    - DTR-50.6
+    - DTR-50.7
+    - DTR-6.2
+    - DTR-6.3
+    - DTR-6.4
+    - DTR-6.5
+    - DTR-6.6
+    - DTR-6.8
+    - DTR-6.9
+    - DTR-60.5
+    - DTR-60.6
+    - DTR-60.7
+    - DTR-7.1
+    - DTR-7.2
+    - DTR-7.3
+    - DTR-7.4
+    - DTR-7.6
+    - DTR-7.7
+    - DTR-7.8
+    - DTR-7.9
+    - DTR-70.1
+    - DTR-70.2
+    - DTR-70.3
+    - DTR-70.4
+    - DTR-70.6
+    - DTR-8.2
+    - DTR-8.3
+    - DTR-8.4
+    - DTR-8.8
+    - DTR-8.9
+    - DTR-80.1
+    - DTR-80.2
+    - DTR-80.3
+    - DTR-9.1
+    - DTR-9.9
+    - DTX-5.8
+    - DTX-5.9
+    - DTX-7
+    - DTX-7.7
+    - DTX-7.8
+    - DTX-8.8
+    - DTX-8.9
+    - DTX-9.9
+    - ETX-NA1000
+    - HT-R693(Ether)
+    - HT-R993(Ether)
+    - HT-RC550(Ether)
+    - HT-RC560(Ether)
+    - HT-RC660
+    - NR-365(Ether)
+    - PR-RZ5100
+    - PR-SC5507
+    - PR-SC5508
+    - PR-SC5509
+    - PR-SC5530
+    - PR-SC885
+    - PR-SC886
+    - RDC-7
+    - RDC-7(Ver2.0)
+    - RDC-7.1
+    - TX-8270(Ether)
+    - TX-DS787
+    - TX-DS797
+    - TX-DS898
+    - TX-DS989
+    - TX-DS989
+    - TX-NA900
+    - TX-NA905
+    - TX-NA906
+    - TX-NA906X
+    - TX-NR1000
+    - TX-NR1007
+    - TX-NR1008
+    - TX-NR1009
+    - TX-NR1010
+    - TX-NR1030
+    - TX-NR3007
+    - TX-NR3008
+    - TX-NR3009
+    - TX-NR3010
+    - TX-NR3030
+    - TX-NR414(Ether)
+    - TX-NR474(Ether)
+    - TX-NR5000
+    - TX-NR5007
+    - TX-NR5008
+    - TX-NR5009
+    - TX-NR5010
+    - TX-NR509(Ether)
+    - TX-NR515
+    - TX-NR525
+    - TX-NR535(Ether)
+    - TX-NR545(Ether)
+    - TX-NR555(Ether)
+    - TX-NR575(Ether)
+    - TX-NR575DAB(Ether)
+    - TX-NR575E(Ether)
+    - TX-NR579(Ether)
+    - TX-NR609(Ether)
+    - TX-NR616
+    - TX-NR626
+    - TX-NR636
+    - TX-NR646(Ether)
+    - TX-NR656(Ether)
+    - TX-NR676(Ether)
+    - TX-NR676E(Ether)
+    - TX-NR708
+    - TX-NR709
+    - TX-NR717(Ether)
+    - TX-NR727(Ether)
+    - TX-NR737(Ether)
+    - TX-NR747(Ether)
+    - TX-NR757
+    - TX-NR777
+    - TX-NR807
+    - TX-NR808
+    - TX-NR809
+    - TX-NR818
+    - TX-NR828(Ether)
+    - TX-NR838(Ether)
+    - TX-NR900
+    - TX-NR901
+    - TX-NR905
+    - TX-NR906
+    - TX-NR929
+    - TX-RZ1100
+    - TX-RZ3100
+    - TX-RZ610
+    - TX-RZ620
+    - TX-RZ710
+    - TX-RZ720
+    - TX-RZ800
+    - TX-RZ810
+    - TX-RZ820
+    - TX-RZ900
+    - TX-SA706
+    - TX-SA706X
+    - TX-SA805
+    - TX-SA806
+    - TX-SA806X
+    - TX-SA875
+    - TX-SA876
+    - TX-SR702
+    - TX-SR703
+    - TX-SR705
+    - TX-SR706
+    - TX-SR707
+    - TX-SR803
+    - TX-SR804
+    - TX-SR805
+    - TX-SR806
+    - TX-SR875
+    - TX-SR876
   set2:
-  - DRC-R1
-  - DRX-2
-  - DRX-2.1
-  - DRX-3
-  - DRX-3.1
-  - DRX-4
-  - DRX-4.1
-  - DRX-5
-  - DRX-5.1
-  - DRX-7
-  - DRX-R1
-  - DTM-7
-  - PR-RZ5100
-  - TX-8270(Ether)
-  - TX-NR474(Ether)
-  - TX-NR555(Ether)
-  - TX-NR575(Ether)
-  - TX-NR575DAB(Ether)
-  - TX-NR575E(Ether)
-  - TX-NR656(Ether)
-  - TX-NR676(Ether)
-  - TX-NR676E(Ether)
-  - TX-NR757
-  - TX-NR777
-  - TX-RZ1100
-  - TX-RZ3100
-  - TX-RZ610
-  - TX-RZ620
-  - TX-RZ710
-  - TX-RZ720
-  - TX-RZ810
-  - TX-RZ820
+    - DRC-R1
+    - DRX-2
+    - DRX-2.1
+    - DRX-3
+    - DRX-3.1
+    - DRX-4
+    - DRX-4.1
+    - DRX-5
+    - DRX-5.1
+    - DRX-7
+    - DRX-R1
+    - DTM-7
+    - PR-RZ5100
+    - TX-8270(Ether)
+    - TX-NR474(Ether)
+    - TX-NR555(Ether)
+    - TX-NR575(Ether)
+    - TX-NR575DAB(Ether)
+    - TX-NR575E(Ether)
+    - TX-NR656(Ether)
+    - TX-NR676(Ether)
+    - TX-NR676E(Ether)
+    - TX-NR757
+    - TX-NR777
+    - TX-RZ1100
+    - TX-RZ3100
+    - TX-RZ610
+    - TX-RZ620
+    - TX-RZ710
+    - TX-RZ720
+    - TX-RZ810
+    - TX-RZ820
   set3:
-  - /515AE(Ether)
-  - /616AE(Ether)
-  - /818AE
-  - DHC-40.2
-  - DHC-60.5
-  - DHC-60.7
-  - DHC-80.2
-  - DHC-80.3
-  - DHC-80.6
-  - DRC-R1
-  - DRX-2
-  - DRX-2.1
-  - DRX-3
-  - DRX-3.1
-  - DRX-4
-  - DRX-4.1
-  - DRX-5
-  - DRX-5.1
-  - DRX-7
-  - DRX-R1
-  - DTM-7
-  - DTR-20.2
-  - DTR-20.3
-  - DTR-20.4
-  - DTR-20.7
-  - DTR-30.2
-  - DTR-30.3
-  - DTR-30.4
-  - DTR-30.5
-  - DTR-30.6
-  - DTR-30.7
-  - DTR-40.2
-  - DTR-40.3
-  - DTR-40.4
-  - DTR-40.5
-  - DTR-40.6
-  - DTR-40.7
-  - DTR-50.2
-  - DTR-50.3
-  - DTR-50.4
-  - DTR-50.5
-  - DTR-50.6
-  - DTR-50.7
-  - DTR-60.5
-  - DTR-60.6
-  - DTR-60.7
-  - DTR-70.2
-  - DTR-70.3
-  - DTR-70.4
-  - DTR-70.6
-  - DTR-80.2
-  - DTR-80.3
-  - HT-R693(Ether)
-  - HT-R993(Ether)
-  - HT-RC550(Ether)
-  - HT-RC560(Ether)
-  - HT-RC660
-  - NR-365(Ether)
-  - PR-RZ5100
-  - PR-SC5508
-  - PR-SC5509
-  - PR-SC5530
-  - TX-8270(Ether)
-  - TX-NR1008
-  - TX-NR1009
-  - TX-NR1010
-  - TX-NR1030
-  - TX-NR3008
-  - TX-NR3009
-  - TX-NR3010
-  - TX-NR3030
-  - TX-NR414(Ether)
-  - TX-NR474(Ether)
-  - TX-NR5008
-  - TX-NR5009
-  - TX-NR5010
-  - TX-NR509(Ether)
-  - TX-NR515
-  - TX-NR525
-  - TX-NR535(Ether)
-  - TX-NR545(Ether)
-  - TX-NR555(Ether)
-  - TX-NR575(Ether)
-  - TX-NR575DAB(Ether)
-  - TX-NR575E(Ether)
-  - TX-NR579(Ether)
-  - TX-NR609(Ether)
-  - TX-NR616
-  - TX-NR626
-  - TX-NR636
-  - TX-NR646(Ether)
-  - TX-NR656(Ether)
-  - TX-NR676(Ether)
-  - TX-NR676E(Ether)
-  - TX-NR708
-  - TX-NR709
-  - TX-NR717(Ether)
-  - TX-NR727(Ether)
-  - TX-NR737(Ether)
-  - TX-NR747(Ether)
-  - TX-NR757
-  - TX-NR777
-  - TX-NR808
-  - TX-NR809
-  - TX-NR818
-  - TX-NR828(Ether)
-  - TX-NR838(Ether)
-  - TX-NR929
-  - TX-RZ1100
-  - TX-RZ3100
-  - TX-RZ610
-  - TX-RZ620
-  - TX-RZ710
-  - TX-RZ720
-  - TX-RZ800
-  - TX-RZ810
-  - TX-RZ820
-  - TX-RZ900
+    - /515AE(Ether)
+    - /616AE(Ether)
+    - /818AE
+    - DHC-40.2
+    - DHC-60.5
+    - DHC-60.7
+    - DHC-80.2
+    - DHC-80.3
+    - DHC-80.6
+    - DRC-R1
+    - DRX-2
+    - DRX-2.1
+    - DRX-3
+    - DRX-3.1
+    - DRX-4
+    - DRX-4.1
+    - DRX-5
+    - DRX-5.1
+    - DRX-7
+    - DRX-R1
+    - DTM-7
+    - DTR-20.2
+    - DTR-20.3
+    - DTR-20.4
+    - DTR-20.7
+    - DTR-30.2
+    - DTR-30.3
+    - DTR-30.4
+    - DTR-30.5
+    - DTR-30.6
+    - DTR-30.7
+    - DTR-40.2
+    - DTR-40.3
+    - DTR-40.4
+    - DTR-40.5
+    - DTR-40.6
+    - DTR-40.7
+    - DTR-50.2
+    - DTR-50.3
+    - DTR-50.4
+    - DTR-50.5
+    - DTR-50.6
+    - DTR-50.7
+    - DTR-60.5
+    - DTR-60.6
+    - DTR-60.7
+    - DTR-70.2
+    - DTR-70.3
+    - DTR-70.4
+    - DTR-70.6
+    - DTR-80.2
+    - DTR-80.3
+    - HT-R693(Ether)
+    - HT-R993(Ether)
+    - HT-RC550(Ether)
+    - HT-RC560(Ether)
+    - HT-RC660
+    - NR-365(Ether)
+    - PR-RZ5100
+    - PR-SC5508
+    - PR-SC5509
+    - PR-SC5530
+    - TX-8270(Ether)
+    - TX-NR1008
+    - TX-NR1009
+    - TX-NR1010
+    - TX-NR1030
+    - TX-NR3008
+    - TX-NR3009
+    - TX-NR3010
+    - TX-NR3030
+    - TX-NR414(Ether)
+    - TX-NR474(Ether)
+    - TX-NR5008
+    - TX-NR5009
+    - TX-NR5010
+    - TX-NR509(Ether)
+    - TX-NR515
+    - TX-NR525
+    - TX-NR535(Ether)
+    - TX-NR545(Ether)
+    - TX-NR555(Ether)
+    - TX-NR575(Ether)
+    - TX-NR575DAB(Ether)
+    - TX-NR575E(Ether)
+    - TX-NR579(Ether)
+    - TX-NR609(Ether)
+    - TX-NR616
+    - TX-NR626
+    - TX-NR636
+    - TX-NR646(Ether)
+    - TX-NR656(Ether)
+    - TX-NR676(Ether)
+    - TX-NR676E(Ether)
+    - TX-NR708
+    - TX-NR709
+    - TX-NR717(Ether)
+    - TX-NR727(Ether)
+    - TX-NR737(Ether)
+    - TX-NR747(Ether)
+    - TX-NR757
+    - TX-NR777
+    - TX-NR808
+    - TX-NR809
+    - TX-NR818
+    - TX-NR828(Ether)
+    - TX-NR838(Ether)
+    - TX-NR929
+    - TX-RZ1100
+    - TX-RZ3100
+    - TX-RZ610
+    - TX-RZ620
+    - TX-RZ710
+    - TX-RZ720
+    - TX-RZ800
+    - TX-RZ810
+    - TX-RZ820
+    - TX-RZ900
   set4:
-  - DRX-2.1
-  - DRX-3.1
-  - DRX-4.1
-  - DRX-5.1
-  - DTM-7
-  - TX-8270(Ether)
-  - TX-NR474(Ether)
-  - TX-NR575(Ether)
-  - TX-NR575DAB(Ether)
-  - TX-NR575E(Ether)
-  - TX-NR676(Ether)
-  - TX-NR676E(Ether)
-  - TX-NR777
-  - TX-RZ620
-  - TX-RZ720
-  - TX-RZ820
+    - DRX-2.1
+    - DRX-3.1
+    - DRX-4.1
+    - DRX-5.1
+    - DTM-7
+    - TX-8270(Ether)
+    - TX-NR474(Ether)
+    - TX-NR575(Ether)
+    - TX-NR575DAB(Ether)
+    - TX-NR575E(Ether)
+    - TX-NR676(Ether)
+    - TX-NR676E(Ether)
+    - TX-NR777
+    - TX-RZ620
+    - TX-RZ720
+    - TX-RZ820
   set5:
-  - DTC-9.8
-  - DTR-10.5
-  - DTR-4.6
-  - DTR-4.9
-  - DTR-5.6
-  - DTR-5.8
-  - DTR-5.9
-  - DTR-6.6
-  - DTR-6.8
-  - DTR-6.9
-  - DTR-7.6
-  - DTR-7.7
-  - DTR-7.8
-  - DTR-8.8
-  - DTX-5.8
-  - DTX-5.9
-  - DTX-7.7
-  - DTX-7.8
-  - DTX-8.8
-  - ETX-NA1000
-  - PR-SC885
-  - RDC-7.1
-  - TX-NA905
-  - TX-NR1000
-  - TX-NR5000
-  - TX-NR905
-  - TX-SA706
-  - TX-SA805
-  - TX-SA875
-  - TX-SR702
-  - TX-SR703
-  - TX-SR705
-  - TX-SR706
-  - TX-SR803
-  - TX-SR804
-  - TX-SR805
-  - TX-SR875
+    - DTC-9.8
+    - DTR-10.5
+    - DTR-4.6
+    - DTR-4.9
+    - DTR-5.6
+    - DTR-5.8
+    - DTR-5.9
+    - DTR-6.6
+    - DTR-6.8
+    - DTR-6.9
+    - DTR-7.6
+    - DTR-7.7
+    - DTR-7.8
+    - DTR-8.8
+    - DTX-5.8
+    - DTX-5.9
+    - DTX-7.7
+    - DTX-7.8
+    - DTX-8.8
+    - ETX-NA1000
+    - PR-SC885
+    - RDC-7.1
+    - TX-NA905
+    - TX-NR1000
+    - TX-NR5000
+    - TX-NR905
+    - TX-SA706
+    - TX-SA805
+    - TX-SA875
+    - TX-SR702
+    - TX-SR703
+    - TX-SR705
+    - TX-SR706
+    - TX-SR803
+    - TX-SR804
+    - TX-SR805
+    - TX-SR875
   set6:
-  - DRC-R1
-  - DRX-2
-  - DRX-2.1
-  - DRX-3
-  - DRX-3.1
-  - DRX-4
-  - DRX-4.1
-  - DRX-5
-  - DRX-5.1
-  - DRX-7
-  - DRX-R1
-  - DTM-7
-  - DTR-9.1
-  - PR-RZ5100
-  - RDC-7
-  - TX-8270(Ether)
-  - TX-DS989
-  - TX-NR474(Ether)
-  - TX-NR555(Ether)
-  - TX-NR575(Ether)
-  - TX-NR575DAB(Ether)
-  - TX-NR575E(Ether)
-  - TX-NR656(Ether)
-  - TX-NR676(Ether)
-  - TX-NR676E(Ether)
-  - TX-NR757
-  - TX-NR777
-  - TX-RZ1100
-  - TX-RZ3100
-  - TX-RZ610
-  - TX-RZ620
-  - TX-RZ710
-  - TX-RZ720
-  - TX-RZ810
-  - TX-RZ820
+    - DRC-R1
+    - DRX-2
+    - DRX-2.1
+    - DRX-3
+    - DRX-3.1
+    - DRX-4
+    - DRX-4.1
+    - DRX-5
+    - DRX-5.1
+    - DRX-7
+    - DRX-R1
+    - DTM-7
+    - DTR-9.1
+    - PR-RZ5100
+    - RDC-7
+    - TX-8270(Ether)
+    - TX-DS989
+    - TX-NR474(Ether)
+    - TX-NR555(Ether)
+    - TX-NR575(Ether)
+    - TX-NR575DAB(Ether)
+    - TX-NR575E(Ether)
+    - TX-NR656(Ether)
+    - TX-NR676(Ether)
+    - TX-NR676E(Ether)
+    - TX-NR757
+    - TX-NR777
+    - TX-RZ1100
+    - TX-RZ3100
+    - TX-RZ610
+    - TX-RZ620
+    - TX-RZ710
+    - TX-RZ720
+    - TX-RZ810
+    - TX-RZ820
   set7:
-  - /515AE(Ether)
-  - /616AE(Ether)
-  - /818AE
-  - DHC-40.1
-  - DHC-40.2
-  - DHC-60.5
-  - DHC-60.7
-  - DHC-80.1
-  - DHC-80.2
-  - DHC-80.3
-  - DHC-80.6
-  - DHC-9.9
-  - DRC-R1
-  - DRX-2
-  - DRX-2.1
-  - DRX-3
-  - DRX-3.1
-  - DRX-4
-  - DRX-4.1
-  - DRX-5
-  - DRX-5.1
-  - DRX-7
-  - DRX-R1
-  - DTC-7
-  - DTC-9.1
-  - DTC-9.4
-  - DTC-9.8
-  - DTM-7
-  - DTR-10.5
-  - DTR-20.1
-  - DTR-20.2
-  - DTR-20.3
-  - DTR-20.4
-  - DTR-20.7
-  - DTR-30.1
-  - DTR-30.2
-  - DTR-30.3
-  - DTR-30.4
-  - DTR-30.5
-  - DTR-30.6
-  - DTR-30.7
-  - DTR-4.5
-  - DTR-4.6
-  - DTR-4.9
-  - DTR-40.1
-  - DTR-40.2
-  - DTR-40.3
-  - DTR-40.4
-  - DTR-40.5
-  - DTR-40.6
-  - DTR-40.7
-  - DTR-5.2
-  - DTR-5.3
-  - DTR-5.4
-  - DTR-5.5
-  - DTR-5.6
-  - DTR-5.8
-  - DTR-5.9
-  - DTR-50.1
-  - DTR-50.2
-  - DTR-50.3
-  - DTR-50.4
-  - DTR-50.5
-  - DTR-50.6
-  - DTR-50.7
-  - DTR-6.2
-  - DTR-6.3
-  - DTR-6.4
-  - DTR-6.5
-  - DTR-6.6
-  - DTR-6.8
-  - DTR-6.9
-  - DTR-60.5
-  - DTR-60.6
-  - DTR-60.7
-  - DTR-7.1
-  - DTR-7.2
-  - DTR-7.3
-  - DTR-7.4
-  - DTR-7.6
-  - DTR-7.7
-  - DTR-7.8
-  - DTR-7.9
-  - DTR-70.1
-  - DTR-70.2
-  - DTR-70.3
-  - DTR-70.4
-  - DTR-70.6
-  - DTR-8.2
-  - DTR-8.3
-  - DTR-8.4
-  - DTR-8.8
-  - DTR-8.9
-  - DTR-80.1
-  - DTR-80.2
-  - DTR-80.3
-  - DTR-9.1
-  - DTR-9.9
-  - DTX-5.8
-  - DTX-5.9
-  - DTX-7
-  - DTX-7.7
-  - DTX-7.8
-  - DTX-8.8
-  - DTX-8.9
-  - DTX-9.9
-  - ETX-NA1000
-  - HT-R693(Ether)
-  - HT-R993(Ether)
-  - HT-RC550(Ether)
-  - HT-RC560(Ether)
-  - HT-RC660
-  - PR-RZ5100
-  - PR-SC5507
-  - PR-SC5508
-  - PR-SC5509
-  - PR-SC5530
-  - PR-SC885
-  - PR-SC886
-  - RDC-7
-  - RDC-7(Ver2.0)
-  - RDC-7.1
-  - TX-8270(Ether)
-  - TX-DS787
-  - TX-DS797
-  - TX-DS898
-  - TX-DS989
-  - TX-DS989
-  - TX-NA900
-  - TX-NA905
-  - TX-NA906
-  - TX-NA906X
-  - TX-NR1000
-  - TX-NR1007
-  - TX-NR1008
-  - TX-NR1009
-  - TX-NR1010
-  - TX-NR1030
-  - TX-NR3007
-  - TX-NR3008
-  - TX-NR3009
-  - TX-NR3010
-  - TX-NR3030
-  - TX-NR414(Ether)
-  - TX-NR5000
-  - TX-NR5007
-  - TX-NR5008
-  - TX-NR5009
-  - TX-NR5010
-  - TX-NR509(Ether)
-  - TX-NR515
-  - TX-NR525
-  - TX-NR535(Ether)
-  - TX-NR545(Ether)
-  - TX-NR555(Ether)
-  - TX-NR575(Ether)
-  - TX-NR575DAB(Ether)
-  - TX-NR575E(Ether)
-  - TX-NR579(Ether)
-  - TX-NR609(Ether)
-  - TX-NR616
-  - TX-NR626
-  - TX-NR636
-  - TX-NR646(Ether)
-  - TX-NR656(Ether)
-  - TX-NR676(Ether)
-  - TX-NR676E(Ether)
-  - TX-NR708
-  - TX-NR709
-  - TX-NR717(Ether)
-  - TX-NR727(Ether)
-  - TX-NR737(Ether)
-  - TX-NR747(Ether)
-  - TX-NR757
-  - TX-NR777
-  - TX-NR807
-  - TX-NR808
-  - TX-NR809
-  - TX-NR818
-  - TX-NR828(Ether)
-  - TX-NR838(Ether)
-  - TX-NR900
-  - TX-NR901
-  - TX-NR905
-  - TX-NR906
-  - TX-NR929
-  - TX-RZ1100
-  - TX-RZ3100
-  - TX-RZ610
-  - TX-RZ620
-  - TX-RZ710
-  - TX-RZ720
-  - TX-RZ800
-  - TX-RZ810
-  - TX-RZ820
-  - TX-RZ900
-  - TX-SA706
-  - TX-SA805
-  - TX-SA806
-  - TX-SA806X
-  - TX-SA875
-  - TX-SA876
-  - TX-SR702
-  - TX-SR703
-  - TX-SR705
-  - TX-SR706
-  - TX-SR707
-  - TX-SR803
-  - TX-SR804
-  - TX-SR805
-  - TX-SR806
-  - TX-SR875
-  - TX-SR876
+    - /515AE(Ether)
+    - /616AE(Ether)
+    - /818AE
+    - DHC-40.1
+    - DHC-40.2
+    - DHC-60.5
+    - DHC-60.7
+    - DHC-80.1
+    - DHC-80.2
+    - DHC-80.3
+    - DHC-80.6
+    - DHC-9.9
+    - DRC-R1
+    - DRX-2
+    - DRX-2.1
+    - DRX-3
+    - DRX-3.1
+    - DRX-4
+    - DRX-4.1
+    - DRX-5
+    - DRX-5.1
+    - DRX-7
+    - DRX-R1
+    - DTC-7
+    - DTC-9.1
+    - DTC-9.4
+    - DTC-9.8
+    - DTM-7
+    - DTR-10.5
+    - DTR-20.1
+    - DTR-20.2
+    - DTR-20.3
+    - DTR-20.4
+    - DTR-20.7
+    - DTR-30.1
+    - DTR-30.2
+    - DTR-30.3
+    - DTR-30.4
+    - DTR-30.5
+    - DTR-30.6
+    - DTR-30.7
+    - DTR-4.5
+    - DTR-4.6
+    - DTR-4.9
+    - DTR-40.1
+    - DTR-40.2
+    - DTR-40.3
+    - DTR-40.4
+    - DTR-40.5
+    - DTR-40.6
+    - DTR-40.7
+    - DTR-5.2
+    - DTR-5.3
+    - DTR-5.4
+    - DTR-5.5
+    - DTR-5.6
+    - DTR-5.8
+    - DTR-5.9
+    - DTR-50.1
+    - DTR-50.2
+    - DTR-50.3
+    - DTR-50.4
+    - DTR-50.5
+    - DTR-50.6
+    - DTR-50.7
+    - DTR-6.2
+    - DTR-6.3
+    - DTR-6.4
+    - DTR-6.5
+    - DTR-6.6
+    - DTR-6.8
+    - DTR-6.9
+    - DTR-60.5
+    - DTR-60.6
+    - DTR-60.7
+    - DTR-7.1
+    - DTR-7.2
+    - DTR-7.3
+    - DTR-7.4
+    - DTR-7.6
+    - DTR-7.7
+    - DTR-7.8
+    - DTR-7.9
+    - DTR-70.1
+    - DTR-70.2
+    - DTR-70.3
+    - DTR-70.4
+    - DTR-70.6
+    - DTR-8.2
+    - DTR-8.3
+    - DTR-8.4
+    - DTR-8.8
+    - DTR-8.9
+    - DTR-80.1
+    - DTR-80.2
+    - DTR-80.3
+    - DTR-9.1
+    - DTR-9.9
+    - DTX-5.8
+    - DTX-5.9
+    - DTX-7
+    - DTX-7.7
+    - DTX-7.8
+    - DTX-8.8
+    - DTX-8.9
+    - DTX-9.9
+    - ETX-NA1000
+    - HT-R693(Ether)
+    - HT-R993(Ether)
+    - HT-RC550(Ether)
+    - HT-RC560(Ether)
+    - HT-RC660
+    - PR-RZ5100
+    - PR-SC5507
+    - PR-SC5508
+    - PR-SC5509
+    - PR-SC5530
+    - PR-SC885
+    - PR-SC886
+    - RDC-7
+    - RDC-7(Ver2.0)
+    - RDC-7.1
+    - TX-8270(Ether)
+    - TX-DS787
+    - TX-DS797
+    - TX-DS898
+    - TX-DS989
+    - TX-DS989
+    - TX-NA900
+    - TX-NA905
+    - TX-NA906
+    - TX-NA906X
+    - TX-NR1000
+    - TX-NR1007
+    - TX-NR1008
+    - TX-NR1009
+    - TX-NR1010
+    - TX-NR1030
+    - TX-NR3007
+    - TX-NR3008
+    - TX-NR3009
+    - TX-NR3010
+    - TX-NR3030
+    - TX-NR414(Ether)
+    - TX-NR5000
+    - TX-NR5007
+    - TX-NR5008
+    - TX-NR5009
+    - TX-NR5010
+    - TX-NR509(Ether)
+    - TX-NR515
+    - TX-NR525
+    - TX-NR535(Ether)
+    - TX-NR545(Ether)
+    - TX-NR555(Ether)
+    - TX-NR575(Ether)
+    - TX-NR575DAB(Ether)
+    - TX-NR575E(Ether)
+    - TX-NR579(Ether)
+    - TX-NR609(Ether)
+    - TX-NR616
+    - TX-NR626
+    - TX-NR636
+    - TX-NR646(Ether)
+    - TX-NR656(Ether)
+    - TX-NR676(Ether)
+    - TX-NR676E(Ether)
+    - TX-NR708
+    - TX-NR709
+    - TX-NR717(Ether)
+    - TX-NR727(Ether)
+    - TX-NR737(Ether)
+    - TX-NR747(Ether)
+    - TX-NR757
+    - TX-NR777
+    - TX-NR807
+    - TX-NR808
+    - TX-NR809
+    - TX-NR818
+    - TX-NR828(Ether)
+    - TX-NR838(Ether)
+    - TX-NR900
+    - TX-NR901
+    - TX-NR905
+    - TX-NR906
+    - TX-NR929
+    - TX-RZ1100
+    - TX-RZ3100
+    - TX-RZ610
+    - TX-RZ620
+    - TX-RZ710
+    - TX-RZ720
+    - TX-RZ800
+    - TX-RZ810
+    - TX-RZ820
+    - TX-RZ900
+    - TX-SA706
+    - TX-SA805
+    - TX-SA806
+    - TX-SA806X
+    - TX-SA875
+    - TX-SA876
+    - TX-SR702
+    - TX-SR703
+    - TX-SR705
+    - TX-SR706
+    - TX-SR707
+    - TX-SR803
+    - TX-SR804
+    - TX-SR805
+    - TX-SR806
+    - TX-SR875
+    - TX-SR876
   set8:
-  - /616AE(Ether)
-  - /818AE
-  - DHC-60.5
-  - DHC-60.7
-  - DHC-80.1
-  - DHC-80.2
-  - DHC-80.3
-  - DHC-80.6
-  - DHC-9.9
-  - DRC-R1
-  - DRX-5
-  - DRX-5.1
-  - DRX-7
-  - DRX-R1
-  - DTC-9.8
-  - DTR-10.5
-  - DTR-30.4
-  - DTR-40.4
-  - DTR-40.5
-  - DTR-40.6
-  - DTR-50.1
-  - DTR-50.2
-  - DTR-50.3
-  - DTR-50.4
-  - DTR-50.5
-  - DTR-50.6
-  - DTR-50.7
-  - DTR-60.5
-  - DTR-60.6
-  - DTR-60.7
-  - DTR-7.8
-  - DTR-70.1
-  - DTR-70.2
-  - DTR-70.3
-  - DTR-70.4
-  - DTR-70.6
-  - DTR-8.8
-  - DTR-8.9
-  - DTR-80.1
-  - DTR-80.2
-  - DTR-80.3
-  - DTR-9.9
-  - DTX-7.8
-  - DTX-8.8
-  - DTX-8.9
-  - DTX-9.9
-  - ETX-NA1000
-  - PR-RZ5100
-  - PR-SC5507
-  - PR-SC5508
-  - PR-SC5509
-  - PR-SC5530
-  - PR-SC885
-  - PR-SC886
-  - RDC-7.1
-  - TX-NA905
-  - TX-NA906
-  - TX-NA906X
-  - TX-NR1000
-  - TX-NR1007
-  - TX-NR1008
-  - TX-NR1009
-  - TX-NR1010
-  - TX-NR1030
-  - TX-NR3007
-  - TX-NR3008
-  - TX-NR3009
-  - TX-NR3010
-  - TX-NR3030
-  - TX-NR5000
-  - TX-NR5007
-  - TX-NR5008
-  - TX-NR5009
-  - TX-NR5010
-  - TX-NR616
-  - TX-NR717(Ether)
-  - TX-NR727(Ether)
-  - TX-NR737(Ether)
-  - TX-NR807
-  - TX-NR808
-  - TX-NR809
-  - TX-NR818
-  - TX-NR828(Ether)
-  - TX-NR838(Ether)
-  - TX-NR905
-  - TX-NR906
-  - TX-NR929
-  - TX-RZ1100
-  - TX-RZ3100
-  - TX-RZ800
-  - TX-RZ810
-  - TX-RZ820
-  - TX-RZ900
-  - TX-SA805
-  - TX-SA806X
-  - TX-SA875
-  - TX-SA876
-  - TX-SR805
-  - TX-SR875
-  - TX-SR876
+    - /616AE(Ether)
+    - /818AE
+    - DHC-60.5
+    - DHC-60.7
+    - DHC-80.1
+    - DHC-80.2
+    - DHC-80.3
+    - DHC-80.6
+    - DHC-9.9
+    - DRC-R1
+    - DRX-5
+    - DRX-5.1
+    - DRX-7
+    - DRX-R1
+    - DTC-9.8
+    - DTR-10.5
+    - DTR-30.4
+    - DTR-40.4
+    - DTR-40.5
+    - DTR-40.6
+    - DTR-50.1
+    - DTR-50.2
+    - DTR-50.3
+    - DTR-50.4
+    - DTR-50.5
+    - DTR-50.6
+    - DTR-50.7
+    - DTR-60.5
+    - DTR-60.6
+    - DTR-60.7
+    - DTR-7.8
+    - DTR-70.1
+    - DTR-70.2
+    - DTR-70.3
+    - DTR-70.4
+    - DTR-70.6
+    - DTR-8.8
+    - DTR-8.9
+    - DTR-80.1
+    - DTR-80.2
+    - DTR-80.3
+    - DTR-9.9
+    - DTX-7.8
+    - DTX-8.8
+    - DTX-8.9
+    - DTX-9.9
+    - ETX-NA1000
+    - PR-RZ5100
+    - PR-SC5507
+    - PR-SC5508
+    - PR-SC5509
+    - PR-SC5530
+    - PR-SC885
+    - PR-SC886
+    - RDC-7.1
+    - TX-NA905
+    - TX-NA906
+    - TX-NA906X
+    - TX-NR1000
+    - TX-NR1007
+    - TX-NR1008
+    - TX-NR1009
+    - TX-NR1010
+    - TX-NR1030
+    - TX-NR3007
+    - TX-NR3008
+    - TX-NR3009
+    - TX-NR3010
+    - TX-NR3030
+    - TX-NR5000
+    - TX-NR5007
+    - TX-NR5008
+    - TX-NR5009
+    - TX-NR5010
+    - TX-NR616
+    - TX-NR717(Ether)
+    - TX-NR727(Ether)
+    - TX-NR737(Ether)
+    - TX-NR807
+    - TX-NR808
+    - TX-NR809
+    - TX-NR818
+    - TX-NR828(Ether)
+    - TX-NR838(Ether)
+    - TX-NR905
+    - TX-NR906
+    - TX-NR929
+    - TX-RZ1100
+    - TX-RZ3100
+    - TX-RZ800
+    - TX-RZ810
+    - TX-RZ820
+    - TX-RZ900
+    - TX-SA805
+    - TX-SA806X
+    - TX-SA875
+    - TX-SA876
+    - TX-SR805
+    - TX-SR875
+    - TX-SR876
   set9:
-  - /616AE(Ether)
-  - /818AE
-  - DHC-60.5
-  - DHC-60.7
-  - DHC-80.6
-  - DRC-R1
-  - DRX-5
-  - DRX-5.1
-  - DRX-7
-  - DRX-R1
-  - DTR-30.4
-  - DTR-40.4
-  - DTR-40.5
-  - DTR-40.6
-  - DTR-50.4
-  - DTR-50.5
-  - DTR-50.6
-  - DTR-50.7
-  - DTR-60.5
-  - DTR-60.6
-  - DTR-60.7
-  - DTR-70.4
-  - DTR-70.6
-  - PR-RZ5100
-  - PR-SC5509
-  - PR-SC5530
-  - TX-NR1010
-  - TX-NR1030
-  - TX-NR3010
-  - TX-NR3030
-  - TX-NR5010
-  - TX-NR616
-  - TX-NR717(Ether)
-  - TX-NR727(Ether)
-  - TX-NR737(Ether)
-  - TX-NR818
-  - TX-NR828(Ether)
-  - TX-NR838(Ether)
-  - TX-NR929
-  - TX-RZ1100
-  - TX-RZ3100
-  - TX-RZ800
-  - TX-RZ810
-  - TX-RZ820
-  - TX-RZ900
+    - /616AE(Ether)
+    - /818AE
+    - DHC-60.5
+    - DHC-60.7
+    - DHC-80.6
+    - DRC-R1
+    - DRX-5
+    - DRX-5.1
+    - DRX-7
+    - DRX-R1
+    - DTR-30.4
+    - DTR-40.4
+    - DTR-40.5
+    - DTR-40.6
+    - DTR-50.4
+    - DTR-50.5
+    - DTR-50.6
+    - DTR-50.7
+    - DTR-60.5
+    - DTR-60.6
+    - DTR-60.7
+    - DTR-70.4
+    - DTR-70.6
+    - PR-RZ5100
+    - PR-SC5509
+    - PR-SC5530
+    - TX-NR1010
+    - TX-NR1030
+    - TX-NR3010
+    - TX-NR3030
+    - TX-NR5010
+    - TX-NR616
+    - TX-NR717(Ether)
+    - TX-NR727(Ether)
+    - TX-NR737(Ether)
+    - TX-NR818
+    - TX-NR828(Ether)
+    - TX-NR838(Ether)
+    - TX-NR929
+    - TX-RZ1100
+    - TX-RZ3100
+    - TX-RZ800
+    - TX-RZ810
+    - TX-RZ820
+    - TX-RZ900
   set10:
-  - DTR-70.1
-  - DTR-70.2
-  - DTR-70.3
-  - DTR-70.4
-  - DTR-80.1
-  - DTR-80.2
-  - DTR-80.3
+    - DTR-70.1
+    - DTR-70.2
+    - DTR-70.3
+    - DTR-70.4
+    - DTR-80.1
+    - DTR-80.2
+    - DTR-80.3
   set11:
-  - /515AE(Ether)
-  - /616AE(Ether)
-  - /818AE
-  - DHC-60.5
-  - DHC-60.7
-  - DHC-80.3
-  - DHC-80.6
-  - DRC-R1
-  - DRX-2
-  - DRX-2.1
-  - DRX-3
-  - DRX-3.1
-  - DRX-4
-  - DRX-4.1
-  - DRX-5
-  - DRX-5.1
-  - DRX-7
-  - DRX-R1
-  - DTM-7
-  - DTR-20.3
-  - DTR-20.4
-  - DTR-20.7
-  - DTR-30.3
-  - DTR-30.4
-  - DTR-30.5
-  - DTR-30.6
-  - DTR-30.7
-  - DTR-40.3
-  - DTR-40.4
-  - DTR-40.5
-  - DTR-40.6
-  - DTR-40.7
-  - DTR-50.3
-  - DTR-50.4
-  - DTR-50.5
-  - DTR-50.6
-  - DTR-50.7
-  - DTR-60.5
-  - DTR-60.6
-  - DTR-60.7
-  - DTR-70.3
-  - DTR-70.4
-  - DTR-70.6
-  - DTR-80.3
-  - HT-R693(Ether)
-  - HT-R993(Ether)
-  - HT-RC550(Ether)
-  - HT-RC560(Ether)
-  - HT-RC660
-  - NR-365(Ether)
-  - PR-RZ5100
-  - PR-SC5509
-  - PR-SC5530
-  - TX-8270(Ether)
-  - TX-NR1009
-  - TX-NR1010
-  - TX-NR1030
-  - TX-NR3009
-  - TX-NR3010
-  - TX-NR3030
-  - TX-NR414(Ether)
-  - TX-NR474(Ether)
-  - TX-NR5009
-  - TX-NR5010
-  - TX-NR515
-  - TX-NR525
-  - TX-NR535(Ether)
-  - TX-NR545(Ether)
-  - TX-NR555(Ether)
-  - TX-NR575(Ether)
-  - TX-NR575DAB(Ether)
-  - TX-NR575E(Ether)
-  - TX-NR579(Ether)
-  - TX-NR609(Ether)
-  - TX-NR616
-  - TX-NR626
-  - TX-NR636
-  - TX-NR646(Ether)
-  - TX-NR656(Ether)
-  - TX-NR676(Ether)
-  - TX-NR676E(Ether)
-  - TX-NR709
-  - TX-NR717(Ether)
-  - TX-NR727(Ether)
-  - TX-NR737(Ether)
-  - TX-NR747(Ether)
-  - TX-NR757
-  - TX-NR777
-  - TX-NR809
-  - TX-NR818
-  - TX-NR828(Ether)
-  - TX-NR838(Ether)
-  - TX-NR929
-  - TX-RZ1100
-  - TX-RZ3100
-  - TX-RZ610
-  - TX-RZ620
-  - TX-RZ710
-  - TX-RZ720
-  - TX-RZ800
-  - TX-RZ810
-  - TX-RZ820
-  - TX-RZ900
+    - /515AE(Ether)
+    - /616AE(Ether)
+    - /818AE
+    - DHC-60.5
+    - DHC-60.7
+    - DHC-80.3
+    - DHC-80.6
+    - DRC-R1
+    - DRX-2
+    - DRX-2.1
+    - DRX-3
+    - DRX-3.1
+    - DRX-4
+    - DRX-4.1
+    - DRX-5
+    - DRX-5.1
+    - DRX-7
+    - DRX-R1
+    - DTM-7
+    - DTR-20.3
+    - DTR-20.4
+    - DTR-20.7
+    - DTR-30.3
+    - DTR-30.4
+    - DTR-30.5
+    - DTR-30.6
+    - DTR-30.7
+    - DTR-40.3
+    - DTR-40.4
+    - DTR-40.5
+    - DTR-40.6
+    - DTR-40.7
+    - DTR-50.3
+    - DTR-50.4
+    - DTR-50.5
+    - DTR-50.6
+    - DTR-50.7
+    - DTR-60.5
+    - DTR-60.6
+    - DTR-60.7
+    - DTR-70.3
+    - DTR-70.4
+    - DTR-70.6
+    - DTR-80.3
+    - HT-R693(Ether)
+    - HT-R993(Ether)
+    - HT-RC550(Ether)
+    - HT-RC560(Ether)
+    - HT-RC660
+    - NR-365(Ether)
+    - PR-RZ5100
+    - PR-SC5509
+    - PR-SC5530
+    - TX-8270(Ether)
+    - TX-NR1009
+    - TX-NR1010
+    - TX-NR1030
+    - TX-NR3009
+    - TX-NR3010
+    - TX-NR3030
+    - TX-NR414(Ether)
+    - TX-NR474(Ether)
+    - TX-NR5009
+    - TX-NR5010
+    - TX-NR515
+    - TX-NR525
+    - TX-NR535(Ether)
+    - TX-NR545(Ether)
+    - TX-NR555(Ether)
+    - TX-NR575(Ether)
+    - TX-NR575DAB(Ether)
+    - TX-NR575E(Ether)
+    - TX-NR579(Ether)
+    - TX-NR609(Ether)
+    - TX-NR616
+    - TX-NR626
+    - TX-NR636
+    - TX-NR646(Ether)
+    - TX-NR656(Ether)
+    - TX-NR676(Ether)
+    - TX-NR676E(Ether)
+    - TX-NR709
+    - TX-NR717(Ether)
+    - TX-NR727(Ether)
+    - TX-NR737(Ether)
+    - TX-NR747(Ether)
+    - TX-NR757
+    - TX-NR777
+    - TX-NR809
+    - TX-NR818
+    - TX-NR828(Ether)
+    - TX-NR838(Ether)
+    - TX-NR929
+    - TX-RZ1100
+    - TX-RZ3100
+    - TX-RZ610
+    - TX-RZ620
+    - TX-RZ710
+    - TX-RZ720
+    - TX-RZ800
+    - TX-RZ810
+    - TX-RZ820
+    - TX-RZ900
