@@ -1,0 +1,1116 @@
+main:
+  SLI:
+    name: input-selector
+    aliases: ["source"]
+    description: Input Selector Command
+    values:
+      "00":
+        name: [video1, vcr, dvr, stb, dvr]
+        description: sets VIDEO1, VCR/DVR, STB/DVR
+        models: set1
+      "01":
+        name: [video2, cbl, sat]
+        description: sets VIDEO2, CBL/SAT
+        models: set1
+      "02":
+        name: [video3, game/tv, game, game1]
+        description: sets VIDEO3, GAME/TV, GAME, GAME1
+        models: set1
+      "03":
+        name: [video4, aux1]
+        description: sets VIDEO4, AUX1(AUX)
+        models: set1
+      "04":
+        name: [video5, aux2, game2]
+        description: sets VIDEO5, AUX2, GAME2
+        models: set1
+      "05":
+        name: [video6, pc]
+        description: sets VIDEO6, PC
+        models: set1
+      "06":
+        name: video7
+        description: sets VIDEO7
+        models: set1
+      "07":
+        name: "07"
+        description: Hidden1     EXTRA1
+        models: set1
+      08:
+        name: 08
+        description: Hidden2     EXTRA2
+        models: set1
+      09:
+        name: 09
+        description: Hidden3     EXTRA3
+        models: set1
+      "10":
+        name: [dvd, bd, dvd]
+        description: sets DVD, BD/DVD
+        models: set1
+      "11":
+        name: strm-box
+        description: sets STRM BOX
+        models: set1
+      "12":
+        name: tv
+        description: sets TV
+        models: set1
+      "20":
+        name: [tape-1, tv/tape]
+        description: sets TAPE(1), TV/TAPE
+        models: set1
+      "21":
+        name: tape2
+        description: sets TAPE2
+        models: set1
+      "22":
+        name: phono
+        description: sets PHONO
+        models: set1
+      "23":
+        name: [cd, tv/cd]
+        description: sets CD, TV/CD
+        models: set1
+      "24":
+        name: fm
+        description: sets FM
+        models: set1
+      "25":
+        name: am
+        description: sets AM
+        models: set1
+      "26":
+        name: tuner
+        description: sets TUNER
+        models: set1
+      "27":
+        name: [music-server, p4s, dlna]
+        description: sets MUSIC SERVER, P4S, DLNA
+        models: set1
+      "28":
+        name: [internet-radio, iradio-favorite]
+        description: sets INTERNET RADIO, iRadio Favorite
+        models: set1
+      "29":
+        name: [usb, usb]
+        description: sets USB/USB(Front)
+        models: set1
+      2A:
+        name: usb
+        description: sets USB(Rear)
+        models: set1
+      2B:
+        name: [network, net]
+        description: sets NETWORK, NET
+        models: set1
+      2C:
+        name: usb
+        description: sets USB(toggle)
+        models: set1
+      2D:
+        name: aiplay
+        description: sets Aiplay
+        models: set1
+      2E:
+        name: bluetooth
+        description: sets Bluetooth
+        models: set1
+      2F:
+        name: usb-dac-in
+        description: sets USB DAC In
+        models: set2
+      "41":
+        name: line
+        description: sets LINE
+        models: set2
+      "42":
+        name: line2
+        description: sets LINE2
+        models: set2
+      "44":
+        name: optical
+        description: sets OPTICAL
+        models: set2
+      "45":
+        name: coaxial
+        description: sets COAXIAL
+        models: set2
+      "40":
+        name: universal-port
+        description: sets Universal PORT
+        models: set1
+      "30":
+        name: multi-ch
+        description: sets MULTI CH
+        models: set1
+      "31":
+        name: xm
+        description: sets XM
+        models: set1
+      "32":
+        name: sirius
+        description: sets SIRIUS
+        models: set1
+      "33":
+        name: dab
+        description: "sets DAB "
+        models: set1
+      "55":
+        name: hdmi-5
+        description: sets HDMI 5
+        models: set1
+      "56":
+        name: hdmi-6
+        description: sets HDMI 6
+        models: set1
+      "57":
+        name: hdmi-7
+        description: sets HDMI 7
+        models: set1
+      UP:
+        name: up
+        description: sets Selector Position Wrap-Around Up
+        models: set1
+      DOWN:
+        name: down
+        description: sets Selector Position Wrap-Around Down
+        models: set1
+      QSTN:
+        name: query
+        description: gets The Selector Position
+        models: set1
+modelsets:
+  set1:
+    - /515AE(Ether)
+    - /616AE(Ether)
+    - /818AE
+    - DHC-40.1
+    - DHC-40.2
+    - DHC-60.5
+    - DHC-60.7
+    - DHC-80.1
+    - DHC-80.2
+    - DHC-80.3
+    - DHC-80.6
+    - DHC-9.9
+    - DRC-R1
+    - DRX-2
+    - DRX-2.1
+    - DRX-3
+    - DRX-3.1
+    - DRX-4
+    - DRX-4.1
+    - DRX-5
+    - DRX-5.1
+    - DRX-7
+    - DRX-R1
+    - DTC-7
+    - DTC-9.1
+    - DTC-9.4
+    - DTC-9.8
+    - DTM-7
+    - DTR-10.5
+    - DTR-20.1
+    - DTR-20.2
+    - DTR-20.3
+    - DTR-20.4
+    - DTR-20.7
+    - DTR-30.1
+    - DTR-30.2
+    - DTR-30.3
+    - DTR-30.4
+    - DTR-30.5
+    - DTR-30.6
+    - DTR-30.7
+    - DTR-4.5
+    - DTR-4.6
+    - DTR-4.9
+    - DTR-40.1
+    - DTR-40.2
+    - DTR-40.3
+    - DTR-40.4
+    - DTR-40.5
+    - DTR-40.6
+    - DTR-40.7
+    - DTR-5.2
+    - DTR-5.3
+    - DTR-5.4
+    - DTR-5.5
+    - DTR-5.6
+    - DTR-5.8
+    - DTR-5.9
+    - DTR-50.1
+    - DTR-50.2
+    - DTR-50.3
+    - DTR-50.4
+    - DTR-50.5
+    - DTR-50.6
+    - DTR-50.7
+    - DTR-6.2
+    - DTR-6.3
+    - DTR-6.4
+    - DTR-6.5
+    - DTR-6.6
+    - DTR-6.8
+    - DTR-6.9
+    - DTR-60.5
+    - DTR-60.6
+    - DTR-60.7
+    - DTR-7.1
+    - DTR-7.2
+    - DTR-7.3
+    - DTR-7.4
+    - DTR-7.6
+    - DTR-7.7
+    - DTR-7.8
+    - DTR-7.9
+    - DTR-70.1
+    - DTR-70.2
+    - DTR-70.3
+    - DTR-70.4
+    - DTR-70.6
+    - DTR-8.2
+    - DTR-8.3
+    - DTR-8.4
+    - DTR-8.8
+    - DTR-8.9
+    - DTR-80.1
+    - DTR-80.2
+    - DTR-80.3
+    - DTR-9.1
+    - DTR-9.9
+    - DTX-5.8
+    - DTX-5.9
+    - DTX-7
+    - DTX-7.7
+    - DTX-7.8
+    - DTX-8.8
+    - DTX-8.9
+    - DTX-9.9
+    - ETX-NA1000
+    - HT-R693(Ether)
+    - HT-R993(Ether)
+    - HT-RC550(Ether)
+    - HT-RC560(Ether)
+    - HT-RC660
+    - NR-365(Ether)
+    - PR-RZ5100
+    - PR-SC5507
+    - PR-SC5508
+    - PR-SC5509
+    - PR-SC5530
+    - PR-SC885
+    - PR-SC886
+    - RDC-7
+    - RDC-7(Ver2.0)
+    - RDC-7.1
+    - TX-8270(Ether)
+    - TX-DS787
+    - TX-DS797
+    - TX-DS898
+    - TX-DS989
+    - TX-DS989
+    - TX-NA900
+    - TX-NA905
+    - TX-NA906
+    - TX-NA906X
+    - TX-NR1000
+    - TX-NR1007
+    - TX-NR1008
+    - TX-NR1009
+    - TX-NR1010
+    - TX-NR1030
+    - TX-NR3007
+    - TX-NR3008
+    - TX-NR3009
+    - TX-NR3010
+    - TX-NR3030
+    - TX-NR414(Ether)
+    - TX-NR474(Ether)
+    - TX-NR5000
+    - TX-NR5007
+    - TX-NR5008
+    - TX-NR5009
+    - TX-NR5010
+    - TX-NR509(Ether)
+    - TX-NR515
+    - TX-NR525
+    - TX-NR535(Ether)
+    - TX-NR545(Ether)
+    - TX-NR555(Ether)
+    - TX-NR575(Ether)
+    - TX-NR575DAB(Ether)
+    - TX-NR575E(Ether)
+    - TX-NR579(Ether)
+    - TX-NR609(Ether)
+    - TX-NR616
+    - TX-NR626
+    - TX-NR636
+    - TX-NR646(Ether)
+    - TX-NR656(Ether)
+    - TX-NR676(Ether)
+    - TX-NR676E(Ether)
+    - TX-NR708
+    - TX-NR709
+    - TX-NR717(Ether)
+    - TX-NR727(Ether)
+    - TX-NR737(Ether)
+    - TX-NR747(Ether)
+    - TX-NR757
+    - TX-NR777
+    - TX-NR807
+    - TX-NR808
+    - TX-NR809
+    - TX-NR818
+    - TX-NR828(Ether)
+    - TX-NR838(Ether)
+    - TX-NR900
+    - TX-NR901
+    - TX-NR905
+    - TX-NR906
+    - TX-NR929
+    - TX-RZ1100
+    - TX-RZ3100
+    - TX-RZ610
+    - TX-RZ620
+    - TX-RZ710
+    - TX-RZ720
+    - TX-RZ800
+    - TX-RZ810
+    - TX-RZ820
+    - TX-RZ900
+    - TX-SA706
+    - TX-SA706X
+    - TX-SA805
+    - TX-SA806
+    - TX-SA806X
+    - TX-SA875
+    - TX-SA876
+    - TX-SR702
+    - TX-SR703
+    - TX-SR705
+    - TX-SR706
+    - TX-SR707
+    - TX-SR803
+    - TX-SR804
+    - TX-SR805
+    - TX-SR806
+    - TX-SR875
+    - TX-SR876
+  set2:
+    - DRC-R1
+    - DRX-2
+    - DRX-2.1
+    - DRX-3
+    - DRX-3.1
+    - DRX-4
+    - DRX-4.1
+    - DRX-5
+    - DRX-5.1
+    - DRX-7
+    - DRX-R1
+    - DTM-7
+    - PR-RZ5100
+    - TX-8270(Ether)
+    - TX-NR474(Ether)
+    - TX-NR555(Ether)
+    - TX-NR575(Ether)
+    - TX-NR575DAB(Ether)
+    - TX-NR575E(Ether)
+    - TX-NR656(Ether)
+    - TX-NR676(Ether)
+    - TX-NR676E(Ether)
+    - TX-NR757
+    - TX-NR777
+    - TX-RZ1100
+    - TX-RZ3100
+    - TX-RZ610
+    - TX-RZ620
+    - TX-RZ710
+    - TX-RZ720
+    - TX-RZ810
+    - TX-RZ820
+  set3:
+    - /515AE(Ether)
+    - /616AE(Ether)
+    - /818AE
+    - DHC-40.2
+    - DHC-60.5
+    - DHC-60.7
+    - DHC-80.2
+    - DHC-80.3
+    - DHC-80.6
+    - DRC-R1
+    - DRX-2
+    - DRX-2.1
+    - DRX-3
+    - DRX-3.1
+    - DRX-4
+    - DRX-4.1
+    - DRX-5
+    - DRX-5.1
+    - DRX-7
+    - DRX-R1
+    - DTM-7
+    - DTR-20.2
+    - DTR-20.3
+    - DTR-20.4
+    - DTR-20.7
+    - DTR-30.2
+    - DTR-30.3
+    - DTR-30.4
+    - DTR-30.5
+    - DTR-30.6
+    - DTR-30.7
+    - DTR-40.2
+    - DTR-40.3
+    - DTR-40.4
+    - DTR-40.5
+    - DTR-40.6
+    - DTR-40.7
+    - DTR-50.2
+    - DTR-50.3
+    - DTR-50.4
+    - DTR-50.5
+    - DTR-50.6
+    - DTR-50.7
+    - DTR-60.5
+    - DTR-60.6
+    - DTR-60.7
+    - DTR-70.2
+    - DTR-70.3
+    - DTR-70.4
+    - DTR-70.6
+    - DTR-80.2
+    - DTR-80.3
+    - HT-R693(Ether)
+    - HT-R993(Ether)
+    - HT-RC550(Ether)
+    - HT-RC560(Ether)
+    - HT-RC660
+    - NR-365(Ether)
+    - PR-RZ5100
+    - PR-SC5508
+    - PR-SC5509
+    - PR-SC5530
+    - TX-8270(Ether)
+    - TX-NR1008
+    - TX-NR1009
+    - TX-NR1010
+    - TX-NR1030
+    - TX-NR3008
+    - TX-NR3009
+    - TX-NR3010
+    - TX-NR3030
+    - TX-NR414(Ether)
+    - TX-NR474(Ether)
+    - TX-NR5008
+    - TX-NR5009
+    - TX-NR5010
+    - TX-NR509(Ether)
+    - TX-NR515
+    - TX-NR525
+    - TX-NR535(Ether)
+    - TX-NR545(Ether)
+    - TX-NR555(Ether)
+    - TX-NR575(Ether)
+    - TX-NR575DAB(Ether)
+    - TX-NR575E(Ether)
+    - TX-NR579(Ether)
+    - TX-NR609(Ether)
+    - TX-NR616
+    - TX-NR626
+    - TX-NR636
+    - TX-NR646(Ether)
+    - TX-NR656(Ether)
+    - TX-NR676(Ether)
+    - TX-NR676E(Ether)
+    - TX-NR708
+    - TX-NR709
+    - TX-NR717(Ether)
+    - TX-NR727(Ether)
+    - TX-NR737(Ether)
+    - TX-NR747(Ether)
+    - TX-NR757
+    - TX-NR777
+    - TX-NR808
+    - TX-NR809
+    - TX-NR818
+    - TX-NR828(Ether)
+    - TX-NR838(Ether)
+    - TX-NR929
+    - TX-RZ1100
+    - TX-RZ3100
+    - TX-RZ610
+    - TX-RZ620
+    - TX-RZ710
+    - TX-RZ720
+    - TX-RZ800
+    - TX-RZ810
+    - TX-RZ820
+    - TX-RZ900
+  set4:
+    - DRX-2.1
+    - DRX-3.1
+    - DRX-4.1
+    - DRX-5.1
+    - DTM-7
+    - TX-8270(Ether)
+    - TX-NR474(Ether)
+    - TX-NR575(Ether)
+    - TX-NR575DAB(Ether)
+    - TX-NR575E(Ether)
+    - TX-NR676(Ether)
+    - TX-NR676E(Ether)
+    - TX-NR777
+    - TX-RZ620
+    - TX-RZ720
+    - TX-RZ820
+  set5:
+    - DTC-9.8
+    - DTR-10.5
+    - DTR-4.6
+    - DTR-4.9
+    - DTR-5.6
+    - DTR-5.8
+    - DTR-5.9
+    - DTR-6.6
+    - DTR-6.8
+    - DTR-6.9
+    - DTR-7.6
+    - DTR-7.7
+    - DTR-7.8
+    - DTR-8.8
+    - DTX-5.8
+    - DTX-5.9
+    - DTX-7.7
+    - DTX-7.8
+    - DTX-8.8
+    - ETX-NA1000
+    - PR-SC885
+    - RDC-7.1
+    - TX-NA905
+    - TX-NR1000
+    - TX-NR5000
+    - TX-NR905
+    - TX-SA706
+    - TX-SA805
+    - TX-SA875
+    - TX-SR702
+    - TX-SR703
+    - TX-SR705
+    - TX-SR706
+    - TX-SR803
+    - TX-SR804
+    - TX-SR805
+    - TX-SR875
+  set6:
+    - DRC-R1
+    - DRX-2
+    - DRX-2.1
+    - DRX-3
+    - DRX-3.1
+    - DRX-4
+    - DRX-4.1
+    - DRX-5
+    - DRX-5.1
+    - DRX-7
+    - DRX-R1
+    - DTM-7
+    - DTR-9.1
+    - PR-RZ5100
+    - RDC-7
+    - TX-8270(Ether)
+    - TX-DS989
+    - TX-NR474(Ether)
+    - TX-NR555(Ether)
+    - TX-NR575(Ether)
+    - TX-NR575DAB(Ether)
+    - TX-NR575E(Ether)
+    - TX-NR656(Ether)
+    - TX-NR676(Ether)
+    - TX-NR676E(Ether)
+    - TX-NR757
+    - TX-NR777
+    - TX-RZ1100
+    - TX-RZ3100
+    - TX-RZ610
+    - TX-RZ620
+    - TX-RZ710
+    - TX-RZ720
+    - TX-RZ810
+    - TX-RZ820
+  set7:
+    - /515AE(Ether)
+    - /616AE(Ether)
+    - /818AE
+    - DHC-40.1
+    - DHC-40.2
+    - DHC-60.5
+    - DHC-60.7
+    - DHC-80.1
+    - DHC-80.2
+    - DHC-80.3
+    - DHC-80.6
+    - DHC-9.9
+    - DRC-R1
+    - DRX-2
+    - DRX-2.1
+    - DRX-3
+    - DRX-3.1
+    - DRX-4
+    - DRX-4.1
+    - DRX-5
+    - DRX-5.1
+    - DRX-7
+    - DRX-R1
+    - DTC-7
+    - DTC-9.1
+    - DTC-9.4
+    - DTC-9.8
+    - DTM-7
+    - DTR-10.5
+    - DTR-20.1
+    - DTR-20.2
+    - DTR-20.3
+    - DTR-20.4
+    - DTR-20.7
+    - DTR-30.1
+    - DTR-30.2
+    - DTR-30.3
+    - DTR-30.4
+    - DTR-30.5
+    - DTR-30.6
+    - DTR-30.7
+    - DTR-4.5
+    - DTR-4.6
+    - DTR-4.9
+    - DTR-40.1
+    - DTR-40.2
+    - DTR-40.3
+    - DTR-40.4
+    - DTR-40.5
+    - DTR-40.6
+    - DTR-40.7
+    - DTR-5.2
+    - DTR-5.3
+    - DTR-5.4
+    - DTR-5.5
+    - DTR-5.6
+    - DTR-5.8
+    - DTR-5.9
+    - DTR-50.1
+    - DTR-50.2
+    - DTR-50.3
+    - DTR-50.4
+    - DTR-50.5
+    - DTR-50.6
+    - DTR-50.7
+    - DTR-6.2
+    - DTR-6.3
+    - DTR-6.4
+    - DTR-6.5
+    - DTR-6.6
+    - DTR-6.8
+    - DTR-6.9
+    - DTR-60.5
+    - DTR-60.6
+    - DTR-60.7
+    - DTR-7.1
+    - DTR-7.2
+    - DTR-7.3
+    - DTR-7.4
+    - DTR-7.6
+    - DTR-7.7
+    - DTR-7.8
+    - DTR-7.9
+    - DTR-70.1
+    - DTR-70.2
+    - DTR-70.3
+    - DTR-70.4
+    - DTR-70.6
+    - DTR-8.2
+    - DTR-8.3
+    - DTR-8.4
+    - DTR-8.8
+    - DTR-8.9
+    - DTR-80.1
+    - DTR-80.2
+    - DTR-80.3
+    - DTR-9.1
+    - DTR-9.9
+    - DTX-5.8
+    - DTX-5.9
+    - DTX-7
+    - DTX-7.7
+    - DTX-7.8
+    - DTX-8.8
+    - DTX-8.9
+    - DTX-9.9
+    - ETX-NA1000
+    - HT-R693(Ether)
+    - HT-R993(Ether)
+    - HT-RC550(Ether)
+    - HT-RC560(Ether)
+    - HT-RC660
+    - PR-RZ5100
+    - PR-SC5507
+    - PR-SC5508
+    - PR-SC5509
+    - PR-SC5530
+    - PR-SC885
+    - PR-SC886
+    - RDC-7
+    - RDC-7(Ver2.0)
+    - RDC-7.1
+    - TX-8270(Ether)
+    - TX-DS787
+    - TX-DS797
+    - TX-DS898
+    - TX-DS989
+    - TX-DS989
+    - TX-NA900
+    - TX-NA905
+    - TX-NA906
+    - TX-NA906X
+    - TX-NR1000
+    - TX-NR1007
+    - TX-NR1008
+    - TX-NR1009
+    - TX-NR1010
+    - TX-NR1030
+    - TX-NR3007
+    - TX-NR3008
+    - TX-NR3009
+    - TX-NR3010
+    - TX-NR3030
+    - TX-NR414(Ether)
+    - TX-NR5000
+    - TX-NR5007
+    - TX-NR5008
+    - TX-NR5009
+    - TX-NR5010
+    - TX-NR509(Ether)
+    - TX-NR515
+    - TX-NR525
+    - TX-NR535(Ether)
+    - TX-NR545(Ether)
+    - TX-NR555(Ether)
+    - TX-NR575(Ether)
+    - TX-NR575DAB(Ether)
+    - TX-NR575E(Ether)
+    - TX-NR579(Ether)
+    - TX-NR609(Ether)
+    - TX-NR616
+    - TX-NR626
+    - TX-NR636
+    - TX-NR646(Ether)
+    - TX-NR656(Ether)
+    - TX-NR676(Ether)
+    - TX-NR676E(Ether)
+    - TX-NR708
+    - TX-NR709
+    - TX-NR717(Ether)
+    - TX-NR727(Ether)
+    - TX-NR737(Ether)
+    - TX-NR747(Ether)
+    - TX-NR757
+    - TX-NR777
+    - TX-NR807
+    - TX-NR808
+    - TX-NR809
+    - TX-NR818
+    - TX-NR828(Ether)
+    - TX-NR838(Ether)
+    - TX-NR900
+    - TX-NR901
+    - TX-NR905
+    - TX-NR906
+    - TX-NR929
+    - TX-RZ1100
+    - TX-RZ3100
+    - TX-RZ610
+    - TX-RZ620
+    - TX-RZ710
+    - TX-RZ720
+    - TX-RZ800
+    - TX-RZ810
+    - TX-RZ820
+    - TX-RZ900
+    - TX-SA706
+    - TX-SA805
+    - TX-SA806
+    - TX-SA806X
+    - TX-SA875
+    - TX-SA876
+    - TX-SR702
+    - TX-SR703
+    - TX-SR705
+    - TX-SR706
+    - TX-SR707
+    - TX-SR803
+    - TX-SR804
+    - TX-SR805
+    - TX-SR806
+    - TX-SR875
+    - TX-SR876
+  set8:
+    - /616AE(Ether)
+    - /818AE
+    - DHC-60.5
+    - DHC-60.7
+    - DHC-80.1
+    - DHC-80.2
+    - DHC-80.3
+    - DHC-80.6
+    - DHC-9.9
+    - DRC-R1
+    - DRX-5
+    - DRX-5.1
+    - DRX-7
+    - DRX-R1
+    - DTC-9.8
+    - DTR-10.5
+    - DTR-30.4
+    - DTR-40.4
+    - DTR-40.5
+    - DTR-40.6
+    - DTR-50.1
+    - DTR-50.2
+    - DTR-50.3
+    - DTR-50.4
+    - DTR-50.5
+    - DTR-50.6
+    - DTR-50.7
+    - DTR-60.5
+    - DTR-60.6
+    - DTR-60.7
+    - DTR-7.8
+    - DTR-70.1
+    - DTR-70.2
+    - DTR-70.3
+    - DTR-70.4
+    - DTR-70.6
+    - DTR-8.8
+    - DTR-8.9
+    - DTR-80.1
+    - DTR-80.2
+    - DTR-80.3
+    - DTR-9.9
+    - DTX-7.8
+    - DTX-8.8
+    - DTX-8.9
+    - DTX-9.9
+    - ETX-NA1000
+    - PR-RZ5100
+    - PR-SC5507
+    - PR-SC5508
+    - PR-SC5509
+    - PR-SC5530
+    - PR-SC885
+    - PR-SC886
+    - RDC-7.1
+    - TX-NA905
+    - TX-NA906
+    - TX-NA906X
+    - TX-NR1000
+    - TX-NR1007
+    - TX-NR1008
+    - TX-NR1009
+    - TX-NR1010
+    - TX-NR1030
+    - TX-NR3007
+    - TX-NR3008
+    - TX-NR3009
+    - TX-NR3010
+    - TX-NR3030
+    - TX-NR5000
+    - TX-NR5007
+    - TX-NR5008
+    - TX-NR5009
+    - TX-NR5010
+    - TX-NR616
+    - TX-NR717(Ether)
+    - TX-NR727(Ether)
+    - TX-NR737(Ether)
+    - TX-NR807
+    - TX-NR808
+    - TX-NR809
+    - TX-NR818
+    - TX-NR828(Ether)
+    - TX-NR838(Ether)
+    - TX-NR905
+    - TX-NR906
+    - TX-NR929
+    - TX-RZ1100
+    - TX-RZ3100
+    - TX-RZ800
+    - TX-RZ810
+    - TX-RZ820
+    - TX-RZ900
+    - TX-SA805
+    - TX-SA806X
+    - TX-SA875
+    - TX-SA876
+    - TX-SR805
+    - TX-SR875
+    - TX-SR876
+  set9:
+    - /616AE(Ether)
+    - /818AE
+    - DHC-60.5
+    - DHC-60.7
+    - DHC-80.6
+    - DRC-R1
+    - DRX-5
+    - DRX-5.1
+    - DRX-7
+    - DRX-R1
+    - DTR-30.4
+    - DTR-40.4
+    - DTR-40.5
+    - DTR-40.6
+    - DTR-50.4
+    - DTR-50.5
+    - DTR-50.6
+    - DTR-50.7
+    - DTR-60.5
+    - DTR-60.6
+    - DTR-60.7
+    - DTR-70.4
+    - DTR-70.6
+    - PR-RZ5100
+    - PR-SC5509
+    - PR-SC5530
+    - TX-NR1010
+    - TX-NR1030
+    - TX-NR3010
+    - TX-NR3030
+    - TX-NR5010
+    - TX-NR616
+    - TX-NR717(Ether)
+    - TX-NR727(Ether)
+    - TX-NR737(Ether)
+    - TX-NR818
+    - TX-NR828(Ether)
+    - TX-NR838(Ether)
+    - TX-NR929
+    - TX-RZ1100
+    - TX-RZ3100
+    - TX-RZ800
+    - TX-RZ810
+    - TX-RZ820
+    - TX-RZ900
+  set10:
+    - DTR-70.1
+    - DTR-70.2
+    - DTR-70.3
+    - DTR-70.4
+    - DTR-80.1
+    - DTR-80.2
+    - DTR-80.3
+  set11:
+    - /515AE(Ether)
+    - /616AE(Ether)
+    - /818AE
+    - DHC-60.5
+    - DHC-60.7
+    - DHC-80.3
+    - DHC-80.6
+    - DRC-R1
+    - DRX-2
+    - DRX-2.1
+    - DRX-3
+    - DRX-3.1
+    - DRX-4
+    - DRX-4.1
+    - DRX-5
+    - DRX-5.1
+    - DRX-7
+    - DRX-R1
+    - DTM-7
+    - DTR-20.3
+    - DTR-20.4
+    - DTR-20.7
+    - DTR-30.3
+    - DTR-30.4
+    - DTR-30.5
+    - DTR-30.6
+    - DTR-30.7
+    - DTR-40.3
+    - DTR-40.4
+    - DTR-40.5
+    - DTR-40.6
+    - DTR-40.7
+    - DTR-50.3
+    - DTR-50.4
+    - DTR-50.5
+    - DTR-50.6
+    - DTR-50.7
+    - DTR-60.5
+    - DTR-60.6
+    - DTR-60.7
+    - DTR-70.3
+    - DTR-70.4
+    - DTR-70.6
+    - DTR-80.3
+    - HT-R693(Ether)
+    - HT-R993(Ether)
+    - HT-RC550(Ether)
+    - HT-RC560(Ether)
+    - HT-RC660
+    - NR-365(Ether)
+    - PR-RZ5100
+    - PR-SC5509
+    - PR-SC5530
+    - TX-8270(Ether)
+    - TX-NR1009
+    - TX-NR1010
+    - TX-NR1030
+    - TX-NR3009
+    - TX-NR3010
+    - TX-NR3030
+    - TX-NR414(Ether)
+    - TX-NR474(Ether)
+    - TX-NR5009
+    - TX-NR5010
+    - TX-NR515
+    - TX-NR525
+    - TX-NR535(Ether)
+    - TX-NR545(Ether)
+    - TX-NR555(Ether)
+    - TX-NR575(Ether)
+    - TX-NR575DAB(Ether)
+    - TX-NR575E(Ether)
+    - TX-NR579(Ether)
+    - TX-NR609(Ether)
+    - TX-NR616
+    - TX-NR626
+    - TX-NR636
+    - TX-NR646(Ether)
+    - TX-NR656(Ether)
+    - TX-NR676(Ether)
+    - TX-NR676E(Ether)
+    - TX-NR709
+    - TX-NR717(Ether)
+    - TX-NR727(Ether)
+    - TX-NR737(Ether)
+    - TX-NR747(Ether)
+    - TX-NR757
+    - TX-NR777
+    - TX-NR809
+    - TX-NR818
+    - TX-NR828(Ether)
+    - TX-NR838(Ether)
+    - TX-NR929
+    - TX-RZ1100
+    - TX-RZ3100
+    - TX-RZ610
+    - TX-RZ620
+    - TX-RZ710
+    - TX-RZ720
+    - TX-RZ800
+    - TX-RZ810
+    - TX-RZ820
+    - TX-RZ900

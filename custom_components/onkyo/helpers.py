@@ -6,18 +6,29 @@ from typing import Any
 
 from eiscp.commands import COMMANDS
 
+from .onkyo_model_mapping import MODEL_SOURCES
 
-def build_sources_list() -> dict:
+
+def build_sources_list(model_name: str | None = None) -> dict:
     """
     Retrieve default sources from eISCP commands.
 
     Parses the eISCP command definitions to build a list of available
     source selection commands and their descriptions.
 
+    Args:
+        model_name: The model name of the receiver. If provided, returns only
+                    sources supported by that model.
+
     Returns:
         dict: A dictionary mapping source identifiers to descriptions.
     """
     sources_list = {}
+    model_specific_sources = None
+
+    if model_name and model_name in MODEL_SOURCES:
+        model_specific_sources = set(MODEL_SOURCES[model_name])
+
     for value in COMMANDS["main"]["SLI"]["values"].values():
         name = value["name"]
         desc = value["description"].replace("sets ", "")
@@ -25,6 +36,13 @@ def build_sources_list() -> dict:
             name = name[0]
         if name in ["07", "08", "09", "up", "down", "query"]:
             continue
+
+        if model_specific_sources is not None:
+            # Check if this source is in the model's supported list
+            # The model_specific_sources contains the source name (not hex ID)
+            if name not in model_specific_sources:
+                continue
+
         sources_list.update({name: desc})
     return sources_list
 

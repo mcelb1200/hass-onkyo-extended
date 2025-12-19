@@ -84,12 +84,21 @@ class OnkyoConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             result = await self._async_try_connect(host)
 
             # Get sources list
-            sources = build_sources_list()
+            # Try to get model name from discovered devices or result of connection
+            model_name = result.get("model_name")
+            if not model_name and host in self._discovered_devices:
+                # The discovered devices dict stores "name" but we need model.
+                # However, SSDP might not give us the exact model string we need.
+                # Let's rely on _async_try_connect returning model_name if possible.
+                pass
+
+            sources = build_sources_list(model_name)
 
             # Create entry data
             entry_data = {
                 CONF_HOST: host,
                 CONF_NAME: user_input.get(CONF_NAME, DEFAULT_NAME),
+                "model_name": model_name,  # Store model name if available
             }
 
             # Create options with defaults
@@ -173,6 +182,9 @@ class OnkyoConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         # Try to connect
         result = await self._async_try_connect(host)
 
+        if result.get("model_name"):
+            self._discovered_devices[host]["model_name"] = result["model_name"]
+
         if not result["success"]:
             _LOGGER.info("Discovered Onkyo receiver at %s but cannot connect yet", host)
 
@@ -192,13 +204,15 @@ class OnkyoConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         """
         if user_input is not None:
             # Get sources list
-            sources = build_sources_list()
+            model_name = self._discovered_devices.get(self._host, {}).get("model_name")
+            sources = build_sources_list(model_name)
 
             return self.async_create_entry(
                 title=self._name,
                 data={
                     CONF_HOST: self._host,
                     CONF_NAME: self._name,
+                    "model_name": model_name,
                 },
                 options={
                     CONF_RECEIVER_MAX_VOLUME: DEFAULT_RECEIVER_MAX_VOLUME,
@@ -233,13 +247,28 @@ class OnkyoConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
             try:
                 # Attempt basic connection test with timeout
+                # Also try to get model name if possible
+
+                # eISCP object might already have model_name if connected?
+                # But command needs to be sent to really connect
                 await self.hass.async_add_executor_job(
                     receiver.command, "system-power", "query"
                 )
 
+                # Try to get model name from receiver object or query
+                # receiver.model_name should be populated if discovery worked
+                # eISCP constructor does discovery if host is not provided.
+                # We can try to send a command to get model info if needed.
+                # Actually, receiver.model_name is available on instance if connected.
+                model_name = getattr(receiver, "model_name", None)
+
+                # If model_name is "unknown" or None, maybe we can query it?
+                # The "NDN" command returns name but maybe not model ID.
+                # The "dock.receiver-information=query" might return XML with model.
+
                 # Connection successful
                 _LOGGER.info("Successfully connected to Onkyo receiver at %s", host)
-                return {"success": True}
+                return {"success": True, "model_name": model_name}
 
             except TimeoutError:
                 # Timeout - receiver might be off or in standby
@@ -324,6 +353,9 @@ class OnkyoOptionsFlowHandler(config_entries.OptionsFlow):
         """
         errors: dict[str, str] = {}
 
+        # Get model name if available
+        model_name = self.config_entry.data.get("model_name")
+
         if user_input is not None:
             # Validate volume settings
             max_volume = user_input[CONF_RECEIVER_MAX_VOLUME]
@@ -332,9 +364,10 @@ class OnkyoOptionsFlowHandler(config_entries.OptionsFlow):
                 errors[CONF_RECEIVER_MAX_VOLUME] = "invalid_max_volume"
             else:
                 # Handle source selection
-                # We need to convert the list of selected keys back to the dict format expected by the integration
+                # We need to convert the list of selected keys back to the dict format
+                # expected by the integration
                 selected_source_keys = user_input.get(CONF_SOURCES, [])
-                full_source_list = build_sources_list()
+                full_source_list = build_sources_list(model_name)
 
                 # Filter full list to only include selected keys
                 new_sources = {
@@ -359,12 +392,12 @@ class OnkyoOptionsFlowHandler(config_entries.OptionsFlow):
         current_max_vol_pct = self.config_entry.options.get(CONF_MAX_VOLUME, 100)
 
         # Get available and currently configured sources
-        all_sources = build_sources_list()
+        all_sources = build_sources_list(model_name)
 
         # Get currently selected source IDs (keys of the dict)
         current_sources = self.config_entry.options.get(CONF_SOURCES)
 
-        # If no sources are configured (e.g., first time or old config), select all by default
+        # If no sources are configured, select all by default
         if current_sources is None:
             current_source_keys = list(all_sources.keys())
         else:
