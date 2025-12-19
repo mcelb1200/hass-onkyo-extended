@@ -24,6 +24,7 @@ def mock_eiscp():
     with patch("custom_components.onkyo.config_flow.eISCP") as mock_eiscp:
         receiver = mock_eiscp.return_value
         receiver.command = MagicMock()
+        receiver.model_name = "VSX-831"  # Default mock model
         yield mock_eiscp
 
 
@@ -56,6 +57,7 @@ async def test_form(hass, mock_setup_entry, mock_eiscp):
     assert result2["data"] == {
         "host": "1.1.1.1",
         "name": "Test Receiver",
+        "model_name": "VSX-831",
     }
     assert result2["options"]["receiver_max_volume"] == 80
     assert len(mock_setup_entry.mock_calls) == 1

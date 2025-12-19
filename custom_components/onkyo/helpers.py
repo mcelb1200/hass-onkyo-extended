@@ -7,6 +7,7 @@ from typing import Any
 from eiscp.commands import COMMANDS
 
 from .onkyo_model_mapping import MODEL_SOURCES
+from .receiver_profiles import RECEIVER_PROFILES
 
 
 def build_sources_list(model_name: str | None = None) -> dict:
@@ -23,6 +24,14 @@ def build_sources_list(model_name: str | None = None) -> dict:
     Returns:
         dict: A dictionary mapping source identifiers to descriptions.
     """
+    # Check if we have a detailed profile for this model
+    if model_name and model_name in RECEIVER_PROFILES:
+        profile = RECEIVER_PROFILES[model_name]
+        if "ha_defaults" in profile and "sources" in profile["ha_defaults"]:
+            # Use sources defined in the profile
+            # Swap keys/values if needed? The profile has 'bd': 'Blu-ray' which is correct (id: name)
+            return profile["ha_defaults"]["sources"]
+
     sources_list = {}
     model_specific_sources = None
 

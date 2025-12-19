@@ -36,6 +36,7 @@ from .const import (
     DOMAIN,
     HDMI_OUTPUT_OPTIONS,
 )
+from .receiver_profiles import RECEIVER_PROFILES
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -227,6 +228,9 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
         # Unique ID based on receiver and zone
         host = entry.data.get("host", "unknown")
         self._attr_unique_id = f"{host}_{zone}"
+
+        # Get model name for profile lookup
+        self._model_name = entry.data.get("model_name")
 
         # Device info for grouping zones
         self._attr_device_info = DeviceInfo(
@@ -498,17 +502,34 @@ class OnkyoMediaPlayer(MediaPlayerEntity):
                 )
             else:
                 _LOGGER.info(
-                    "No listening modes returned for %s. This may be normal.",
+                    "No listening modes returned for %s. Checking profile defaults.",
                     self._attr_name,
                 )
-                self._listening_modes = []
+                # Fallback to profile defaults if available
+                if self._model_name and self._model_name in RECEIVER_PROFILES:
+                    defaults = RECEIVER_PROFILES[self._model_name].get(
+                        "ha_defaults", {}
+                    )
+                    self._listening_modes = defaults.get("listening_modes", [])
+                    if self._listening_modes:
+                        _LOGGER.debug(
+                            "Loaded %d listening modes from profile for %s",
+                            len(self._listening_modes),
+                            self._attr_name,
+                        )
+                else:
+                    self._listening_modes = []
 
         except OSError as err:
             _LOGGER.debug(
                 "Could not fetch listening modes for %s: %s", self._attr_name, err
             )
-            # Keep empty list instead of failing
-            self._listening_modes = []
+            # Fallback to profile defaults if available
+            if self._model_name and self._model_name in RECEIVER_PROFILES:
+                defaults = RECEIVER_PROFILES[self._model_name].get("ha_defaults", {})
+                self._listening_modes = defaults.get("listening_modes", [])
+            else:
+                self._listening_modes = []
 
     # Media Player Entity Methods
 
