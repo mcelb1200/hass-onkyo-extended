@@ -88,7 +88,7 @@ class OnkyoConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             model_name = result.get("model_name")
             if not model_name and host in self._discovered_devices:
                 # The discovered devices dict stores "name" but we need model.
-                # However, SSDP might not give us the exact model string we need for mapping.
+                # However, SSDP might not give us the exact model string we need.
                 # Let's rely on _async_try_connect returning model_name if possible.
                 pass
 
@@ -183,7 +183,7 @@ class OnkyoConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         result = await self._async_try_connect(host)
 
         if result.get("model_name"):
-            self._discovered_devices[host]["model_name"] = result["model_name"]
+             self._discovered_devices[host]["model_name"] = result["model_name"]
 
         if not result["success"]:
             _LOGGER.info("Discovered Onkyo receiver at %s but cannot connect yet", host)
@@ -256,15 +256,15 @@ class OnkyoConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 )
 
                 # Try to get model name from receiver object or query
-                # receiver.model_name should be populated if discovery worked or if we query it?
-                # eISCP constructor does discovery if host is not provided, but here we provide host.
-                # We can try to send a command to get model info if needed, but eISCP might parse it.
-                # Actually, receiver.model_name is available on the instance if it got it.
+                # receiver.model_name should be populated if discovery worked
+                # eISCP constructor does discovery if host is not provided.
+                # We can try to send a command to get model info if needed.
+                # Actually, receiver.model_name is available on instance if connected.
                 model_name = getattr(receiver, "model_name", None)
 
-                # If model_name is 'unknown' or None, maybe we can query it?
-                # The 'NDN' command returns name but maybe not model ID in the format we want.
-                # The 'dock.receiver-information=query' (NRIQSTN) might return XML with model.
+                # If model_name is "unknown" or None, maybe we can query it?
+                # The "NDN" command returns name but maybe not model ID.
+                # The "dock.receiver-information=query" might return XML with model.
 
                 # Connection successful
                 _LOGGER.info("Successfully connected to Onkyo receiver at %s", host)
@@ -364,7 +364,8 @@ class OnkyoOptionsFlowHandler(config_entries.OptionsFlow):
                 errors[CONF_RECEIVER_MAX_VOLUME] = "invalid_max_volume"
             else:
                 # Handle source selection
-                # We need to convert the list of selected keys back to the dict format expected by the integration
+                # We need to convert the list of selected keys back to the dict format
+                # expected by the integration
                 selected_source_keys = user_input.get(CONF_SOURCES, [])
                 full_source_list = build_sources_list(model_name)
 
@@ -396,7 +397,7 @@ class OnkyoOptionsFlowHandler(config_entries.OptionsFlow):
         # Get currently selected source IDs (keys of the dict)
         current_sources = self.config_entry.options.get(CONF_SOURCES)
 
-        # If no sources are configured (e.g., first time or old config), select all by default
+        # If no sources are configured, select all by default
         if current_sources is None:
             current_source_keys = list(all_sources.keys())
         else:
