@@ -34,6 +34,7 @@ from .const import (
     DOMAIN,
 )
 from .helpers import build_sources_list
+from .receiver_profiles import RECEIVER_PROFILES
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -94,6 +95,8 @@ class OnkyoConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
             sources = build_sources_list(model_name)
 
+            default_max_vol, default_vol_res = self._get_profile_defaults(model_name)
+
             # Create entry data
             entry_data = {
                 CONF_HOST: host,
@@ -106,8 +109,8 @@ class OnkyoConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 CONF_RECEIVER_MAX_VOLUME: user_input.get(
                     CONF_RECEIVER_MAX_VOLUME, DEFAULT_RECEIVER_MAX_VOLUME
                 ),
-                CONF_VOLUME_RESOLUTION: DEFAULT_VOLUME_RESOLUTION,
-                CONF_MAX_VOLUME: 100,
+                CONF_VOLUME_RESOLUTION: default_vol_res,
+                CONF_MAX_VOLUME: default_max_vol,
                 CONF_SOURCES: sources,
             }
 
@@ -207,6 +210,8 @@ class OnkyoConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             model_name = self._discovered_devices.get(self._host, {}).get("model_name")
             sources = build_sources_list(model_name)
 
+            default_max_vol, default_vol_res = self._get_profile_defaults(model_name)
+
             return self.async_create_entry(
                 title=self._name,
                 data={
@@ -216,8 +221,8 @@ class OnkyoConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 },
                 options={
                     CONF_RECEIVER_MAX_VOLUME: DEFAULT_RECEIVER_MAX_VOLUME,
-                    CONF_VOLUME_RESOLUTION: DEFAULT_VOLUME_RESOLUTION,
-                    CONF_MAX_VOLUME: 100,
+                    CONF_VOLUME_RESOLUTION: default_vol_res,
+                    CONF_MAX_VOLUME: default_max_vol,
                     CONF_SOURCES: sources,
                 },
             )
@@ -307,6 +312,29 @@ class OnkyoConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         except Exception as err:  # pylint: disable=broad-exception-caught
             _LOGGER.error("Unexpected error connecting to %s: %s", host, err)
             return {"success": False, "error": "unknown", "allow_setup": False}
+
+    @staticmethod
+    def _get_profile_defaults(model_name: str | None) -> tuple[int, int]:
+        """
+        Get default volume settings from profile.
+
+        Args:
+            model_name: The model name.
+
+        Returns:
+            tuple[int, int]: (max_volume_percent, volume_resolution)
+        """
+        default_max_vol = 100
+        default_vol_res = DEFAULT_VOLUME_RESOLUTION
+
+        if model_name and model_name in RECEIVER_PROFILES:
+            defaults = RECEIVER_PROFILES[model_name].get("ha_defaults", {})
+            if defaults.get("max_volume_percent"):
+                default_max_vol = defaults["max_volume_percent"]
+            if defaults.get("volume_resolution"):
+                default_vol_res = defaults["volume_resolution"]
+
+        return default_max_vol, default_vol_res
 
     @staticmethod
     @callback

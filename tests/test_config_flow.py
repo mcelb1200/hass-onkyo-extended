@@ -24,6 +24,7 @@ def mock_eiscp():
     with patch("custom_components.onkyo.config_flow.eISCP") as mock_eiscp:
         receiver = mock_eiscp.return_value
         receiver.command = MagicMock()
+        receiver.model_name = "VSX-831"  # Default mock model
         yield mock_eiscp
 
 
@@ -56,6 +57,7 @@ async def test_form(hass, mock_setup_entry, mock_eiscp):
     assert result2["data"] == {
         "host": "1.1.1.1",
         "name": "Test Receiver",
+        "model_name": "VSX-831",
     }
     assert result2["options"]["receiver_max_volume"] == 80
     assert len(mock_setup_entry.mock_calls) == 1
@@ -161,6 +163,61 @@ async def test_ssdp_discovery(hass, mock_setup_entry, mock_eiscp):
 
     assert result2["type"] == FlowResultType.CREATE_ENTRY
     assert result2["title"] == "Onkyo Receiver"
+    assert result2["data"]["host"] == "1.1.1.1"
+
+
+@pytest.mark.asyncio
+async def test_ssdp_discovery_location_only(hass, mock_setup_entry, mock_eiscp):
+    """Test SSDP discovery with only ssdp_location."""
+    discovery_info = {
+        "ssdp_location": "http://192.168.1.1:8080/desc.xml",
+        "friendlyName": "Onkyo Receiver._eISCP._tcp.local.",
+    }
+
+    result = await hass.config_entries.flow.async_init(
+        DOMAIN,
+        context={"source": config_entries.SOURCE_SSDP},
+        data=discovery_info,
+    )
+
+    assert result["type"] == FlowResultType.FORM
+    assert result["step_id"] == "discovery_confirm"
+
+    # Finish flow
+    result2 = await hass.config_entries.flow.async_configure(
+        result["flow_id"],
+        user_input={},
+    )
+    assert result2["type"] == FlowResultType.CREATE_ENTRY
+    assert result2["data"]["host"] == "192.168.1.1"
+
+
+@pytest.mark.asyncio
+async def test_ssdp_discovery_connect_fail(hass, mock_setup_entry, mock_eiscp):
+    """Test SSDP discovery when initial connection fails."""
+    mock_eiscp.return_value.command.side_effect = TimeoutError
+
+    discovery_info = {
+        "host": "1.1.1.1",
+        "friendlyName": "Onkyo Receiver._eISCP._tcp.local.",
+    }
+
+    result = await hass.config_entries.flow.async_init(
+        DOMAIN,
+        context={"source": config_entries.SOURCE_SSDP},
+        data=discovery_info,
+    )
+
+    # Should still show form
+    assert result["type"] == FlowResultType.FORM
+    assert result["step_id"] == "discovery_confirm"
+
+    # Finish flow
+    result2 = await hass.config_entries.flow.async_configure(
+        result["flow_id"],
+        user_input={},
+    )
+    assert result2["type"] == FlowResultType.CREATE_ENTRY
     assert result2["data"]["host"] == "1.1.1.1"
 
 
