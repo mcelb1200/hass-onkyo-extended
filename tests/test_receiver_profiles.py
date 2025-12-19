@@ -1,25 +1,30 @@
 """Test receiver profiles integration."""
+
+from unittest.mock import MagicMock, patch
+
 import pytest
-from unittest.mock import patch, MagicMock
 from homeassistant.const import CONF_HOST, CONF_NAME
+
+from custom_components.onkyo.config_flow import OnkyoConfigFlow
 from custom_components.onkyo.const import (
-    DOMAIN,
     CONF_MAX_VOLUME,
     CONF_RECEIVER_MAX_VOLUME,
     CONF_SOURCES,
     CONF_VOLUME_RESOLUTION,
 )
-from custom_components.onkyo.config_flow import OnkyoConfigFlow
-from custom_components.onkyo.receiver_profiles import RECEIVER_PROFILES
+
 
 @pytest.mark.asyncio
 async def test_config_flow_defaults_from_profile(hass):
     """Test that config flow picks up defaults from profile."""
 
     # Mock eISCP to return a specific model name
-    with patch("custom_components.onkyo.config_flow.eISCP") as mock_eiscp, \
-         patch("custom_components.onkyo.config_flow.build_sources_list") as mock_build_sources:
-
+    with (
+        patch("custom_components.onkyo.config_flow.eISCP") as mock_eiscp,
+        patch(
+            "custom_components.onkyo.config_flow.build_sources_list"
+        ) as mock_build_sources,
+    ):
         mock_receiver = MagicMock()
         mock_receiver.model_name = "VSX-831"
         mock_eiscp.return_value = mock_receiver
@@ -32,11 +37,13 @@ async def test_config_flow_defaults_from_profile(hass):
         # Need to initialize context usually handled by data entry flow
         flow.context = {}
 
-        result = await flow.async_step_user({
-            CONF_HOST: "192.168.1.100",
-            CONF_NAME: "My Pioneer",
-            CONF_RECEIVER_MAX_VOLUME: 100,
-        })
+        result = await flow.async_step_user(
+            {
+                CONF_HOST: "192.168.1.100",
+                CONF_NAME: "My Pioneer",
+                CONF_RECEIVER_MAX_VOLUME: 100,
+            }
+        )
 
         assert result["type"] == "create_entry"
         options = result["options"]
@@ -48,6 +55,7 @@ async def test_config_flow_defaults_from_profile(hass):
 
         # Verify sources are set correctly
         assert options[CONF_SOURCES] == {"bd": "Blu-ray", "tv": "TV"}
+
 
 @pytest.mark.asyncio
 async def test_helpers_build_sources_list_from_profile():

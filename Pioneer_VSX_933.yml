@@ -42,31 +42,30 @@
 # ---------------------------------------------------------------------
 
 devices:
-
   - brand: Pioneer
     model: VSX-933
     product_page:
-      - "https://intl.pioneer-audiovisual.com/products/av_receiver/vsx-933/"   # Features/spec overview (Atmos 5.2.2, HDR10/HLG/Dolby Vision, Chromecast, DTS Play-Fi, MCACC)  # [5](https://intl.pioneer-audiovisual.com/products/av_receiver/vsx-933/)
-      - "https://intl.pioneer-av.com/vsx-933"                                   # Regional page with feature summary & docs link  # [3](https://intl.pioneer-av.com/vsx-933)
-      - "https://www.manualslib.com/manual/1384477/Pioneer-Vsx-933.html"        # Instruction Manual (functions, zones, inputs)   # [6](https://www.manualslib.com/manual/1384477/Pioneer-Vsx-933.html)
+      - "https://intl.pioneer-audiovisual.com/products/av_receiver/vsx-933/" # Features/spec overview (Atmos 5.2.2, HDR10/HLG/Dolby Vision, Chromecast, DTS Play-Fi, MCACC)  # [5](https://intl.pioneer-audiovisual.com/products/av_receiver/vsx-933/)
+      - "https://intl.pioneer-av.com/vsx-933" # Regional page with feature summary & docs link  # [3](https://intl.pioneer-av.com/vsx-933)
+      - "https://www.manualslib.com/manual/1384477/Pioneer-Vsx-933.html" # Instruction Manual (functions, zones, inputs)   # [6](https://www.manualslib.com/manual/1384477/Pioneer-Vsx-933.html)
     eiscp_port: 60128
     zones:
       main: true
-      zone2: true          # Powered Zone 2 supported / bi-amp alternative per manual/reviews  # [6](https://www.manualslib.com/manual/1384477/Pioneer-Vsx-933.html)[7](https://hometheaterreview.com/pioneer-vsx-933-72-channel-network-av-receiver-reviewed/)
+      zone2: true # Powered Zone 2 supported / bi-amp alternative per manual/reviews  # [6](https://www.manualslib.com/manual/1384477/Pioneer-Vsx-933.html)[7](https://hometheaterreview.com/pioneer-vsx-933-72-channel-network-av-receiver-reviewed/)
       zone3: false
       zone_b: false
     hdmi_outputs:
       dual_main_sub: false # Single HDMI OUT (ARC-capable); 6x HDMI IN / 1x HDMI OUT typical   # [8](https://www.manuals.ca/pioneer/vsx-933/manual)[9](https://shop3a.com/shop3a/electronics/amplifiers/pioneer-surround-sound-audio-and-video-component-receiver-black-vsx-933/)
       notes: "Single HDMI OUT with ARC; all HDMI ports support 4K/60, BT.2020, HDCP 2.2, HDR10/HLG/Dolby Vision passthrough."
-      service_codes: [ ]   # Not applicable with single HDMI OUT                                    # [5](https://intl.pioneer-audiovisual.com/products/av_receiver/vsx-933/)
-    tuners: { fm: true, am: true, dab: false }  # AM/FM; RDS on EU/AU variants; DAB not listed for 933  # [4](https://www.manua.ls/pioneer/vsx-933/manual)
+      service_codes: [] # Not applicable with single HDMI OUT                                    # [5](https://intl.pioneer-audiovisual.com/products/av_receiver/vsx-933/)
+    tuners: { fm: true, am: true, dab: false } # AM/FM; RDS on EU/AU variants; DAB not listed for 933  # [4](https://www.manua.ls/pioneer/vsx-933/manual)
     net_services:
       # Connectivity/services as advertised for VSX-933:
       # Chromecast built-in, DTS Play-Fi, FlareConnect; AirPlay supported on this generation
       - chromecast
       - dts_play_fi
       - flareconnect
-      - airplay          # AirPlay (original); (AirPlay 2 appears on later models like VSX-935)  # [5](https://intl.pioneer-audiovisual.com/products/av_receiver/vsx-933/)[3](https://intl.pioneer-av.com/vsx-933)
+      - airplay # AirPlay (original); (AirPlay 2 appears on later models like VSX-935)  # [5](https://intl.pioneer-audiovisual.com/products/av_receiver/vsx-933/)[3](https://intl.pioneer-av.com/vsx-933)
       - spotify
     inputs_present:
       # eISCP / HA source IDs commonly exposed on Pioneer eISCP models.
@@ -92,11 +91,11 @@ devices:
       - DTS
       - AllChStereo
       - Dolby Surround
-      - DTS Neural:X                                                     # [5](https://intl.pioneer-audiovisual.com/products/av_receiver/vsx-933/)[4](https://www.manua.ls/pioneer/vsx-933/manual)
+      - DTS Neural:X # [5](https://intl.pioneer-audiovisual.com/products/av_receiver/vsx-933/)[4](https://www.manua.ls/pioneer/vsx-933/manual)
     ha_defaults:
-      volume_resolution: null   # Set in HA (typical newer Onkyo/Pioneer = 200, but verify on unit)  # [1](https://www.home-assistant.io/integrations/onkyo/)
+      volume_resolution: null # Set in HA (typical newer Onkyo/Pioneer = 200, but verify on unit)  # [1](https://www.home-assistant.io/integrations/onkyo/)
       max_volume_percent: 55
-      sources:                 # Paste this mapping into HA ▸ Onkyo ▸ Configure ▸ Input sources
+      sources: # Paste this mapping into HA ▸ Onkyo ▸ Configure ▸ Input sources
         bd: "Blu-ray"
         cbl/sat: "Set-top Box"
         game: "Game Console"
@@ -109,7 +108,7 @@ devices:
         bluetooth: "Bluetooth"
         usb: "USB"
         cd: "CD Player"
-      listening_modes:         # Paste into HA ▸ Onkyo ▸ Configure ▸ Listening modes
+      listening_modes: # Paste into HA ▸ Onkyo ▸ Configure ▸ Listening modes
         - "Stereo"
         - "Direct"
         - "Dolby Surround"
