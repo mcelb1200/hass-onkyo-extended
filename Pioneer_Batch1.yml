@@ -1,0 +1,195 @@
+# =====================================================================
+# Pioneer VSX-831 — Home Assistant "Onkyo" (eISCP) profile
+# Save as: pioneer_vsx-831.yaml
+# =====================================================================
+# UI steps: Settings ▸ Devices & Services ▸ Onkyo ▸ Configure (see note above).  # [1](https://www.manua.ls/pioneer/vsx-933/manual)
+#
+# Reference docs:
+#  - Basic Manual (2016 series; UI, hookups, features): https://www.manua.ls/pioneer/vsx-831/manual    # [6](https://www.manua.ls/pioneer/vsx-831/manual)
+#  - Alternate basic manual mirror: https://www.manualslib.com/manual/1100480/Pioneer-Vsx-831.html       # [7](https://www.manualslib.com/manual/1100480/Pioneer-Vsx-831.html)
+
+devices:
+  - brand: Pioneer
+    model: VSX-831
+    product_page:
+      - "https://www.manua.ls/pioneer/vsx-831/manual"         # manual (basic + link to advanced)  # [6](https://www.manua.ls/pioneer/vsx-831/manual)
+      - "https://www.manualslib.com/manual/1100480/Pioneer-Vsx-831.html"  # manual mirror         # [7](https://www.manualslib.com/manual/1100480/Pioneer-Vsx-831.html)
+    eiscp_port: 60128
+    zones: { main: true, zone2: false, zone3: false, zone_b: false }  # 5.x-class; no documented Zone 2/3  # [6](https://www.manua.ls/pioneer/vsx-831/manual)
+    hdmi_outputs:
+      dual_main_sub: false
+      notes: "Single HDMI OUT with ARC; 4K/60 pass‑through generation."  # [6](https://www.manua.ls/pioneer/vsx-831/manual)
+      service_codes: [ ]
+    tuners: { fm: true, am: true, dab: false }  # AM/FM per manual  # [7](https://www.manualslib.com/manual/1100480/Pioneer-Vsx-831.html)
+    net_services: [ ]  # Network functions exist but vary by region; see Advanced Manual link in basic manual.  # [6](https://www.manua.ls/pioneer/vsx-831/manual)
+    inputs_present: [ bd, dvd, cbl/sat, game, pc, tv, cd, phono, net, fm, am, usb, bluetooth ]   # per platform/eISCP  # [5](https://intl.pioneer-av.com/parts)
+    listening_mode_families: [ "Stereo", "Direct", "Dolby", "DTS", "AllChStereo", "Dolby Surround" ]
+    ha_defaults:
+      volume_resolution: null
+      max_volume_percent: 55
+      sources:
+        bd: "Blu-ray"
+        cbl/sat: "Set-top Box"
+        game: "Game"
+        tv: "TV (ARC)"
+        net: "Network"
+        fm: "FM"
+        am: "AM"
+        phono: "Phono"
+        bluetooth: "Bluetooth"
+        cd: "CD"
+      listening_modes: [ "Stereo", "Direct", "Dolby Surround", "All Channel Stereo" ]
+
+# =====================================================================
+# Pioneer VSX-832 — Home Assistant "Onkyo" (eISCP) profile
+# Save as: pioneer_vsx-832.yaml
+# =====================================================================
+# Docs:
+#  - Product page (5ch AVR w/ Atmos (3.1.2 virtual via Surround Enhancer), Chromecast, Play‑Fi): 
+#    https://intl.pioneer-av.com/vsx-832                                          # [8](https://intl.pioneer-av.com/vsx-832)
+#  - Instruction manual (full): https://www.manualslib.com/manual/1248379/Pioneer-Vsx-832.html  # [9](https://www.manualslib.com/manual/1248379/Pioneer-Vsx-832.html)
+
+devices:
+  - brand: Pioneer
+    model: VSX-832
+    product_page:
+      - "https://intl.pioneer-av.com/vsx-832"                 # features (Atmos 3.1.2 via firmware, Surround Enhancer, Chromecast, Play‑Fi)  # [8](https://intl.pioneer-av.com/vsx-832)
+      - "https://www.manualslib.com/manual/1248379/Pioneer-Vsx-832.html"  # manual (563 pp.)  # [9](https://www.manualslib.com/manual/1248379/Pioneer-Vsx-832.html)
+    eiscp_port: 60128
+    zones: { main: true, zone2: false, zone3: false, zone_b: false }   # 5ch class; no documented Zone 2  # [9](https://www.manualslib.com/manual/1248379/Pioneer-Vsx-832.html)
+    hdmi_outputs:
+      dual_main_sub: false
+      notes: "Single HDMI OUT; 4K/60, BT.2020; HDR10/Dolby Vision pass‑through per generation."  # [8](https://intl.pioneer-av.com/vsx-832)
+      service_codes: [ ]
+    tuners: { fm: true, am: true, dab: false }  # AM/FM per manual; no DAB listed for VSX‑832  # [9](https://www.manualslib.com/manual/1248379/Pioneer-Vsx-832.html)
+    net_services:
+      - chromecast
+      - dts_play_fi
+      - flareconnect               # per product page  # [8](https://intl.pioneer-av.com/vsx-832)
+    inputs_present: [ bd, dvd, cbl/sat, strm box, game, pc, tv, cd, phono, net, fm, am, usb, bluetooth ]  # input labels align with slim/2017 gen  # [5](https://intl.pioneer-av.com/parts)
+    listening_mode_families: [ "Stereo", "Direct", "Dolby", "DTS", "AllChStereo", "Dolby Surround" ]
+    ha_defaults:
+      volume_resolution: null
+      max_volume_percent: 55
+      sources:
+        bd: "Blu-ray"
+        cbl/sat: "Set-top Box"
+        strm box: "Streaming Box"
+        game: "Game"
+        tv: "TV (ARC)"
+        net: "Network"
+        fm: "FM"
+        am: "AM"
+        phono: "Phono"
+        bluetooth: "Bluetooth"
+        cd: "CD"
+      listening_modes: [ "Stereo", "Direct", "Dolby Surround", "All Channel Stereo" ]
+
+# =====================================================================
+# Pioneer VSX‑S520D (slim) — Home Assistant "Onkyo" (eISCP) profile
+# Save as: pioneer_vsx-s520d.yaml
+# =====================================================================
+# Docs:
+#  - Product page (Slim Class‑D, 4K/60 passthrough, Chromecast, DTS Play‑Fi): 
+#    https://intl.pioneer-audiovisual.com/products/av_receiver/vsx-s520d/index.php      # [10](https://intl.pioneer-audiovisual.com/products/av_receiver/vsx-s520d/index.php)
+#  - Manual (lists front input labels including STRM BOX, DAB on S520D, etc.):
+#    https://www.manualslib.com/manual/1201670/Pioneer-Vsx-S520d.html                   # [11](https://www.manualslib.com/manual/1201670/Pioneer-Vsx-S520d.html)
+#  - US regional page (VSX‑S520 sibling): https://pioneerhomeusa.com/vsx-s520-2         # [12](https://pioneerhomeusa.com/vsx-s520-2)
+
+devices:
+  - brand: Pioneer
+    model: VSX-S520D
+    product_page:
+      - "https://intl.pioneer-audiovisual.com/products/av_receiver/vsx-s520d/index.php"  # features/services  # [10](https://intl.pioneer-audiovisual.com/products/av_receiver/vsx-s520d/index.php)
+      - "https://www.manualslib.com/manual/1201670/Pioneer-Vsx-S520d.html"               # manual             # [11](https://www.manualslib.com/manual/1201670/Pioneer-Vsx-S520d.html)
+    eiscp_port: 60128
+    zones: { main: true, zone2: false, zone3: false, zone_b: false }  # slim 5.1 class; no multi‑zone  # [11](https://www.manualslib.com/manual/1201670/Pioneer-Vsx-S520d.html)
+    hdmi_outputs:
+      dual_main_sub: false
+      notes: "Single HDMI OUT; 4K/60 4:4:4 pass‑through; BT.2020; HDR10 per generation."  # [10](https://intl.pioneer-audiovisual.com/products/av_receiver/vsx-s520d/index.php)
+      service_codes: [ ]
+    tuners: { fm: true, am: false, dab: true }  # S520D variant includes DAB/FM; see manual (antenna & input list).  # [11](https://www.manualslib.com/manual/1201670/Pioneer-Vsx-S520d.html)
+    net_services:
+      - chromecast
+      - dts_play_fi
+      - flareconnect        # per product page  # [10](https://intl.pioneer-audiovisual.com/products/av_receiver/vsx-s520d/index.php)
+    inputs_present:
+      # Exact front‑panel selector labels listed in the manual (S520D):                 # [11](https://www.manualslib.com/manual/1201670/Pioneer-Vsx-S520d.html)
+      - bd
+      - cbl/sat
+      - game
+      - strm box
+      - cd
+      - tv
+      - phono
+      - dab
+      - fm
+      - net
+      - usb
+      - bluetooth
+    listening_mode_families: [ "Stereo", "Direct", "Dolby", "DTS", "AllChStereo", "Dolby Surround" ]
+    ha_defaults:
+      volume_resolution: null
+      max_volume_percent: 50
+      sources:
+        bd: "Blu-ray"
+        cbl/sat: "Set-top Box"
+        strm box: "Streaming Box"
+        game: "Game"
+        tv: "TV (ARC)"
+        net: "Network"
+        dab: "DAB Radio"
+        fm: "FM Radio"
+        phono: "Phono"
+        usb: "USB"
+        bluetooth: "Bluetooth"
+        cd: "CD Player"
+      listening_modes: [ "Stereo", "Direct", "Dolby Surround", "All Channel Stereo" ]
+
+# =====================================================================
+# Pioneer VSX‑LX101 (Elite) — Home Assistant "Onkyo" (eISCP) profile
+# Save as: pioneer_vsx-lx101.yaml
+# =====================================================================
+# Docs:
+#  - Product page (Atmos 5.2.2, DTS:X‑ready FW, MCACC, Chromecast built‑in): 
+#    https://intl.pioneer-audiovisual.com/products/av_receiver/vsx-lx101/    # [13](https://intl.pioneer-audiovisual.com/products/av_receiver/vsx-lx101/)
+#  - Spec one‑sheet (rear terminals; HDMI 6 IN / 1 OUT; no Zone 2 pre‑outs listed):
+#    https://www.snapav.com/.../PE-VSX-LX101_Single%20Sheet.pdf              # [14](https://www.snapav.com/wcsstore/ExtendedSitesCatalogAssetStore/attachments/documents/Pioneer/ManualsAndGuides/PE-VSX-LX101_Single%20Sheet.pdf)
+#  - Basic manual: https://www.manualslib.com/manual/1115059/Pioneer-Vsx-Lx101.html     # [15](https://www.manualslib.com/manual/1115059/Pioneer-Vsx-Lx101.html)
+
+devices:
+  - brand: Pioneer
+    model: VSX-LX101
+    product_page:
+      - "https://intl.pioneer-audiovisual.com/products/av_receiver/vsx-lx101/"   # features  # [13](https://intl.pioneer-audiovisual.com/products/av_receiver/vsx-lx101/)
+      - "https://www.snapav.com/wcsstore/ExtendedSitesCatalogAssetStore/attachments/documents/Pioneer/ManualsAndGuides/PE-VSX-LX101_Single%20Sheet.pdf"  # rear I/O  # [14](https://www.snapav.com/wcsstore/ExtendedSitesCatalogAssetStore/attachments/documents/Pioneer/ManualsAndGuides/PE-VSX-LX101_Single%20Sheet.pdf)
+      - "https://www.manualslib.com/manual/1115059/Pioneer-Vsx-Lx101.html"       # manual    # [15](https://www.manualslib.com/manual/1115059/Pioneer-Vsx-Lx101.html)
+    eiscp_port: 60128
+    zones: { main: true, zone2: false, zone3: false, zone_b: false }  # No Zone2 preouts shown in spec sheet  # [14](https://www.snapav.com/wcsstore/ExtendedSitesCatalogAssetStore/attachments/documents/Pioneer/ManualsAndGuides/PE-VSX-LX101_Single%20Sheet.pdf)
+    hdmi_outputs:
+      dual_main_sub: false
+      notes: "Single HDMI OUT; inputs support 4K/60, HDCP 2.2; HDR/BT.2020 generation."  # [14](https://www.snapav.com/wcsstore/ExtendedSitesCatalogAssetStore/attachments/documents/Pioneer/ManualsAndGuides/PE-VSX-LX101_Single%20Sheet.pdf)[13](https://intl.pioneer-audiovisual.com/products/av_receiver/vsx-lx101/)
+      service_codes: [ ]
+    tuners: { fm: true, am: true, dab: false }  # AM/FM per manual/spec  # [15](https://www.manualslib.com/manual/1115059/Pioneer-Vsx-Lx101.html)
+    net_services:
+      - chromecast
+      - airplay
+      - flareconnect          # Google Cast/Chromecast & AirPlay noted in sheet; FireConnect/FlareConnect family  # [14](https://www.snapav.com/wcsstore/ExtendedSitesCatalogAssetStore/attachments/documents/Pioneer/ManualsAndGuides/PE-VSX-LX101_Single%20Sheet.pdf)
+    inputs_present: [ bd, dvd, cbl/sat, game, pc, tv, cd, phono, net, fm, am, usb, bluetooth ]
+    listening_mode_families: [ "Stereo", "Direct", "Dolby", "DTS", "AllChStereo", "Dolby Surround", "DTS Neural:X" ]  # DTS:X-ready FW  # [13](https://intl.pioneer-audiovisual.com/products/av_receiver/vsx-lx101/)
+    ha_defaults:
+      volume_resolution: null
+      max_volume_percent: 60
+      sources:
+        bd: "Blu-ray"
+        cbl/sat: "Set-top Box"
+        game: "Game"
+        pc: "PC"
+        tv: "TV (ARC)"
+        net: "Network"
+        fm: "FM"
+        am: "AM"
+        phono: "Phono"
+        bluetooth: "Bluetooth"
+        cd: "CD"
+      listening_modes: [ "Stereo", "Direct", "Dolby Surround", "DTS Neural:X", "All Channel Stereo" ]

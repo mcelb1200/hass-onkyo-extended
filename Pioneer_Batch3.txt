@@ -1,0 +1,177 @@
+spec_version: "1.1"
+vendor: "Pioneer"
+protocol: "eISCP"
+integration: "home-assistant.onkyo"
+generated_utc: "2025-09-21T05:44:00Z"
+
+notes:
+  - "All mapping keys are sanitized: spaces and special characters (e.g., 'cbl/sat') are replaced with underscores (e.g., 'cbl_sat')."
+  - "Copy-paste 'ha_defaults.sources' and 'ha_defaults.listening_modes' for each device into HA ▸ Devices & Services ▸ Onkyo ▸ Configure."
+  - "Set 'volume_resolution' (commonly 200 on newer units) and 'max_volume_percent' in HA options."  # [1](https://www.manualslib.com/manual/1100480/Pioneer-Vsx-831.html)
+devices:
+
+  # ===========================
+  # PREVIOUS BATCH (SANITIZED)
+  # ===========================
+
+  - brand: "Pioneer"
+    model: "VSX-932"
+    product_page:
+      - "https://intl.pioneer-audiovisual.com/products/av_receiver/vsx-932/"   # Features: Atmos 5.2.2, DTS:X, HDR10/Dolby Vision, Chromecast, Play‑Fi, FlareConnect  # [2](https://www.onkyophilippines.com/product-page/tx-8390-network-stereo-receiver)
+      - "https://pioneerhomeusa.com/vsx-932"                                   # Regional page  # [3](https://www.manualslib.com/manual/2432719/Onkyo-Tx-8390.html)
+      - "https://intl.pioneer-audiovisual.com/manuals/docs/SN29402804B_VSX-932_BAS_En_171113_web.pdf"  # Manual  # [4](https://www.manua.ls/onkyo/tx-nr575e/manual)
+    eiscp_port: 60128
+    zones: { main: true, zone2: false, zone3: false, zone_b: false }  # No explicit Zone 2 in basic docs  # [4](https://www.manua.ls/onkyo/tx-nr575e/manual)
+    hdmi_outputs:
+      dual_main_sub: false
+      notes: "Single HDMI OUT (ARC); HDMI inputs support 4K/BT.2020 with HDR10/Dolby Vision passthrough."  # [2](https://www.onkyophilippines.com/product-page/tx-8390-network-stereo-receiver)
+      service_codes: [ ]
+    tuners: { fm: true, am: true, dab: false }  # [4](https://www.manua.ls/onkyo/tx-nr575e/manual)
+    net_services: [ "chromecast", "dts_play_fi", "flareconnect" ]  # [2](https://www.onkyophilippines.com/product-page/tx-8390-network-stereo-receiver)
+    inputs_present: [ bd, dvd, cbl_sat, game, pc, tv, cd, phono, net, fm, am, usb, bluetooth ]  # eISCP IDs (sanitized)  # [5](https://pioneer.manymanuals.com/av-receivers/vsx-832)
+    listening_mode_families: [ "Stereo", "Direct", "Dolby", "DTS", "AllChStereo", "Dolby_Surround", "DTS_Neural_X" ]  # [2](https://www.onkyophilippines.com/product-page/tx-8390-network-stereo-receiver)
+    ha_defaults:
+      volume_resolution: null
+      max_volume_percent: 55
+      sources:
+        bd: "Blu-ray"
+        cbl_sat: "Set-top Box"
+        game: "Game Console"
+        pc: "PC"
+        tv: "TV (ARC)"
+        net: "Network"
+        fm: "FM Radio"
+        am: "AM Radio"
+        phono: "Phono"
+        usb: "USB"
+        bluetooth: "Bluetooth"
+        cd: "CD Player"
+      listening_modes: [ "Stereo", "Direct", "Dolby Surround", "DTS Neural:X", "All Channel Stereo" ]
+
+  - brand: "Pioneer"
+    model: "VSX-831"
+    product_page:
+      - "https://www.manua.ls/pioneer/vsx-831/manual"        # Basic manual (link to Advanced Manual inside)  # [6](https://pioneerhomeusa.com/vsx-lx503)
+      - "https://www.manualslib.com/manual/1100480/Pioneer-Vsx-831.html"  # Mirror  # [7](https://www.pioneerhomeaudio.com/av-receivers/vsx-lx503/)
+    eiscp_port: 60128
+    zones: { main: true, zone2: false, zone3: false, zone_b: false }
+    hdmi_outputs: { dual_main_sub: false, notes: "Single HDMI OUT with ARC; 4K/60 passthrough generation.", service_codes: [ ] }  # [6](https://pioneerhomeusa.com/vsx-lx503)
+    tuners: { fm: true, am: true, dab: false }  # [7](https://www.pioneerhomeaudio.com/av-receivers/vsx-lx503/)
+    net_services: [ ]  # Region‑dependent; see Advanced Manual  # [6](https://pioneerhomeusa.com/vsx-lx503)
+    inputs_present: [ bd, dvd, cbl_sat, game, pc, tv, cd, phono, net, fm, am, usb, bluetooth ]  # [5](https://pioneer.manymanuals.com/av-receivers/vsx-832)
+    listening_mode_families: [ "Stereo", "Direct", "Dolby", "DTS", "AllChStereo", "Dolby_Surround" ]
+    ha_defaults:
+      volume_resolution: null
+      max_volume_percent: 55
+      sources:
+        bd: "Blu-ray"
+        cbl_sat: "Set-top Box"
+        game: "Game"
+        tv: "TV (ARC)"
+        net: "Network"
+        fm: "FM"
+        am: "AM"
+        phono: "Phono"
+        bluetooth: "Bluetooth"
+        cd: "CD"
+      listening_modes: [ "Stereo", "Direct", "Dolby Surround", "All Channel Stereo" ]
+
+  - brand: "Pioneer"
+    model: "VSX-832"
+    product_page:
+      - "https://intl.pioneer-av.com/vsx-832"                   # Features (Atmos via Surround Enhancer), Chromecast, Play‑Fi  # [8](https://www.manua.ls/onkyo/tx-rz810/manual)
+      - "https://www.manualslib.com/manual/1248379/Pioneer-Vsx-832.html"  # Manual  # [9](https://onkyo.com/intl/tx-nr414)
+    eiscp_port: 60128
+    zones: { main: true, zone2: false, zone3: false, zone_b: false }
+    hdmi_outputs: { dual_main_sub: false, notes: "Single HDMI OUT; 4K/60, BT.2020; HDR10/Dolby Vision passthrough.", service_codes: [ ] }  # [8](https://www.manua.ls/onkyo/tx-rz810/manual)
+    tuners: { fm: true, am: true, dab: false }  # [9](https://onkyo.com/intl/tx-nr414)
+    net_services: [ "chromecast", "dts_play_fi", "flareconnect" ]  # [8](https://www.manua.ls/onkyo/tx-rz810/manual)
+    inputs_present: [ bd, dvd, cbl_sat, game, pc, tv, cd, phono, net, fm, am, usb, bluetooth ]  # [5](https://pioneer.manymanuals.com/av-receivers/vsx-832)
+    listening_mode_families: [ "Stereo", "Direct", "Dolby", "DTS", "AllChStereo", "Dolby_Surround" ]
+    ha_defaults:
+      volume_resolution: null
+      max_volume_percent: 55
+      sources:
+        bd: "Blu-ray"
+        cbl_sat: "Set-top Box"
+        game: "Game"
+        tv: "TV (ARC)"
+        net: "Network"
+        fm: "FM"
+        am: "AM"
+        phono: "Phono"
+        bluetooth: "Bluetooth"
+        cd: "CD"
+      listening_modes: [ "Stereo", "Direct", "Dolby Surround", "All Channel Stereo" ]
+
+  - brand: "Pioneer"
+    model: "VSX-S520D"
+    product_page:
+      - "https://intl.pioneer-audiovisual.com/products/av_receiver/vsx-s520d/index.php"  # Features/services (slim class)  # [10](https://support.onkyousa.com/hc/en-us/articles/19978350767764-TX-RZ810-Owner-s-Manual)
+      - "https://www.manualslib.com/manual/1201670/Pioneer-Vsx-S520d.html"               # Manual (input labels incl. DAB/FM)  # [11](https://pioneerhomeusa.com/pioneer/vsx-935-av-receiver)
+    eiscp_port: 60128
+    zones: { main: true, zone2: false, zone3: false, zone_b: false }
+    hdmi_outputs: { dual_main_sub: false, notes: "Single HDMI OUT; 4K/60 4:4:4, BT.2020; HDR10 (series).", service_codes: [ ] }  # [10](https://support.onkyousa.com/hc/en-us/articles/19978350767764-TX-RZ810-Owner-s-Manual)
+    tuners: { fm: true, am: false, dab: true }  # S520D has DAB/FM  # [11](https://pioneerhomeusa.com/pioneer/vsx-935-av-receiver)
+    net_services: [ "chromecast", "dts_play_fi", "flareconnect" ]  # [10](https://support.onkyousa.com/hc/en-us/articles/19978350767764-TX-RZ810-Owner-s-Manual)
+    inputs_present: [ bd, cbl_sat, game, cd, tv, phono, dab, fm, net, usb, bluetooth ]  # As labeled in manual  # [11](https://pioneerhomeusa.com/pioneer/vsx-935-av-receiver)
+    listening_mode_families: [ "Stereo", "Direct", "Dolby", "DTS", "AllChStereo", "Dolby_Surround" ]
+    ha_defaults:
+      volume_resolution: null
+      max_volume_percent: 50
+      sources:
+        bd: "Blu-ray"
+        cbl_sat: "Set-top Box"
+        game: "Game"
+        tv: "TV (ARC)"
+        net: "Network"
+        dab: "DAB Radio"
+        fm: "FM Radio"
+        phono: "Phono"
+        usb: "USB"
+        bluetooth: "Bluetooth"
+        cd: "CD Player"
+      listening_modes: [ "Stereo", "Direct", "Dolby Surround", "All Channel Stereo" ]
+
+  - brand: "Pioneer"
+    model: "VSX-LX101"
+    product_page:
+      - "https://intl.pioneer-audiovisual.com/products/av_receiver/vsx-lx101/"  # Features: Atmos/DTS:X-ready, Chromecast  # [12](https://www.manuals.co.uk/onkyo/tx-8130/manual)
+      - "https://www.snapav.com/wcsstore/ExtendedSitesCatalogAssetStore/attachments/documents/Pioneer/ManualsAndGuides/PE-VSX-LX101_Single%20Sheet.pdf"  # Rear I/O  # [13](https://www.hifiengine.com/manual_library/onkyo/tx-8130.shtml)
+      - "https://www.manualslib.com/manual/1115059/Pioneer-Vsx-Lx101.html"      # Manual  # [14](https://www.manua.ls/onkyo/tx8130/manual)
+    eiscp_port: 60128
+    zones: { main: true, zone2: false, zone3: false, zone_b: false }  # No Zone2 preouts listed  # [13](https://www.hifiengine.com/manual_library/onkyo/tx-8130.shtml)
+    hdmi_outputs: { dual_main_sub: false, notes: "Single HDMI OUT; 4K/60, HDCP 2.2; HDR/BT.2020 generation.", service_codes: [ ] }  # [13](https://www.hifiengine.com/manual_library/onkyo/tx-8130.shtml)[12](https://www.manuals.co.uk/onkyo/tx-8130/manual)
+    tuners: { fm: true, am: true, dab: false }  # [14](https://www.manua.ls/onkyo/tx8130/manual)
+    net_services: [ "chromecast", "airplay", "flareconnect" ]  # Sheet references Cast; AirPlay on this generation  # [13](https://www.hifiengine.com/manual_library/onkyo/tx-8130.shtml)
+    inputs_present: [ bd, dvd, cbl_sat, game, pc, tv, cd, phono, net, fm, am, usb, bluetooth ]
+    listening_mode_families: [ "Stereo", "Direct", "Dolby", "DTS", "AllChStereo", "Dolby_Surround", "DTS_Neural_X" ]  # [12](https://www.manuals.co.uk/onkyo/tx-8130/manual)
+    ha_defaults:
+      volume_resolution: null
+      max_volume_percent: 60
+      sources:
+        bd: "Blu-ray"
+        cbl_sat: "Set-top Box"
+        game: "Game"
+        pc: "PC"
+        tv: "TV (ARC)"
+        net: "Network"
+        fm: "FM"
+        am: "AM"
+        phono: "Phono"
+        bluetooth: "Bluetooth"
+        cd: "CD"
+      listening_modes: [ "Stereo", "Direct", "Dolby Surround", "DTS Neural:X", "All Channel Stereo" ]
+
+  # ===========================
+  # NEXT BATCH (ADDED)
+  # ===========================
+
+  - brand: "Pioneer"
+    model: "VSX-LX103"
+    product_page:
+      - "https://pioneerhomeusa.com/vsx-lx103"                  # Feature overview  # [15](https://pioneerhomeusa.com/vsx-lx103)
+      - "https://intl.pioneer-audiovisual.com/products/av_receiver/vsx-lx103/"  # Feature page  # [16](https://intl.pioneer-audiovisual.com/products/av_receiver/vsx-lx103/)
+      - "https://www.manua.ls/pioneer/vsx-lx103/manual"         # Manual  # [17](https://www.manua.ls/pioneer/vsx-lx103/manual)
+    eiscp_port: 60128
+    zones: { main: true, zone2: true, zone3: false, zone_b

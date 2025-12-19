@@ -1,0 +1,178 @@
+# =====================================================================
+# Pioneer — eISCP models (Batch 2) for Home Assistant "Onkyo" integration
+# Save as: pioneer_next_batch.yaml
+# =====================================================================
+# How to apply in HA (UI-first): Settings ▸ Devices & Services ▸ Onkyo ▸ Configure
+# - Set Volume resolution (typical newer units ≈200; verify on device) and Max volume cap.
+# - Paste the 'ha_defaults.sources' mapping and the 'ha_defaults.listening_modes' list.
+# - Ensure "Network Standby / Network Control" is enabled on the AVR.               # [1](https://www.manualslib.com/manual/1100480/Pioneer-Vsx-831.html)
+
+devices:
+
+  # -----------------------------
+  # VSX-LX103 (7.2ch / 5.2.2 Atmos)
+  # -----------------------------
+  - brand: Pioneer
+    model: VSX-LX103
+    product_page:
+      - "https://pioneerhomeusa.com/vsx-lx103"            # features: Atmos/DTS:X, HDR10/HLG/Dolby Vision, Chromecast, Play‑Fi, FlareConnect  # [2](https://pioneerhomeusa.com/vsx-lx103)
+      - "https://intl.pioneer-audiovisual.com/products/av_receiver/vsx-lx103/"  # intl page  # [3](https://intl.pioneer-audiovisual.com/products/av_receiver/vsx-lx103/)
+      - "https://www.manua.ls/pioneer/vsx-lx103/manual"  # instruction manual (zones, sources, MCACC, AirPlay, etc.)                      # [4](https://www.manua.ls/pioneer/vsx-lx103/manual)
+    eiscp_port: 60128
+    zones: { main: true, zone2: true, zone3: false, zone_b: false }  # Zone 2 / pre‑main via manual  # [4](https://www.manua.ls/pioneer/vsx-lx103/manual)
+    hdmi_outputs:
+      dual_main_sub: false        # LX103 class: single HDMI OUT with ARC, next‑gen 4K HDR passthrough         # [2](https://pioneerhomeusa.com/vsx-lx103)[3](https://intl.pioneer-audiovisual.com/products/av_receiver/vsx-lx103/)
+      notes: "HDMI OUT (ARC); 4K/60, BT.2020; HDR10/HLG/Dolby Vision passthrough."
+      service_codes: [ ]
+    tuners: { fm: true, am: true, dab: false }  # AM/FM  # [4](https://www.manua.ls/pioneer/vsx-lx103/manual)
+    net_services: [ chromecast, dts_play_fi, flareconnect, airplay ]  # per pages & manual  # [2](https://pioneerhomeusa.com/vsx-lx103)[3](https://intl.pioneer-audiovisual.com/products/av_receiver/vsx-lx103/)[4](https://www.manua.ls/pioneer/vsx-lx103/manual)
+    inputs_present: [ bd, dvd, cbl/sat, game, pc, tv, cd, phono, net, fm, am, usb, bluetooth ]  # eISCP IDs  # [29](https://pioneer.manymanuals.com/av-receivers/vsx-832)
+    listening_mode_families: [ Stereo, Direct, Dolby, DTS, AllChStereo, Dolby\ Surround, DTS\ Neural:X ]  # Atmos gen  # [2](https://pioneerhomeusa.com/vsx-lx103)
+    ha_defaults:
+      volume_resolution: null
+      max_volume_percent: 60
+      sources:
+        bd: "Blu-ray"        # Common mapping for HA Options
+        cbl/sat: "Set-top Box"
+        game: "Game Console"
+        pc: "PC"
+        tv: "TV (ARC)"
+        net: "Network"
+        fm: "FM Radio"
+        am: "AM Radio"
+        phono: "Phono"
+        usb: "USB"
+        bluetooth: "Bluetooth"
+        cd: "CD Player"
+      listening_modes: [ "Stereo", "Direct", "Dolby Surround", "DTS Neural:X", "All Channel Stereo" ]
+
+  # -----------------------------
+  # VSX-LX104 (7.2ch / 5.2.2 Atmos; 2x HDMI OUT; Powered Zone 2 w/DAC)
+  # -----------------------------
+  - brand: Pioneer
+    model: VSX-LX104
+    product_page:
+      - "https://intl.pioneer-av.com/vsx-lx104"                             # feature overview  # [5](https://intl.pioneer-av.com/vsx-lx104)
+      - "https://intl.pioneer-audiovisual.com/products/av_receiver/vsx-lx104/index.php"  # lists 2 HDMI outputs & Powered Zone 2  # [6](https://intl.pioneer-audiovisual.com/products/av_receiver/vsx-lx104/index.php)
+      - "https://www.manua.ls/pioneer/vsx-lx104/manual"                     # manual  # [7](https://www.manua.ls/pioneer/vsx-lx104/manual)
+    eiscp_port: 60128
+    zones: { main: true, zone2: true, zone3: false, zone_b: false }           # Powered Zone 2 (dedicated DAC)  # [6](https://intl.pioneer-audiovisual.com/products/av_receiver/vsx-lx104/index.php)
+    hdmi_outputs:
+      dual_main_sub: true
+      notes: "Dual HDMI OUT (MAIN/SUB); 4K/60, BT.2020; HDR10/HLG/Dolby Vision; HDCP 2.3."  # [6](https://intl.pioneer-audiovisual.com/products/av_receiver/vsx-lx104/index.php)
+      service_codes: [ "main", "sub" ]
+    tuners: { fm: true, am: true, dab: false }                                # AM/FM  # [7](https://www.manua.ls/pioneer/vsx-lx104/manual)
+    net_services: [ airplay2, dts_play_fi, sonos ]                            # AirPlay 2, SONOS, Play‑Fi per product page  # [6](https://intl.pioneer-audiovisual.com/products/av_receiver/vsx-lx104/index.php)
+    inputs_present: [ bd, dvd, cbl/sat, game, pc, tv, cd, phono, net, fm, am, usb, bluetooth ]  # [29](https://pioneer.manymanuals.com/av-receivers/vsx-832)
+    listening_mode_families: [ Stereo, Direct, Dolby, DTS, AllChStereo, Dolby\ Surround, DTS\ Neural:X ]  # [6](https://intl.pioneer-audiovisual.com/products/av_receiver/vsx-lx104/index.php)
+    ha_defaults:
+      volume_resolution: null
+      max_volume_percent: 60
+      sources:
+        bd: "Blu-ray"
+        cbl/sat: "Set-top Box"
+        game: "Game"
+        pc: "PC"
+        tv: "TV (ARC/eARC)"
+        net: "Network"
+        fm: "FM"
+        am: "AM"
+        phono: "Phono"
+        usb: "USB"
+        bluetooth: "Bluetooth"
+        cd: "CD"
+      listening_modes: [ "Stereo", "Direct", "Dolby Surround", "DTS Neural:X", "All Channel Stereo" ]
+
+  # -----------------------------
+  # VSX-LX302 (7.2ch; 2x HDMI OUT; Zone 2 pre/line)
+  # -----------------------------
+  - brand: Pioneer
+    model: VSX-LX302
+    product_page:
+      - "https://pioneerhomeusa.com/vsx-lx302"                     # regional page  # [8](https://pioneerhomeusa.com/vsx-lx302)
+      - "https://pioneer-audiovisual.com/products/av_receiver/vsx-lx302/specification.php"  # full spec: HDMI 2 OUT (MAIN/SUB), Zone 2 pre/line  # [9](https://pioneer-audiovisual.com/products/av_receiver/vsx-lx302/specification.php)
+      - "https://www.manua.ls/pioneer/vsx-lx302/manual"            # basic manual  # [10](https://www.manua.ls/pioneer/vsx-lx302/manual)
+    eiscp_port: 60128
+    zones: { main: true, zone2: true, zone3: false, zone_b: false }  # Zone 2 pre/line + assignable amps  # [9](https://pioneer-audiovisual.com/products/av_receiver/vsx-lx302/specification.php)
+    hdmi_outputs:
+      dual_main_sub: true
+      notes: "Dual HDMI OUT (MAIN/SUB); 4K/60 pass‑through; HDR10/HLG/Dolby Vision."  # [9](https://pioneer-audiovisual.com/products/av_receiver/vsx-lx302/specification.php)
+      service_codes: [ "main", "sub" ]
+    tuners: { fm: true, am: true, dab: false }                      # DAB ready via optional USB adapter (not built-in)  # [9](https://pioneer-audiovisual.com/products/av_receiver/vsx-lx302/specification.php)
+    net_services: [ chromecast, dts_play_fi, flareconnect, airplay, spotify, tidal, deezer ]  # per spec page  # [9](https://pioneer-audiovisual.com/products/av_receiver/vsx-lx302/specification.php)
+    inputs_present: [ bd, dvd, cbl/sat, game, pc, tv, cd, phono, net, fm, am, usb, bluetooth ]
+    listening_mode_families: [ Stereo, Direct, Dolby, DTS, AllChStereo, Dolby\ Surround, DTS\ Neural:X ]
+    ha_defaults:
+      volume_resolution: null
+      max_volume_percent: 60
+      sources:
+        bd: "Blu-ray"
+        cbl/sat: "Set-top Box"
+        game: "Game"
+        pc: "PC"
+        tv: "TV (ARC)"
+        net: "Network"
+        fm: "FM"
+        am: "AM"
+        phono: "Phono"
+        usb: "USB"
+        bluetooth: "Bluetooth"
+        cd: "CD"
+      listening_modes: [ "Stereo", "Direct", "Dolby Surround", "DTS Neural:X", "All Channel Stereo" ]
+
+  # -----------------------------
+  # VSX-LX303 (9.2ch; up to 7.2.2/5.2.4; 2x HDMI OUT; Zone 2 & Zone 3)
+  # -----------------------------
+  - brand: Pioneer
+    model: VSX-LX303
+    product_page:
+      - "https://pioneerhomeusa.com/vsx-lx303"                     # features (Atmos/DTS:X 7.2.2/5.2.4; multi‑zone)  # [11](https://pioneerhomeusa.com/vsx-lx303)
+      - "https://intl.pioneer-audiovisual.com/products/av_receiver/vsx-lx303/"  # intl page  # [12](https://intl.pioneer-audiovisual.com/products/av_receiver/vsx-lx303/)
+      - "https://www.manualslib.com/manual/2345468/Pioneer-Vsx-Lx303.html"     # instruction manual  # [13](https://www.manualslib.com/manual/2345468/Pioneer-Vsx-Lx303.html)
+    eiscp_port: 60128
+    zones: { main: true, zone2: true, zone3: true, zone_b: false }  # speaker terminals support Z2/Z3 assignment  # [11](https://pioneerhomeusa.com/vsx-lx303)
+    hdmi_outputs:
+      dual_main_sub: true
+      notes: "Dual HDMI OUT (MAIN/SUB); 4K/60; HDR10/HLG/Dolby Vision; HDCP 2.2; no eARC on this generation."  # [30](https://stereonet.com/reviews/review-pioneer-vsx-lx303-9-2-channel-av-receiver)
+      service_codes: [ "main", "sub" ]
+    tuners: { fm: true, am: true, dab: false }                      # AM/FM  # [13](https://www.manualslib.com/manual/2345468/Pioneer-Vsx-Lx303.html)
+    net_services: [ chromecast, dts_play_fi, flareconnect, airplay ] # AirPlay shown in specs; Chromecast/Play‑Fi/FlareConnect in pages  # [31](https://www.manua.ls/pioneer/vsx-lx303/manual)[11](https://pioneerhomeusa.com/vsx-lx303)[12](https://intl.pioneer-audiovisual.com/products/av_receiver/vsx-lx303/)
+    inputs_present: [ bd, dvd, cbl/sat, game, pc, tv, cd, phono, net, fm, am, usb, bluetooth ]
+    listening_mode_families: [ Stereo, Direct, Dolby, DTS, AllChStereo, Dolby\ Surround, DTS\ Neural:X ]
+    ha_defaults:
+      volume_resolution: null
+      max_volume_percent: 60
+      sources:
+        bd: "Blu-ray"
+        cbl/sat: "Set-top Box"
+        game: "Game"
+        pc: "PC"
+        tv: "TV (ARC)"
+        net: "Network"
+        fm: "FM"
+        am: "AM"
+        phono: "Phono"
+        usb: "USB"
+        bluetooth: "Bluetooth"
+        cd: "CD"
+      listening_modes: [ "Stereo", "Direct", "Dolby Surround", "DTS Neural:X", "All Channel Stereo" ]
+
+  # -----------------------------
+  # VSX-LX503 (9.2ch; expands to 7.2.4 with ext amp; 2x HDMI OUT; Zone 2 & 3)
+  # -----------------------------
+  - brand: Pioneer
+    model: VSX-LX503
+    product_page:
+      - "https://pioneerhomeusa.com/vsx-lx503"                  # features incl. Zone 3, Chromecast, Play‑Fi, Atmos/DTS:X  # [14](https://pioneerhomeusa.com/vsx-lx503)
+      - "https://www.manualslib.com/manual/1452339/Pioneer-Vsx-Lx503.html"  # instruction manual (Z2/Z3, HDMI, MCACC)  # [15](https://www.manualslib.com/manual/1452339/Pioneer-Vsx-Lx503.html)
+      - "https://www.manua.ls/pioneer/vsx-lx503/manual"         # manual mirror  # [16](https://www.manua.ls/pioneer/vsx-lx503/manual)
+    eiscp_port: 60128
+    zones: { main: true, zone2: true, zone3: true, zone_b: false }  # Powered Z2/Z3 per manual & page  # [14](https://pioneerhomeusa.com/vsx-lx503)[16](https://www.manua.ls/pioneer/vsx-lx503/manual)
+    hdmi_outputs:
+      dual_main_sub: true
+      notes: "Dual HDMI OUT (MAIN/SUB); 4K/60; HDR10/HLG/Dolby Vision; HDCP 2.2."  # [16](https://www.manua.ls/pioneer/vsx-lx503/manual)
+      service_codes: [ "main", "sub" ]
+    tuners: { fm: true, am: true, dab: false }
+    net_services: [ chromecast, dts_play_fi, flareconnect, airplay ]  # per page & manuals  # [14](https://pioneerhomeusa.com/vsx-lx503)[16](https://www.manua.ls/pioneer/vsx-lx503/manual)
+    inputs_present: [ bd, dvd, cbl/sat, game, pc, tv, cd, phono, net, fm, am, usb, bluetooth ]
+    listening_mode_families: [ Stereo, Direct, Dolby,
